@@ -32,8 +32,8 @@ public class AppointmentController {
 	 * @param session
 	 * @param response
 	 */
-	@RequestMapping(value = "viewAppointment", method = RequestMethod.GET)
-	public void viewAppointment(HttpSession session,
+	@RequestMapping(value = "viewAppointments", method = RequestMethod.GET)
+	public void viewAppointments(HttpSession session,
 			HttpServletResponse response) {
 		AppointmentRepository ar = new AppointmentRepository();
 		JSONObject result = new JSONObject();
@@ -231,6 +231,7 @@ public class AppointmentController {
 
 	/**
 	 * 管理员反馈
+	 * 
 	 * @param _appId
 	 * @param _teacherName
 	 * @param _teacherId
@@ -275,6 +276,15 @@ public class AppointmentController {
 		}
 	}
 
+	/**
+	 * 管理员增加咨询
+	 * 
+	 * @param _startTime
+	 * @param _endTime
+	 * @param _teacher
+	 * @param session
+	 * @param response
+	 */
 	@RequestMapping(value = "addAppointment", method = RequestMethod.POST)
 	public void addAppointment(@RequestParam("startTime") String _startTime,
 			@RequestParam("endTime") String _endTime,
@@ -307,4 +317,160 @@ public class AppointmentController {
 			e.printStackTrace();
 		}
 	}
+
+	/**
+	 * 管理员编辑咨询
+	 * 
+	 * @param _appId
+	 * @param _startTime
+	 * @param _endTime
+	 * @param _teacher
+	 * @param session
+	 * @param response
+	 */
+	@RequestMapping(value = "editAppointment", method = RequestMethod.POST)
+	public void editAppointment(@RequestParam("appId") String _appId,
+			@RequestParam("startTime") String _startTime,
+			@RequestParam("endTime") String _endTime,
+			@RequestParam("teacher") String _teacher, HttpSession session,
+			HttpServletResponse response) {
+		AppointmentRepository ar = new AppointmentRepository();
+		JSONObject result = new JSONObject();
+		try {
+			String[] editResult = ar.editAppointment(_appId, _startTime,
+					_endTime, _teacher,
+					(UserType) session.getAttribute("userType"));
+			result.put("state", "SUCCESS");
+			result.put("appointmentId", editResult[0]);
+			result.put("startTime", editResult[1]);
+			result.put("endTime", editResult[2]);
+			result.put("teacher", editResult[3]);
+		} catch (BasicException e) {
+			result.put("state", "FAILED");
+			result.put("message", e.getInfo());
+		}
+
+		// send response
+		response.setContentType("application/json");
+		response.setCharacterEncoding("UTF-8");
+		PrintWriter out;
+		try {
+			out = response.getWriter();
+			out.write(result.toString());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * 管理员删除咨询
+	 * 
+	 * @param _appIds
+	 * @param session
+	 * @param response
+	 */
+	@RequestMapping(value = "removeAppointment", method = RequestMethod.POST)
+	public void removeAppointment(@RequestParam("appIds") String[] _appIds,
+			HttpSession session, HttpServletResponse response) {
+		AppointmentRepository ar = new AppointmentRepository();
+		JSONObject result = new JSONObject();
+		try {
+			ar.removeAppointment(_appIds,
+					(UserType) session.getAttribute("userType"));
+			result.put("state", "SUCCESS");
+		} catch (BasicException e) {
+			result.put("state", "FAILED");
+			result.put("message", e.getInfo());
+		}
+
+		// send response
+		response.setContentType("application/json");
+		response.setCharacterEncoding("UTF-8");
+		PrintWriter out;
+		try {
+			out = response.getWriter();
+			out.write(result.toString());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * 管理员取消预约
+	 * 
+	 * @param _appIds
+	 * @param session
+	 * @param response
+	 */
+	@RequestMapping(value = "cancelAppointment", method = RequestMethod.POST)
+	public void cancelAppointment(@RequestParam("appIds") String[] _appIds,
+			HttpSession session, HttpServletResponse response) {
+		AppointmentRepository ar = new AppointmentRepository();
+		JSONObject result = new JSONObject();
+		try {
+			ar.cancelAppointment(_appIds,
+					(UserType) session.getAttribute("userType"));
+			result.put("state", "SUCCESS");
+		} catch (BasicException e) {
+			result.put("state", "FAILED");
+			result.put("message", e.getInfo());
+		}
+
+		// send response
+		response.setContentType("application/json");
+		response.setCharacterEncoding("UTF-8");
+		PrintWriter out;
+		try {
+			out = response.getWriter();
+			out.write(result.toString());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * 管理员查看学生信息
+	 * 
+	 * @param _appId
+	 * @param session
+	 * @param response
+	 */
+	@RequestMapping(value = "viewAppointment", method = RequestMethod.POST)
+	public void viewAppointment(@RequestParam("appId") String _appId,
+			HttpSession session, HttpServletResponse response) {
+		AppointmentRepository ar = new AppointmentRepository();
+		JSONObject result = new JSONObject();
+		try {
+			Appointment app = ar.viewAppointment(_appId,
+					(UserType) session.getAttribute("userType"));
+			result.put("name", app.getStudentInfo().getName());
+			result.put("gender", app.getStudentInfo().getGender());
+			result.put("studentId", app.getStudentInfo().getStudentId());
+			result.put("school", app.getStudentInfo().getSchool());
+			result.put("hometown", app.getStudentInfo().getHometown());
+			result.put("mobile", app.getStudentInfo().getMobile());
+			result.put("email", app.getStudentInfo().getEmail());
+			result.put("problem", app.getStudentInfo().getProblem());
+			result.put("state", "SUCCESS");
+		} catch (BasicException e) {
+			result.put("state", "FAILED");
+			result.put("message", e.getInfo());
+		}
+
+		// send response
+		response.setContentType("application/json");
+		response.setCharacterEncoding("UTF-8");
+		PrintWriter out;
+		try {
+			out = response.getWriter();
+			out.write(result.toString());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
 }
