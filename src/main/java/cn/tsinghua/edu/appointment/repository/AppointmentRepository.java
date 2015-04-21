@@ -425,4 +425,14 @@ public class AppointmentRepository {
 		return app;
 	}
 
+	public String exportAppointments(String appIds, UserType userType)
+			throws ActionRejectException, EmptyFieldException {
+		if (userType != UserType.ADMIN) {
+			throw new ActionRejectException("权限不足");
+		} else if (appIds == null) {
+			throw new EmptyFieldException("咨询参数为空");
+		}
+		return "";
+	}
+
 }

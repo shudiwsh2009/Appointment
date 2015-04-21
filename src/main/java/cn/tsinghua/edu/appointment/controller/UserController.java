@@ -21,6 +21,20 @@ import cn.tsinghua.edu.appointment.repository.UserRepository;
 @RequestMapping("user")
 public class UserController {
 	
+	@RequestMapping(value = "register", method = RequestMethod.POST)
+	public void register(@RequestParam("username") String _username,
+			@RequestParam("password") String _password,
+			HttpServletResponse response, ModelMap model) throws IOException {
+		UserRepository ur = new UserRepository();
+		try {
+			ur.register(_username, _password);
+			response.sendRedirect("/appointment/login");
+		} catch (BasicException e) {
+			model.addAttribute("message", e.getInfo());
+			response.sendRedirect("/appointment/register");
+		}
+	}
+	
 	@RequestMapping(value = "login", method = RequestMethod.POST)
 	public void login(@RequestParam("username") String _username,
 			@RequestParam("password") String _password,
