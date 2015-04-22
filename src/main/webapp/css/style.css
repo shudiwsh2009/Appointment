@@ -1,0 +1,61 @@
+body{
+	margin: 0;
+	background-color: #ffd;
+}
+#page_title{
+	color: #622;
+}
+#page_maintable{
+
+}
+#page_bottom{
+	color: #ccc;
+	font-style: italic;
+}
+.table_col{
+	float: left;
+	border: 1px solid #ccc;
+	border-right: 0;
+	border-bottom: 0;
+}
+#col3, #col5{
+	border-right: 1px solid #ccc
+}
+#col4{
+	border-left: 0;
+}
+.table_cell{
+	padding:2px;
+	border-bottom: 1px solid #ccc;
+}
+.clearfix{
+	clear: both;
+}
+.yuyue_stu_pre, .fankui_stu_pre, .fankui_tch_pre, .tch_login{
+	position: fixed;
+	border: 2px solid #777;
+	border-radius: 9px;
+	width:70%;
+	padding: 10px;
+	text-align: center;
+	background-color: rgba(255,255,255,0.9);
+}
+.yuyue_stu_success, .fankui_stu_success, .fankui_tch_success, .admin_chakan{
+	position: fixed;
+	border: 2px solid #777;
+	border-radius: 9px;
+	width:70%;
+	padding: 10px;
+	text-align: center;
+	background-color: rgba(255,255,255,0.9);
+}
+.yuyue_stu, .fankui_stu, .fankui_tch, .fankui_admin{
+	position: fixed;
+	border: 2px solid #777;
+	border-radius: 9px;
+	width:90%;
+	height: 90%;
+	padding: 10px;
+	text-align: center;
+	background-color: rgba(255,255,255,0.95);
+}
