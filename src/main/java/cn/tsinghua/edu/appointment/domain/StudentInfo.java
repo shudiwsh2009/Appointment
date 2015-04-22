@@ -9,21 +9,23 @@ public class StudentInfo {
 	protected String hometown = ""; // 生源地
 	protected String mobile = ""; // 手机
 	protected String email = ""; // E-mail
+	protected String experience = ""; // 以前是否有过咨询
 	protected String problem = ""; // 咨询问题
-	
+
 	public StudentInfo() {
-		
+
 	}
-	
-	public StudentInfo(String n, String g, String st, String sc,
-			String h, String m, String e, String p) {
+
+	public StudentInfo(String n, String g, String st, String sc, String h,
+			String m, String em, String ex, String p) {
 		name = n;
 		gender = g;
 		studentId = st;
 		school = sc;
 		hometown = h;
 		mobile = m;
-		email = e;
+		email = em;
+		experience = ex;
 		problem = p;
 	}
 
@@ -89,6 +91,14 @@ public class StudentInfo {
 
 	public void setProblem(String problem) {
 		this.problem = problem;
+	}
+
+	public String getExperience() {
+		return experience;
+	}
+
+	public void setExperience(String experience) {
+		this.experience = experience;
 	}
 
 }

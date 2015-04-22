@@ -105,13 +105,14 @@ public class AppointmentController {
 			@RequestParam("hometown") String _hometown,
 			@RequestParam("mobile") String _mobile,
 			@RequestParam("email") String _email,
+			@RequestParam("experience") String _experience,
 			@RequestParam("problem") String _problem, HttpSession session,
 			HttpServletResponse response) {
 		AppointmentRepository ar = new AppointmentRepository();
 		JSONObject result = new JSONObject();
 		try {
 			Appointment app = ar.makeAppointment(_appId, _name, _gender,
-					_studentId, _school, _hometown, _mobile, _email, _problem);
+					_studentId, _school, _hometown, _mobile, _email, _experience, _problem);
 			result.put("startTime", DateUtil.convertDate(app.getStartTime()));
 			result.put("endTime", DateUtil.convertDate(app.getEndTime()));
 			result.put("teacher", app.getTeacher());
@@ -488,6 +489,7 @@ public class AppointmentController {
 			result.put("hometown", app.getStudentInfo().getHometown());
 			result.put("mobile", app.getStudentInfo().getMobile());
 			result.put("email", app.getStudentInfo().getEmail());
+			result.put("experience", app.getStudentInfo().getExperience());
 			result.put("problem", app.getStudentInfo().getProblem());
 			result.put("state", "SUCCESS");
 		} catch (BasicException e) {

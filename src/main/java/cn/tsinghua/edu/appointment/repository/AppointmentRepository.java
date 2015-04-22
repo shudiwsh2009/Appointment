@@ -60,7 +60,7 @@ public class AppointmentRepository {
 	 */
 	public Appointment makeAppointment(String appId, String name,
 			String gender, String studentId, String school, String hometown,
-			String mobile, String email, String problem)
+			String mobile, String email, String experience, String problem)
 			throws EmptyFieldException, NoExistException, ActionRejectException {
 		if (appId == null || appId.equals("")) {
 			throw new EmptyFieldException("咨询已下架");
@@ -78,6 +78,8 @@ public class AppointmentRepository {
 			throw new EmptyFieldException("手机号为空");
 		} else if (email == null || email.equals("")) {
 			throw new EmptyFieldException("邮箱为空");
+		} else if(experience == null || experience.equals("")) {
+			throw new EmptyFieldException("咨询经历为空");
 		} else if (problem == null || problem.equals("")) {
 			throw new EmptyFieldException("咨询问题为空");
 		}
@@ -92,7 +94,7 @@ public class AppointmentRepository {
 			throw new ActionRejectException("该咨询已被占用");
 		}
 		StudentInfo studentInfo = new StudentInfo(name, gender, studentId,
-				school, hometown, mobile, email, problem);
+				school, hometown, mobile, email, experience, problem);
 		app.setStudentInfo(studentInfo);
 		app.setStatus(Status.APPOINTED);
 		mongo.saveApp(app);
