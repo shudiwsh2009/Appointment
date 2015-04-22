@@ -1,6 +1,7 @@
 package cn.tsinghua.edu.appointment.domain;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection = "user")
@@ -8,9 +9,14 @@ public class User {
 	
 	@Id
 	private String id;
+	@Indexed
 	protected String username = "";
 	protected String password = "";
 	protected UserType userType = UserType.STUDENT;
+	
+	public User() {
+
+	}
 	
 	public User(String u, String p) {
 		username = u;

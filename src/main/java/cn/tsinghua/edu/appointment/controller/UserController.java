@@ -59,4 +59,14 @@ public class UserController {
 		}
 	}
 	
+	@RequestMapping(value = "logout", method = RequestMethod.POST)
+	public void login(
+			HttpServletResponse response, HttpServletRequest request,
+			HttpSession session, ModelMap model) throws IOException {
+		session.removeAttribute("userId");
+		session.removeAttribute("username");
+		session.removeAttribute("userType");
+		response.sendRedirect("/appointment");
+	}
+	
 }

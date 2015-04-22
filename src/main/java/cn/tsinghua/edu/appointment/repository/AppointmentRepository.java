@@ -35,7 +35,7 @@ public class AppointmentRepository {
 		cal.set(Calendar.MINUTE, 0);
 		cal.set(Calendar.SECOND, 0);
 		Calendar fromCal = (Calendar) cal.clone();
-		fromCal.add(Calendar.DAY_OF_MONTH, 7);
+		fromCal.add(Calendar.DAY_OF_MONTH, -7);
 		Calendar toCal = (Calendar) cal.clone();
 		toCal.add(Calendar.DAY_OF_MONTH, 7);
 		return mongo.getAppsBetweenDates(fromCal.getTime(), toCal.getTime());

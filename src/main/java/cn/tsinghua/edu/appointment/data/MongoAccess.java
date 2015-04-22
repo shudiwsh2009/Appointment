@@ -67,8 +67,8 @@ public class MongoAccess {
 	}
 
 	public List<Appointment> getAppsBetweenDates(Date from, Date to) {
-		Query query = new Query(Criteria.where("startDate").gte(from).lte(to));
-		query.with(new Sort(Direction.ASC, "startDate"));
+		Query query = new Query(Criteria.where("startTime").gte(from).lte(to));
+		query.with(new Sort(Direction.ASC, "startTime"));
 		return MONGO.find(query, Appointment.class);
 	}
 
