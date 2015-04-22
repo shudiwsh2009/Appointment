@@ -151,6 +151,45 @@ public class AppointmentRepository {
 	}
 
 	/**
+	 * 咨询师验证学号
+	 * 
+	 * @param appId
+	 * @param studentId
+	 * @param userType
+	 * @return
+	 * @throws ActionRejectException
+	 * @throws EmptyFieldException
+	 * @throws NoExistException
+	 */
+	public boolean teacherCheck(String appId, String studentId,
+			UserType userType) throws ActionRejectException,
+			EmptyFieldException, NoExistException {
+		if (userType == null || userType != UserType.TEACHER) {
+			throw new ActionRejectException("权限不足");
+		} else if (appId == null || appId.equals("")) {
+			throw new EmptyFieldException("预约已下架");
+		} else if (studentId == null || studentId.equals("")) {
+			throw new ActionRejectException("预约学生不匹配");
+		}
+		Appointment app = mongo.getAppById(appId);
+		if (app == null) {
+			throw new NoExistException("预约已下架");
+		}
+		if (app.getStartTime().compareTo(new Date()) > 0) {
+			throw new ActionRejectException("咨询未开始，不能反馈");
+		}
+		if (app.getStatus() == Status.AVAILABLE) {
+			throw new ActionRejectException("咨询未被预约");
+		}
+		if (app.getStudentInfo() != null
+				&& app.getStudentInfo().getStudentId().equals(studentId)) {
+			return true;
+		} else {
+			throw new ActionRejectException("预约学生不匹配");
+		}
+	}
+
+	/**
 	 * 咨询师反馈
 	 * 
 	 * @param appId
@@ -166,17 +205,14 @@ public class AppointmentRepository {
 	 * @throws NoExistException
 	 * @throws ActionRejectException
 	 */
-	public Appointment teacherFeedback(String appId, String studentId,
-			String teacherName, String teacherId, String studentName,
-			String problem, String solution, String adviceToCenter,
-			UserType userType) throws EmptyFieldException, NoExistException,
-			ActionRejectException {
-		if (userType != UserType.TEACHER) {
+	public Appointment teacherFeedback(String appId, String teacherName,
+			String teacherId, String studentName, String problem,
+			String solution, String adviceToCenter, UserType userType)
+			throws EmptyFieldException, NoExistException, ActionRejectException {
+		if (userType == null || userType != UserType.TEACHER) {
 			throw new ActionRejectException("权限不足");
 		} else if (appId == null || appId.equals("")) {
 			throw new EmptyFieldException("预约已下架");
-		} else if (studentId == null || studentId.equals("")) {
-			throw new EmptyFieldException("预约学号不匹配");
 		} else if (teacherName == null || teacherName.equals("")) {
 			throw new EmptyFieldException("咨询师姓名为空");
 		} else if (teacherId == null || teacherId.equals("")) {
@@ -227,7 +263,7 @@ public class AppointmentRepository {
 			String teacherId, String studentName, String problem,
 			String solution, String adviceToCenter, UserType userType)
 			throws EmptyFieldException, NoExistException, ActionRejectException {
-		if (userType != UserType.ADMIN) {
+		if (userType == null || userType != UserType.ADMIN) {
 			throw new ActionRejectException("权限不足");
 		} else if (appId == null || appId.equals("")) {
 			throw new EmptyFieldException("预约已下架");
@@ -276,7 +312,7 @@ public class AppointmentRepository {
 	public String[] addAppointment(String startTime, String endTime,
 			String teacher, UserType userType) throws EmptyFieldException,
 			FormatException, ActionRejectException {
-		if (userType != UserType.ADMIN) {
+		if (userType == null || userType != UserType.ADMIN) {
 			throw new ActionRejectException("权限不足");
 		} else if (startTime == null || startTime.equals("")) {
 			throw new EmptyFieldException("开始时间为空");
@@ -317,7 +353,7 @@ public class AppointmentRepository {
 			String endTime, String teacher, UserType userType)
 			throws EmptyFieldException, FormatException, ActionRejectException,
 			NoExistException {
-		if (userType != UserType.ADMIN) {
+		if (userType == null || userType != UserType.ADMIN) {
 			throw new ActionRejectException("权限不足");
 		} else if (appId == null || appId.equals("")) {
 			throw new EmptyFieldException("咨询已下架");
@@ -358,7 +394,7 @@ public class AppointmentRepository {
 	 */
 	public void removeAppointment(String[] appIds, UserType userType)
 			throws EmptyFieldException, ActionRejectException {
-		if (userType != UserType.ADMIN) {
+		if (userType == null || userType != UserType.ADMIN) {
 			throw new ActionRejectException("权限不足");
 		} else if (appIds == null) {
 			throw new EmptyFieldException("咨询参数为空");
@@ -378,7 +414,7 @@ public class AppointmentRepository {
 	 */
 	public void cancelAppointment(String[] appIds, UserType userType)
 			throws EmptyFieldException, ActionRejectException {
-		if (userType != UserType.ADMIN) {
+		if (userType == null || userType != UserType.ADMIN) {
 			throw new ActionRejectException("权限不足");
 		} else if (appIds == null) {
 			throw new EmptyFieldException("咨询参数为空");
@@ -411,7 +447,7 @@ public class AppointmentRepository {
 	 */
 	public Appointment viewAppointment(String appId, UserType userType)
 			throws ActionRejectException, EmptyFieldException, NoExistException {
-		if (userType != UserType.ADMIN) {
+		if (userType == null || userType != UserType.ADMIN) {
 			throw new ActionRejectException("权限不足");
 		} else if (appId == null || appId.equals("")) {
 			throw new EmptyFieldException("预约已下架");
@@ -427,7 +463,7 @@ public class AppointmentRepository {
 
 	public String exportAppointments(String appIds, UserType userType)
 			throws ActionRejectException, EmptyFieldException {
-		if (userType != UserType.ADMIN) {
+		if (userType == null || userType != UserType.ADMIN) {
 			throw new ActionRejectException("权限不足");
 		} else if (appIds == null) {
 			throw new EmptyFieldException("咨询参数为空");

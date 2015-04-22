@@ -181,6 +181,42 @@ public class AppointmentController {
 	}
 
 	/**
+	 * 咨询师验证学号
+	 * 
+	 * @param _appId
+	 * @param _studentId
+	 * @param session
+	 * @param response
+	 */
+	@RequestMapping(value = "teacherCheck", method = RequestMethod.POST)
+	public void teacherCheck(@RequestParam("appId") String _appId,
+			@RequestParam("studentId") String _studentId, HttpSession session,
+			HttpServletResponse response) {
+		AppointmentRepository ar = new AppointmentRepository();
+		JSONObject result = new JSONObject();
+		try {
+			ar.teacherCheck(_appId, _studentId,
+					(UserType) session.getAttribute("userType"));
+			result.put("state", "SUCCESS");
+		} catch (BasicException e) {
+			result.put("state", "FAILED");
+			result.put("message", e.getInfo());
+		}
+
+		// send response
+		response.setContentType("application/json");
+		response.setCharacterEncoding("UTF-8");
+		PrintWriter out;
+		try {
+			out = response.getWriter();
+			out.write(result.toString());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	/**
 	 * 咨询师反馈
 	 * 
 	 * @param _appId
@@ -196,7 +232,6 @@ public class AppointmentController {
 	 */
 	@RequestMapping(value = "teacherFeedback", method = RequestMethod.POST)
 	public void teacherFeedback(@RequestParam("appId") String _appId,
-			@RequestParam("studentId") String _studentId,
 			@RequestParam("teacherName") String _teacherName,
 			@RequestParam("teacherId") String _teacherId,
 			@RequestParam("studentName") String _studentName,
@@ -207,8 +242,8 @@ public class AppointmentController {
 		AppointmentRepository ar = new AppointmentRepository();
 		JSONObject result = new JSONObject();
 		try {
-			ar.teacherFeedback(_appId, _studentId, _teacherName, _teacherId,
-					_studentName, _problem, _solution, _advice,
+			ar.teacherFeedback(_appId, _teacherName, _teacherId, _studentName,
+					_problem, _solution, _advice,
 					(UserType) session.getAttribute("userType"));
 			result.put("state", "SUCCESS");
 		} catch (BasicException e) {
@@ -296,7 +331,7 @@ public class AppointmentController {
 			String[] addResult = ar.addAppointment(_startTime, _endTime,
 					_teacher, (UserType) session.getAttribute("userType"));
 			result.put("state", "SUCCESS");
-			result.put("appointmentId", addResult[0]);
+			result.put("appId", addResult[0]);
 			result.put("startTime", addResult[1]);
 			result.put("endTime", addResult[2]);
 			result.put("teacher", addResult[3]);
@@ -341,7 +376,7 @@ public class AppointmentController {
 					_endTime, _teacher,
 					(UserType) session.getAttribute("userType"));
 			result.put("state", "SUCCESS");
-			result.put("appointmentId", editResult[0]);
+			result.put("appId", editResult[0]);
 			result.put("startTime", editResult[1]);
 			result.put("endTime", editResult[2]);
 			result.put("teacher", editResult[3]);
