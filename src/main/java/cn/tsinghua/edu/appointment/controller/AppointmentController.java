@@ -112,10 +112,46 @@ public class AppointmentController {
 		JSONObject result = new JSONObject();
 		try {
 			Appointment app = ar.makeAppointment(_appId, _name, _gender,
-					_studentId, _school, _hometown, _mobile, _email, _experience, _problem);
+					_studentId, _school, _hometown, _mobile, _email,
+					_experience, _problem);
 			result.put("startTime", DateUtil.convertDate(app.getStartTime()));
 			result.put("endTime", DateUtil.convertDate(app.getEndTime()));
 			result.put("teacher", app.getTeacher());
+			result.put("state", "SUCCESS");
+		} catch (BasicException e) {
+			result.put("state", "FAILED");
+			result.put("message", e.getInfo());
+		}
+
+		// send response
+		response.setContentType("application/json");
+		response.setCharacterEncoding("UTF-8");
+		PrintWriter out;
+		try {
+			out = response.getWriter();
+			out.write(result.toString());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * 学生验证学号
+	 * 
+	 * @param _appId
+	 * @param _studentId
+	 * @param session
+	 * @param response
+	 */
+	@RequestMapping(value = "studentCheck", method = RequestMethod.POST)
+	public void studentCheck(@RequestParam("appId") String _appId,
+			@RequestParam("studentId") String _studentId, HttpSession session,
+			HttpServletResponse response) {
+		AppointmentRepository ar = new AppointmentRepository();
+		JSONObject result = new JSONObject();
+		try {
+			ar.studentCheck(_appId, _studentId);
 			result.put("state", "SUCCESS");
 		} catch (BasicException e) {
 			result.put("state", "FAILED");

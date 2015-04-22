@@ -78,7 +78,7 @@ public class AppointmentRepository {
 			throw new EmptyFieldException("手机号为空");
 		} else if (email == null || email.equals("")) {
 			throw new EmptyFieldException("邮箱为空");
-		} else if(experience == null || experience.equals("")) {
+		} else if (experience == null || experience.equals("")) {
 			throw new EmptyFieldException("咨询经历为空");
 		} else if (problem == null || problem.equals("")) {
 			throw new EmptyFieldException("咨询问题为空");
@@ -99,6 +99,41 @@ public class AppointmentRepository {
 		app.setStatus(Status.APPOINTED);
 		mongo.saveApp(app);
 		return app;
+	}
+
+	/**
+	 * 学生验证学号
+	 * 
+	 * @param appId
+	 * @param studentId
+	 * @return
+	 * @throws ActionRejectException
+	 * @throws EmptyFieldException
+	 * @throws NoExistException
+	 */
+	public boolean studentCheck(String appId, String studentId)
+			throws ActionRejectException, EmptyFieldException, NoExistException {
+		if (appId == null || appId.equals("")) {
+			throw new EmptyFieldException("预约已下架");
+		} else if (studentId == null || studentId.equals("")) {
+			throw new ActionRejectException("预约学生不匹配");
+		}
+		Appointment app = mongo.getAppById(appId);
+		if (app == null) {
+			throw new NoExistException("预约已下架");
+		}
+		if (app.getStartTime().compareTo(new Date()) > 0) {
+			throw new ActionRejectException("咨询未开始，不能反馈");
+		}
+		if (app.getStatus() == Status.AVAILABLE) {
+			throw new ActionRejectException("咨询未被预约");
+		}
+		if (app.getStudentInfo() != null
+				&& app.getStudentInfo().getStudentId().equals(studentId)) {
+			return true;
+		} else {
+			throw new ActionRejectException("预约学生不匹配");
+		}
 	}
 
 	/**

@@ -77,14 +77,14 @@ function fankui_stu_pre(num){
 
 function check_studentid(num){
 	var postdata={
-		appId:student_table_data[num].appid,
+		appId:student_table_data[num].appId,
 		studentId:$('#feedback_studentid').val()
 	};
 	//return true;
 	$.ajax({
 		type:'POST',
 		async:false,
-		url:'appointment/teacherCheck',
+		url:'appointment/studentCheck',
 		data:postdata,
 		dataType:'json',
 		success:function(data){
@@ -184,7 +184,7 @@ function yuyue_stu_confirm(num){
 	$('#cell3b_'+num).text('已预约');
 	$('body').append('\
 		<div class="yuyue_stu_success">\
-			您已预约<br>'+student_table_data[num].t+'<br>'+student_table_data[num].n+'。请等待中心老师与你联系!\
+			您已预约<br>'+student_table_data[num].startTime+'<br>'+student_table_data[num].endTime+'。请等待中心老师与你联系!\
 			<br>\
 			感谢使用中心咨询预约系统！<br>\
 			<button type="button" onclick="$(\'.yuyue_stu_success\').fadeOut(100);">确定</button>\
@@ -264,7 +264,7 @@ function getAppointmentData(num){
 	t=$('#ap_experience').val();
 	if (t!='') appointmentdata.experience=t;
 		else return false;
-	appointmentdata.appId=''+student_table_data[num].appid;
+	appointmentdata.appId=''+student_table_data[num].appId;
 	return true;
 }
 
@@ -304,7 +304,7 @@ function getFeedbackData(num){
 		t+=(s=='非常同意'?'A':(s=='一般'?'B':'C'));
 	}
 	feedbackdata.choices=t;
-	feedbackdata.appId=student_table_data[num].appid;
+	feedbackdata.appId=student_table_data[num].appId;
 	feedbackdata.studentId=''+studentid_now;
 	return true;
 }
