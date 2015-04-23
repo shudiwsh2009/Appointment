@@ -186,7 +186,6 @@ public class AppointmentController {
 	 */
 	@RequestMapping(value = "studentFeedback", method = RequestMethod.POST)
 	public void studentFeedback(@RequestParam("appId") String _appId,
-			@RequestParam("studentId") String _studentId,
 			@RequestParam("name") String _name,
 			@RequestParam("problem") String _problem,
 			@RequestParam("choices") String[] _choices,
@@ -196,8 +195,8 @@ public class AppointmentController {
 		AppointmentRepository ar = new AppointmentRepository();
 		JSONObject result = new JSONObject();
 		try {
-			ar.studentFeedback(_appId, _studentId, _name, _problem, _choices,
-					_score, _feedback);
+			ar.studentFeedback(_appId, _name, _problem, _choices, _score,
+					_feedback);
 			result.put("state", "SUCCESS");
 		} catch (BasicException e) {
 			result.put("state", "FAILED");

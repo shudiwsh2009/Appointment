@@ -66,9 +66,9 @@ function fankui_stu_pre(num){
 		<div class="fankui_stu_pre">\
 			请输入预约学号\
 			<br>\
-			<input id="feedback_studentid"></input>\
+			<input class="feedback_studentid"></input>\
 			<br>\
-			<button type="button" onclick="$(\'.fankui_stu_pre\').fadeOut(100);if (check_studentid('+num+')) fankui_stu('+num+');">确定</button>\
+			<button type="button" onclick="check_studentid('+num+');">确定</button>\
 			<button type="button" onclick="$(\'.fankui_stu_pre\').fadeOut(100);">取消</button>\
 		</div>\
 	');
@@ -76,11 +76,30 @@ function fankui_stu_pre(num){
 }
 
 function check_studentid(num){
+	var len=$('.feedback_studentid').length;
 	var postdata={
 		appId:student_table_data[num].appId,
-		studentId:$('#feedback_studentid').val()
+		studentId:$('.feedback_studentid')[len-1].value
 	};
+	console.log(postdata);
+	//studentid_now=$('.feedback_studentid')[len-1].value;
+
 	//return true;
+	
+	$.ajax({
+		type:'POST',
+		async:false,
+		url:'appointment/studentCheck',
+		dataType:'json',
+		data:postdata,
+		success:function(data){
+			if (data.state=='SUCCESS'){
+				$('.fankui_stu_pre').fadeOut(100);
+				 fankui_stu(num);
+				return true;
+			}
+		}
+	});/*
 	$.ajax({
 		type:'POST',
 		async:false,
@@ -89,13 +108,13 @@ function check_studentid(num){
 		dataType:'json',
 		success:function(data){
 			if (data.state=='SUCCESS'){
-				studentid_now=$('#feedback_studentid').val();			
-				return true;
+				alert('success');
+				return true;			
 			}
 			else
 				return false;
 		}
-	});
+	});*/
 }
 
 function fankui_stu(num){
@@ -127,8 +146,8 @@ function fankui_stu(num){
 
 function fankui_stu_confirm(num){
 	$('.fankui_stu').fadeOut(100);
-	$('#cell3b_'+num).attr('disabled','true');
-	$('#cell3b_'+num).text('已反馈');
+	//$('#cell3b_'+num).attr('disabled','true');
+	//$('#cell3b_'+num).text('已反馈');
 	$('body').append('\
 		<div class="fankui_stu_success">\
 			感谢使用中心咨询预约系统！<br>\
@@ -233,6 +252,8 @@ function getData(){
 			}
 		}
 	});
+	
+	
 }
 
 function getAppointmentData(num){

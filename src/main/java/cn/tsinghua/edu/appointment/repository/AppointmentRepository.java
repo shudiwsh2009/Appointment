@@ -151,14 +151,11 @@ public class AppointmentRepository {
 	 * @throws NoExistException
 	 * @throws ActionRejectException
 	 */
-	public Appointment studentFeedback(String appId, String studentId,
-			String name, String problem, String[] choices, String score,
-			String feedback) throws EmptyFieldException, NoExistException,
-			ActionRejectException {
+	public Appointment studentFeedback(String appId, String name,
+			String problem, String[] choices, String score, String feedback)
+			throws EmptyFieldException, NoExistException, ActionRejectException {
 		if (appId == null || appId.equals("")) {
 			throw new EmptyFieldException("预约已下架");
-		} else if (studentId == null || studentId.equals("")) {
-			throw new EmptyFieldException("预约学号不匹配");
 		} else if (name == null || name.equals("")) {
 			throw new EmptyFieldException("姓名为空");
 		} else if (problem == null || problem.equals("")) {
