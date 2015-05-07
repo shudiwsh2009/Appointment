@@ -111,7 +111,7 @@ public class AppointmentRepository {
 	 * @throws EmptyFieldException
 	 * @throws NoExistException
 	 */
-	public boolean studentCheck(String appId, String studentId)
+	public Appointment studentCheck(String appId, String studentId)
 			throws ActionRejectException, EmptyFieldException, NoExistException {
 		if (appId == null || appId.equals("")) {
 			throw new EmptyFieldException("预约已下架");
@@ -130,7 +130,7 @@ public class AppointmentRepository {
 		}
 		if (app.getStudentInfo() != null
 				&& app.getStudentInfo().getStudentId().equals(studentId)) {
-			return true;
+			return app;
 		} else {
 			throw new ActionRejectException("预约学生不匹配");
 		}
@@ -195,7 +195,7 @@ public class AppointmentRepository {
 	 * @throws EmptyFieldException
 	 * @throws NoExistException
 	 */
-	public boolean teacherCheck(String appId, String studentId,
+	public Appointment teacherCheck(String appId, String studentId,
 			UserType userType) throws ActionRejectException,
 			EmptyFieldException, NoExistException {
 		if (userType == null || userType != UserType.TEACHER) {
@@ -217,7 +217,7 @@ public class AppointmentRepository {
 		}
 		if (app.getStudentInfo() != null
 				&& app.getStudentInfo().getStudentId().equals(studentId)) {
-			return true;
+			return app;
 		} else {
 			throw new ActionRejectException("预约学生不匹配");
 		}
@@ -275,6 +275,40 @@ public class AppointmentRepository {
 		app.setTeacherFeedback(teacherFeedback);
 		mongo.saveApp(app);
 		return app;
+	}
+
+	/**
+	 * 管理员拉取反馈
+	 * 
+	 * @param appId
+	 * @param userType
+	 * @return
+	 * @throws ActionRejectException
+	 * @throws EmptyFieldException
+	 * @throws NoExistException
+	 */
+	public Appointment adminCheck(String appId, UserType userType)
+			throws ActionRejectException, EmptyFieldException, NoExistException {
+		if (userType == null || userType != UserType.ADMIN) {
+			throw new ActionRejectException("权限不足");
+		} else if (appId == null || appId.equals("")) {
+			throw new EmptyFieldException("预约已下架");
+		}
+		Appointment app = mongo.getAppById(appId);
+		if (app == null) {
+			throw new NoExistException("预约已下架");
+		}
+		if (app.getStartTime().compareTo(new Date()) > 0) {
+			throw new ActionRejectException("咨询未开始，不能反馈");
+		}
+		if (app.getStatus() == Status.AVAILABLE) {
+			throw new ActionRejectException("咨询未被预约");
+		}
+		if (app.getStudentInfo() != null) {
+			return app;
+		} else {
+			throw new ActionRejectException("预约学生不匹配");
+		}
 	}
 
 	/**

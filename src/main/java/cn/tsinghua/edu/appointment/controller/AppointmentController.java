@@ -151,7 +151,16 @@ public class AppointmentController {
 		AppointmentRepository ar = new AppointmentRepository();
 		JSONObject result = new JSONObject();
 		try {
-			ar.studentCheck(_appId, _studentId);
+			Appointment app = ar.studentCheck(_appId, _studentId);
+			result.put("name", app.getStudentFeedback().getName());
+			result.put("problem", app.getStudentFeedback().getProblem());
+			JSONArray choices = new JSONArray();
+			for(String c : app.getStudentFeedback().getChoices()) {
+				choices.put(c);
+			}
+			result.put("choices", choices);
+			result.put("score", app.getStudentFeedback().getScore());
+			result.put("feedback", app.getStudentFeedback().getFeedback());
 			result.put("state", "SUCCESS");
 		} catch (BasicException e) {
 			result.put("state", "FAILED");
@@ -231,8 +240,14 @@ public class AppointmentController {
 		AppointmentRepository ar = new AppointmentRepository();
 		JSONObject result = new JSONObject();
 		try {
-			ar.teacherCheck(_appId, _studentId,
+			Appointment app = ar.teacherCheck(_appId, _studentId,
 					(UserType) session.getAttribute("userType"));
+			result.put("teacherName", app.getTeacherFeedback().getTeacherName());
+			result.put("teacherId", app.getTeacherFeedback().getTeacherId());
+			result.put("studentName", app.getTeacherFeedback().getStudentName());
+			result.put("problem", app.getTeacherFeedback().getProblem());
+			result.put("solution", app.getTeacherFeedback().getSolution());
+			result.put("advice", app.getTeacherFeedback().getAdviceToCenter());
 			result.put("state", "SUCCESS");
 		} catch (BasicException e) {
 			result.put("state", "FAILED");
@@ -281,6 +296,40 @@ public class AppointmentController {
 			ar.teacherFeedback(_appId, _teacherName, _teacherId, _studentName,
 					_problem, _solution, _advice,
 					(UserType) session.getAttribute("userType"));
+			result.put("state", "SUCCESS");
+		} catch (BasicException e) {
+			result.put("state", "FAILED");
+			result.put("message", e.getInfo());
+		}
+
+		// send response
+		response.setContentType("application/json");
+		response.setCharacterEncoding("UTF-8");
+		PrintWriter out;
+		try {
+			out = response.getWriter();
+			out.write(result.toString());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	@RequestMapping(value = "adminCheck", method = RequestMethod.POST)
+	public void adminCheck(@RequestParam("appId") String _appId,
+			HttpSession session,
+			HttpServletResponse response) {
+		AppointmentRepository ar = new AppointmentRepository();
+		JSONObject result = new JSONObject();
+		try {
+			Appointment app = ar.adminCheck(_appId,
+					(UserType) session.getAttribute("userType"));
+			result.put("teacherName", app.getTeacherFeedback().getTeacherName());
+			result.put("teacherId", app.getTeacherFeedback().getTeacherId());
+			result.put("studentName", app.getTeacherFeedback().getStudentName());
+			result.put("problem", app.getTeacherFeedback().getProblem());
+			result.put("solution", app.getTeacherFeedback().getSolution());
+			result.put("advice", app.getTeacherFeedback().getAdviceToCenter());
 			result.put("state", "SUCCESS");
 		} catch (BasicException e) {
 			result.put("state", "FAILED");
