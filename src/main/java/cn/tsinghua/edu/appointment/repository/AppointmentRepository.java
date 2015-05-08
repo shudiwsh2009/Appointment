@@ -1,9 +1,18 @@
 package cn.tsinghua.edu.appointment.repository;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 import cn.tsinghua.edu.appointment.data.MongoAccess;
 import cn.tsinghua.edu.appointment.domain.Appointment;
@@ -18,6 +27,8 @@ import cn.tsinghua.edu.appointment.exception.EmptyFieldException;
 import cn.tsinghua.edu.appointment.exception.FormatException;
 import cn.tsinghua.edu.appointment.exception.NoExistException;
 import cn.tsinghua.edu.appointment.util.DateUtil;
+import cn.tsinghua.edu.appointment.util.ExcelUtil;
+import cn.tsinghua.edu.appointment.util.TimeUtil;
 
 public class AppointmentRepository {
 
@@ -529,14 +540,72 @@ public class AppointmentRepository {
 		return app;
 	}
 
-	public String exportAppointments(String appIds, UserType userType)
-			throws ActionRejectException, EmptyFieldException {
+	/**
+	 * 管理员导出咨询
+	 * 
+	 * @param appIds
+	 * @param userType
+	 * @return
+	 * @throws ActionRejectException
+	 * @throws EmptyFieldException
+	 * @throws NoExistException
+	 */
+	public String exportAppointment(String[] appIds, UserType userType)
+			throws ActionRejectException, EmptyFieldException, NoExistException {
 		if (userType == null || userType != UserType.ADMIN) {
 			throw new ActionRejectException("权限不足");
 		} else if (appIds == null) {
 			throw new EmptyFieldException("咨询参数为空");
 		}
-		return "";
+		List<String> filenames = new ArrayList<String>();
+		int index = 0;
+		for (String appId : appIds) {
+			Appointment app = mongo.getAppById(appId);
+			if (app == null) {
+				continue;
+			}
+			String filename = (++index) + "."
+					+ DateUtil.exportDate(app.getStartTime()) + "_"
+					+ DateUtil.exportDate(app.getEndTime()) + "_"
+					+ app.getTeacher() + ExcelUtil.EXPORT_SUFFIX;
+			try {
+				ExcelUtil.exportToExcel(app, filename);
+				filenames.add(filename);
+			} catch (BasicException e) {
+				continue;
+			}
+		}
+		if (filenames.isEmpty()) {
+			return "";
+		} else if (filenames.size() == 1) {
+			return ExcelUtil.EXPORT_PREFIX + filenames.get(0);
+		} else {
+			try {
+				String zipFileName = "export_" + TimeUtil.getCurrentYMD()
+						+ ExcelUtil.ZIP_SUFFIX;
+				File zipFile = new File(ExcelUtil.DEFAULT_EXPORT_FOLDER
+						+ zipFileName);
+				ZipOutputStream zipOut = new ZipOutputStream(
+						new FileOutputStream(zipFile));
+				int temp = 0;
+				for (String fname : filenames) {
+					File file = new File(ExcelUtil.DEFAULT_EXPORT_FOLDER
+							+ fname);
+					InputStream input = new FileInputStream(file);
+					zipOut.putNextEntry(new ZipEntry(fname));
+					while ((temp = input.read()) != -1) {
+						zipOut.write(temp);
+					}
+					input.close();
+				}
+				zipOut.close();
+				return ExcelUtil.EXPORT_PREFIX + zipFileName;
+			} catch (FileNotFoundException e) {
+				throw new NoExistException("本地文件找不到");
+			} catch (IOException e) {
+				throw new NoExistException("本地文件找不到");
+			}
+		}
 	}
 
 }

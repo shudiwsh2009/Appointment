@@ -2,22 +2,27 @@ package cn.tsinghua.edu.appointment.util;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 
-import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 
 import cn.tsinghua.edu.appointment.domain.Appointment;
+import cn.tsinghua.edu.appointment.exception.BasicException;
 
 public class ExcelUtil {
 
-	public static String DEFAULT_EXCEL = "";
+	public static final String DEFAULT_EXPORT_FOLDER = "D:\\Workspace\\apache-tomcat-8.0.21-appointment\\webapps\\appointment\\export\\";
+	public static final String EXPORT_PREFIX = "export/";
+	public static final String EXPORT_SUFFIX = ".xlsx";
+	public static final String ZIP_SUFFIX = ".zip";
+	public static final String DEFAULT_EXCEL = DEFAULT_EXPORT_FOLDER + "export_template.xlsx";
 
-	public static void exportToExcel(Appointment app, String filepath) {
+	public static void exportToExcel(Appointment app, String filename)
+			throws BasicException {
+		String filepath = DEFAULT_EXPORT_FOLDER + filename;
 		try {
 			InputStream input = new FileInputStream(DEFAULT_EXCEL);
 			Workbook wb = WorkbookFactory.create(input);
@@ -57,9 +62,12 @@ public class ExcelUtil {
 			cell.setCellValue(app.getStudentFeedback().getProblem());
 			cell = sheet.getRow(11).createCell(1);
 			cell.setCellValue(app.getStudentFeedback().getName());
-			for (int i = 12; i <= 23; ++i) {
-				cell = sheet.getRow(i).createCell(2);
-				cell.setCellValue(app.getStudentFeedback().getChoices().charAt(i - 12));
+			if(!app.getStudentFeedback().getChoices().isEmpty()) {
+				for (int i = 12; i <= 23; ++i) {
+					cell = sheet.getRow(i).createCell(2);
+					cell.setCellValue(app.getStudentFeedback().getChoices()
+							.charAt(i - 12) + "");
+				}
 			}
 			cell = sheet.getRow(24).createCell(1);
 			cell.setCellValue(app.getStudentFeedback().getScore());
@@ -84,12 +92,8 @@ public class ExcelUtil {
 			wb.write(output);
 			input.close();
 			output.close();
-		} catch (InvalidFormatException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		} catch (Exception e) {
+			throw new BasicException("导出错误");
 		}
 	}
 }

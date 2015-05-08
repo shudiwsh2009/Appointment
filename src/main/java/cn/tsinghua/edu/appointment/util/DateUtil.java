@@ -16,6 +16,11 @@ public class DateUtil {
 		DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 		return df.parse(s);
 	}
+	
+	public static String exportDate(Date d) {
+		DateFormat df = new SimpleDateFormat("yyyyMMdd HHmm");
+		return df.format(d);
+	}
 
 	public static void main(String[] args) {
 		System.out.println(DateUtil.convertDate(new Date()));

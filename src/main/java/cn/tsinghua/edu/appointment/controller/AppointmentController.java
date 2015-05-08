@@ -589,5 +589,40 @@ public class AppointmentController {
 			e.printStackTrace();
 		}
 	}
+	
+	/**
+	 * 管理员取消预约
+	 * 
+	 * @param _appIds
+	 * @param session
+	 * @param response
+	 */
+	@RequestMapping(value = "exportAppointment", method = RequestMethod.POST)
+	public void exportAppointment(@RequestParam("appIds") String[] _appIds,
+			HttpSession session, HttpServletResponse response) {
+		AppointmentRepository ar = new AppointmentRepository();
+		JSONObject result = new JSONObject();
+		try {
+			String zipUrl = ar.exportAppointment(_appIds,
+					(UserType) session.getAttribute("userType"));
+			result.put("url", zipUrl);
+			result.put("state", "SUCCESS");
+		} catch (BasicException e) {
+			result.put("state", "FAILED");
+			result.put("message", e.getInfo());
+		}
+
+		// send response
+		response.setContentType("application/json");
+		response.setCharacterEncoding("UTF-8");
+		PrintWriter out;
+		try {
+			out = response.getWriter();
+			out.write(result.toString());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 
 }
