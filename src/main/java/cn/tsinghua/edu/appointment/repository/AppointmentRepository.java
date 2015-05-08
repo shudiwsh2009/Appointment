@@ -152,7 +152,7 @@ public class AppointmentRepository {
 	 * @throws ActionRejectException
 	 */
 	public Appointment studentFeedback(String appId, String name,
-			String problem, String[] choices, String score, String feedback)
+			String problem, String choices, String score, String feedback)
 			throws EmptyFieldException, NoExistException, ActionRejectException {
 		if (appId == null || appId.equals("")) {
 			throw new EmptyFieldException("预约已下架");
@@ -160,7 +160,7 @@ public class AppointmentRepository {
 			throw new EmptyFieldException("姓名为空");
 		} else if (problem == null || problem.equals("")) {
 			throw new EmptyFieldException("咨询问题为空");
-		} else if (choices == null || choices.length == 0) {
+		} else if (choices == null || choices.equals("")) {
 			throw new EmptyFieldException("选项为空");
 		} else if (score == null || score.equals("")) {
 			throw new EmptyFieldException("总评为空");

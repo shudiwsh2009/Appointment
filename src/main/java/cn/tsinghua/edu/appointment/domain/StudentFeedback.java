@@ -1,25 +1,21 @@
 package cn.tsinghua.edu.appointment.domain;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 public class StudentFeedback {
 
 	protected String name = "";
 	protected String problem = "";
-	protected List<String> choices = new ArrayList<String>();
+	protected String choices = "";
 	protected String score = "";
 	protected String feedback = "";
-	
+
 	public StudentFeedback() {
-		
+
 	}
-	
-	public StudentFeedback(String n, String p, String[] cs, String s, String f) {
+
+	public StudentFeedback(String n, String p, String c, String s, String f) {
 		name = n;
 		problem = p;
-		choices.addAll(Arrays.asList(cs));
+		choices = c;
 		score = s;
 		feedback = f;
 	}
@@ -40,11 +36,11 @@ public class StudentFeedback {
 		this.problem = problem;
 	}
 
-	public List<String> getChoices() {
+	public String getChoices() {
 		return choices;
 	}
 
-	public void setChoices(List<String> choices) {
+	public void setChoices(String choices) {
 		this.choices = choices;
 	}
 

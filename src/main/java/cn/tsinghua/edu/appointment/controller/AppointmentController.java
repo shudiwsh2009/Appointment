@@ -154,11 +154,7 @@ public class AppointmentController {
 			Appointment app = ar.studentCheck(_appId, _studentId);
 			result.put("name", app.getStudentFeedback().getName());
 			result.put("problem", app.getStudentFeedback().getProblem());
-			JSONArray choices = new JSONArray();
-			for(String c : app.getStudentFeedback().getChoices()) {
-				choices.put(c);
-			}
-			result.put("choices", choices);
+			result.put("choices", app.getStudentFeedback().getChoices());
 			result.put("score", app.getStudentFeedback().getScore());
 			result.put("feedback", app.getStudentFeedback().getFeedback());
 			result.put("state", "SUCCESS");
@@ -197,7 +193,7 @@ public class AppointmentController {
 	public void studentFeedback(@RequestParam("appId") String _appId,
 			@RequestParam("name") String _name,
 			@RequestParam("problem") String _problem,
-			@RequestParam("choices") String[] _choices,
+			@RequestParam("choices") String _choices,
 			@RequestParam("score") String _score,
 			@RequestParam("feedback") String _feedback, HttpSession session,
 			HttpServletResponse response) {
