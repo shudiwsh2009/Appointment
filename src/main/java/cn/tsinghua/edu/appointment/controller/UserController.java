@@ -1,11 +1,13 @@
 package cn.tsinghua.edu.appointment.controller;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.json.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -40,6 +42,8 @@ public class UserController {
 			@RequestParam("password") String _password,
 			HttpServletResponse response, HttpServletRequest request,
 			HttpSession session, ModelMap model) throws IOException {
+		
+		JSONObject result = new JSONObject();
 		UserRepository ur = new UserRepository();
 		try {
 			User user = ur.login(_username, _password);
@@ -47,15 +51,28 @@ public class UserController {
 			session.setAttribute("username", _username);
 			session.setAttribute("userType", user.getUserType());
 			if(user.getUserType() == UserType.ADMIN) {
-				response.sendRedirect("/appointment/admin");
+				result.put("url", "admin");
 			} else if(user.getUserType() == UserType.TEACHER) {
-				response.sendRedirect("/appointment/teacher");
+				result.put("url", "teacher");
 			} else {
-				response.sendRedirect("/appointment");
+				result.put("url", "/");
 			}
+			result.put("state", "SUCCESS");
 		} catch (BasicException e) {
-			model.addAttribute("message", e.getInfo());
-			response.sendRedirect("/appointment/login");
+			result.put("state", "FAILED");
+			result.put("url", "login");
+		}
+
+		// send response
+		response.setContentType("application/json");
+		response.setCharacterEncoding("UTF-8");
+		PrintWriter out;
+		try {
+			out = response.getWriter();
+			out.write(result.toString());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 	

@@ -69,7 +69,7 @@ function fankui_stu_pre(num){
 			<input class="feedback_studentid"></input>\
 			<br>\
 			<button type="button" onclick="check_studentid('+num+');">确定</button>\
-			<button type="button" onclick="$(\'.fankui_stu_pre\').fadeOut(100);">取消</button>\
+			<button type="button" onclick="$(\'.fankui_stu_pre\').remove();">取消</button>\
 		</div>\
 	');
 	optimize('.fankui_stu_pre');
@@ -94,7 +94,8 @@ function check_studentid(num){
 		data:postdata,
 		success:function(data){
 			if (data.state=='SUCCESS'){
-				$('.fankui_stu_pre').fadeOut(100);
+				$('.fankui_stu_pre').remove();
+				 feedback=data;
 				 fankui_stu(num);
 				return true;
 			}
@@ -138,20 +139,30 @@ function fankui_stu(num){
 			请为本次咨询打分（0~100）：<input id="fb_score"></input><br>\
 			感受和建议：<br><textarea id="fb_feedback"></textarea><br>\
 			<button type="button" onclick="if (getFeedbackData('+num+')) studentPostFeedback(feedbackdata,'+num+');">提交反馈</button>\
-			<button type="button" onclick="$(\'.fankui_stu\').fadeOut(100);">取消</button>\
+			<button type="button" onclick="$(\'.fankui_stu\').remove();">取消</button>\
 		</div>\
 	');
+	if (feedback.choices!=""){
+		$('#fb_name').val(feedback.name);
+		$('#fb_problem').val(feedback.problem);
+		$('#fb_score').val(feedback.score);
+		$('#fb_feedback').val(feedback.feedback);
+		for (i=1;i<=12;i++){
+			var t=feedback.choices[i-1];
+			$('#fb_q'+i).val(t=='A'?'非常同意':(t=='B'?'一般':'不同意'));
+		}
+	}
 	optimize('.fankui_stu');
 }
 
 function fankui_stu_confirm(num){
-	$('.fankui_stu').fadeOut(100);
+	$('.fankui_stu').remove();
 	//$('#cell3b_'+num).attr('disabled','true');
 	//$('#cell3b_'+num).text('已反馈');
 	$('body').append('\
 		<div class="fankui_stu_success">\
 			感谢使用中心咨询预约系统！<br>\
-			<button type="button" onclick="$(\'.fankui_stu_success\').fadeOut(100);">确定</button>\
+			<button type="button" onclick="$(\'.fankui_stu_success\').remove();">确定</button>\
 		</div>\
 	');
 	optimize('.fankui_stu_success');
@@ -162,8 +173,8 @@ function yuyue_stu_pre(num){
 		<div class="yuyue_stu_pre">\
 			确定预约后请准确填写个人信息，方便学习与发展中心老师与你取得联系\
 			<br>\
-			<button type="button" onclick="$(\'.yuyue_stu_pre\').fadeOut(100);yuyue_stu('+num+');">立即预约</button>\
-			<button type="button" onclick="$(\'.yuyue_stu_pre\').fadeOut(100);">暂不预约</button>\
+			<button type="button" onclick="$(\'.yuyue_stu_pre\').remove();yuyue_stu('+num+');">立即预约</button>\
+			<button type="button" onclick="$(\'.yuyue_stu_pre\').remove();">暂不预约</button>\
 		</div>\
 	');
 	optimize('.yuyue_stu_pre');
@@ -191,14 +202,14 @@ function yuyue_stu(num){
 			<textarea id="ap_problem"></textarea>\
 			<br>\
 			<button type="button" onclick="if (getAppointmentData('+num+')) studentPostAppointment(appointmentdata, '+num+');">确定预约</button>\
-			<button type="button" onclick="$(\'.yuyue_stu\').fadeOut(100);">取消</button>\
+			<button type="button" onclick="$(\'.yuyue_stu\').remove();">取消</button>\
 		</div>\
 	');
 	optimize('.yuyue_stu');
 }
 
 function yuyue_stu_confirm(num){
-	$('.yuyue_stu').fadeOut(100);
+	$('.yuyue_stu').remove();
 	$('#cell3b_'+num).attr('disabled','true');
 	$('#cell3b_'+num).text('已预约');
 	$('body').append('\
@@ -206,7 +217,7 @@ function yuyue_stu_confirm(num){
 			您已预约<br>'+student_table_data[num].startTime+'<br>'+student_table_data[num].endTime+'。请等待中心老师与你联系!\
 			<br>\
 			感谢使用中心咨询预约系统！<br>\
-			<button type="button" onclick="$(\'.yuyue_stu_success\').fadeOut(100);">确定</button>\
+			<button type="button" onclick="$(\'.yuyue_stu_success\').remove();">确定</button>\
 		</div>\
 	');
 	optimize('.yuyue_stu_success');
