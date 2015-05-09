@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import cn.tsinghua.edu.appointment.data.MongoAccess;
 import cn.tsinghua.edu.appointment.domain.Appointment;
 import cn.tsinghua.edu.appointment.domain.UserType;
+import cn.tsinghua.edu.appointment.exception.FormatException;
 import cn.tsinghua.edu.appointment.util.DateUtil;
 
 @Controller
@@ -48,7 +49,7 @@ public class CoreController {
 
 	@RequestMapping(value = "init", method = RequestMethod.GET)
 	public void init(HttpSession session, HttpServletRequest request)
-			throws ParseException {
+			throws FormatException {
 		Appointment app1 = new Appointment(
 				DateUtil.convertDate("2015-05-10 08:00"),
 				DateUtil.convertDate("2015-05-10 09:00"), "李老师");
