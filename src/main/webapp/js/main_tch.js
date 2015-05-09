@@ -140,8 +140,8 @@ function fankui_tch(num){
 
 function fankui_tch_confirm(num){
 	$('.fankui_tch').remove();
-	$('#cell3b_'+num).attr('disabled','true');
-	$('#cell3b_'+num).text('已反馈');
+//	$('#cell3b_'+num).attr('disabled','true');
+//	$('#cell3b_'+num).text('已反馈');
 	$('body').append('\
 		<div class="fankui_tch_success">\
 			您已成功提交反馈！<br>\

@@ -311,6 +311,13 @@ public class AppointmentController {
 		}
 	}
 	
+	/**
+	 * 管理员拉取反馈
+	 * 
+	 * @param _appId
+	 * @param session
+	 * @param response
+	 */
 	@RequestMapping(value = "adminCheck", method = RequestMethod.POST)
 	public void adminCheck(@RequestParam("appId") String _appId,
 			HttpSession session,
@@ -409,13 +416,13 @@ public class AppointmentController {
 		AppointmentRepository ar = new AppointmentRepository();
 		JSONObject result = new JSONObject();
 		try {
-			String[] addResult = ar.addAppointment(_startTime, _endTime,
+			Appointment newApp = ar.addAppointment(_startTime, _endTime,
 					_teacher, (UserType) session.getAttribute("userType"));
 			result.put("state", "SUCCESS");
-			result.put("appId", addResult[0]);
-			result.put("startTime", addResult[1]);
-			result.put("endTime", addResult[2]);
-			result.put("teacher", addResult[3]);
+			result.put("appId", newApp.getId());
+			result.put("startTime", DateUtil.convertDate(newApp.getStartTime()));
+			result.put("endTime", DateUtil.convertDate(newApp.getEndTime()));
+			result.put("teacher", newApp.getTeacher());
 		} catch (BasicException e) {
 			result.put("state", "FAILED");
 			result.put("message", e.getInfo());
@@ -453,14 +460,14 @@ public class AppointmentController {
 		AppointmentRepository ar = new AppointmentRepository();
 		JSONObject result = new JSONObject();
 		try {
-			String[] editResult = ar.editAppointment(_appId, _startTime,
+			Appointment app = ar.editAppointment(_appId, _startTime,
 					_endTime, _teacher,
 					(UserType) session.getAttribute("userType"));
 			result.put("state", "SUCCESS");
-			result.put("appId", editResult[0]);
-			result.put("startTime", editResult[1]);
-			result.put("endTime", editResult[2]);
-			result.put("teacher", editResult[3]);
+			result.put("appId", app.getId());
+			result.put("startTime", DateUtil.convertDate(app.getStartTime()));
+			result.put("endTime", DateUtil.convertDate(app.getEndTime()));
+			result.put("teacher", app.getTeacher());
 		} catch (BasicException e) {
 			result.put("state", "FAILED");
 			result.put("message", e.getInfo());
@@ -487,7 +494,7 @@ public class AppointmentController {
 	 * @param response
 	 */
 	@RequestMapping(value = "removeAppointment", method = RequestMethod.POST)
-	public void removeAppointment(@RequestParam("appIds") String[] _appIds,
+	public void removeAppointment(@RequestParam("appIds[]") String[] _appIds,
 			HttpSession session, HttpServletResponse response) {
 		AppointmentRepository ar = new AppointmentRepository();
 		JSONObject result = new JSONObject();
@@ -521,7 +528,7 @@ public class AppointmentController {
 	 * @param response
 	 */
 	@RequestMapping(value = "cancelAppointment", method = RequestMethod.POST)
-	public void cancelAppointment(@RequestParam("appIds") String[] _appIds,
+	public void cancelAppointment(@RequestParam("appIds[]") String[] _appIds,
 			HttpSession session, HttpServletResponse response) {
 		AppointmentRepository ar = new AppointmentRepository();
 		JSONObject result = new JSONObject();
@@ -591,14 +598,14 @@ public class AppointmentController {
 	}
 	
 	/**
-	 * 管理员取消预约
+	 * 管理员导出预约
 	 * 
 	 * @param _appIds
 	 * @param session
 	 * @param response
 	 */
 	@RequestMapping(value = "exportAppointment", method = RequestMethod.POST)
-	public void exportAppointment(@RequestParam("appIds") String[] _appIds,
+	public void exportAppointment(@RequestParam("appIds[]") String[] _appIds,
 			HttpSession session, HttpServletResponse response) {
 		AppointmentRepository ar = new AppointmentRepository();
 		JSONObject result = new JSONObject();

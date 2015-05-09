@@ -6,7 +6,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -388,7 +387,7 @@ public class AppointmentRepository {
 	 * @throws FormatException
 	 * @throws ActionRejectException
 	 */
-	public String[] addAppointment(String startTime, String endTime,
+	public Appointment addAppointment(String startTime, String endTime,
 			String teacher, UserType userType) throws EmptyFieldException,
 			FormatException, ActionRejectException {
 		if (userType == null || userType != UserType.ADMIN) {
@@ -400,18 +399,14 @@ public class AppointmentRepository {
 		} else if (teacher == null || teacher.equals("")) {
 			throw new EmptyFieldException("咨询师姓名为空");
 		}
-		try {
-			Date start = DateUtil.convertDate(startTime);
-			Date end = DateUtil.convertDate(endTime);
-			if (start.compareTo(end) >= 1) {
-				throw new FormatException("开始时间不能晚于结束时间");
-			}
-			Appointment newApp = new Appointment(start, end, teacher);
-			mongo.saveApp(newApp);
-			return new String[] { newApp.getId(), startTime, endTime, teacher };
-		} catch (ParseException e) {
-			throw new FormatException("日期格式有误");
+		Date start = DateUtil.convertDate(startTime);
+		Date end = DateUtil.convertDate(endTime);
+		if (start.compareTo(end) >= 1) {
+			throw new FormatException("开始时间不能晚于结束时间");
 		}
+		Appointment newApp = new Appointment(start, end, teacher);
+		mongo.saveApp(newApp);
+		return newApp;
 	}
 
 	/**
@@ -428,7 +423,7 @@ public class AppointmentRepository {
 	 * @throws ActionRejectException
 	 * @throws NoExistException
 	 */
-	public String[] editAppointment(String appId, String startTime,
+	public Appointment editAppointment(String appId, String startTime,
 			String endTime, String teacher, UserType userType)
 			throws EmptyFieldException, FormatException, ActionRejectException,
 			NoExistException {
@@ -443,24 +438,20 @@ public class AppointmentRepository {
 		} else if (teacher == null || teacher.equals("")) {
 			throw new EmptyFieldException("咨询师姓名为空");
 		}
-		try {
-			Appointment app = mongo.getAppById(appId);
-			if (app == null) {
-				throw new NoExistException("咨询已下架");
-			}
-			Date start = DateUtil.convertDate(startTime);
-			Date end = DateUtil.convertDate(endTime);
-			if (start.compareTo(end) >= 1) {
-				throw new FormatException("开始时间不能晚于结束时间");
-			}
-			app.setStartTime(start);
-			app.setEndTime(end);
-			app.setTeacher(teacher);
-			mongo.saveApp(app);
-			return new String[] { app.getId(), startTime, endTime, teacher };
-		} catch (ParseException e) {
-			throw new FormatException("日期格式有误");
+		Appointment app = mongo.getAppById(appId);
+		if (app == null) {
+			throw new NoExistException("咨询已下架");
 		}
+		Date start = DateUtil.convertDate(startTime);
+		Date end = DateUtil.convertDate(endTime);
+		if (start.compareTo(end) >= 1) {
+			throw new FormatException("开始时间不能晚于结束时间");
+		}
+		app.setStartTime(start);
+		app.setEndTime(end);
+		app.setTeacher(teacher);
+		mongo.saveApp(app);
+		return app;
 	}
 
 	/**

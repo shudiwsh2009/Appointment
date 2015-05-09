@@ -65,7 +65,7 @@ function addInfo(){
 		}
 	}
 	$('#col0').append('<div class="table_cell" id="cell0_'+'add'+'"><input type="checkbox"></div>');
-	$('#col1').append('<div class="table_cell" id="cell1_'+'add'+'" onclick="admin_add();">点击新增，请输入符合"150304 19 30"格式的时间</div>');
+	$('#col1').append('<div class="table_cell" id="cell1_'+'add'+'" onclick="admin_add();">点击新增，请输入符合"201505111300"格式的时间</div>');
 	$('#col2').append('<div class="table_cell" id="cell2_'+'add'+'"></div>');
 	$('#col3').append('<div class="table_cell" id="cell3_'+'add'+'"></div>');
 	$('#col4').append('<div class="table_cell" id="cell4_'+'add'+'"></div>');
@@ -153,7 +153,7 @@ function fankui_tch(num){
 			<textarea id="fb_solution"></textarea><br>\
 			对中心的工作建议：<br>\
 			<textarea id="fb_advice"></textarea><br>\
-			<button type="button" onclick="if (getFeedbackData('+num+')) teacherPostFeedback(feedbackdata,'+num+');">提交反馈</button>\
+			<button type="button" onclick="if (getFeedbackData('+num+')) adminPostFeedback(feedbackdata,'+num+');">提交反馈</button>\
 			<button type="button" onclick="$(\'.fankui_tch\').remove();">取消</button>\
 		</div>\
 	');
@@ -194,11 +194,11 @@ function getFeedbackData(num){
 	return true;
 }
 
-function teacherPostFeedback(postdata, num){
+function adminPostFeedback(postdata, num){
 	$.ajax({
 		type:'POST',
 		async:false,
-		url:'appointment/teacherFeedback',
+		url:'appointment/adminFeedBack',
 		data:postdata,
 		dataType:'json',
 		success:function(data){
@@ -211,8 +211,8 @@ function teacherPostFeedback(postdata, num){
 
 function fankui_tch_confirm(num){
 	$('.fankui_tch').remove();
-	$('#cell3b_'+num).attr('disabled','true');
-	$('#cell3b_'+num).text('已反馈');
+//	$('#cell3b_'+num).attr('disabled','true');
+//	$('#cell3b_'+num).text('已反馈');
 	$('body').append('\
 		<div class="fankui_tch_success">\
 			您已成功提交反馈！<br>\
@@ -230,13 +230,14 @@ function admin_edit(num){
 }
 
 function parseTime2(t){
-	var s=t.split('-');
-	var r=s[2].split(':');
-	return s[0]+s[1]+r[0]+' '+r[1];
+	var tt=t.split(' ');
+	var s=tt[0].split('-');
+	var r=tt[1].split(':');
+	return s[0]+s[1]+s[2]+r[0]+r[1];
 }
 
 function edit_commit(num){
-	var postdata={startTime:parseTime($("#time_st"+num).val()), endTime:parseTime($("#time_ed"+num).val()), teacher:$("#name"+num).val()};
+	var postdata={appId:student_table_data[num].appId, startTime:parseTime($("#time_st"+num).val()), endTime:parseTime($("#time_ed"+num).val()), teacher:$("#name"+num).val()};
 console.log(postdata);
 	$.ajax({
 		type:'POST',
@@ -261,12 +262,12 @@ function admin_add(){
 
 function parseTime(t){
 	var s=t.split(' ');
-	return s[0][0]+s[0][1]+'-'+s[0][2]+s[0][3]+'-'+s[0][4]+s[0][5]+' '+s[1]+':'+s[2];
+	return s[0][0]+s[0][1]+s[0][2]+s[0][3]+'-'+s[0][4]+s[0][5]+'-'+s[0][6]+s[0][7]+' '+s[0][8]+s[0][9]+':'+s[0][10]+s[0][11];
 }
 
 function add_commit(){
 	var postdata={startTime:parseTime($("#time_st").val()), endTime:parseTime($("#time_ed").val()), teacher:$("#name").val()};
-console.log(postdata);
+	console.log(postdata);
 	$.ajax({
 		type:'POST',
 		async:false,
@@ -290,7 +291,7 @@ function admin_delete(){
 			postdata.appIds.push(student_table_data[i].appId);
 		}
 	}
-//	console.log(postdata);
+	console.log(postdata);
 	$.ajax({
 		type:'POST',
 		async:false,
