@@ -310,7 +310,7 @@ public class AppointmentController {
 			e.printStackTrace();
 		}
 	}
-	
+
 	/**
 	 * 管理员拉取反馈
 	 * 
@@ -320,8 +320,7 @@ public class AppointmentController {
 	 */
 	@RequestMapping(value = "adminCheck", method = RequestMethod.POST)
 	public void adminCheck(@RequestParam("appId") String _appId,
-			HttpSession session,
-			HttpServletResponse response) {
+			HttpSession session, HttpServletResponse response) {
 		AppointmentRepository ar = new AppointmentRepository();
 		JSONObject result = new JSONObject();
 		try {
@@ -460,9 +459,8 @@ public class AppointmentController {
 		AppointmentRepository ar = new AppointmentRepository();
 		JSONObject result = new JSONObject();
 		try {
-			Appointment app = ar.editAppointment(_appId, _startTime,
-					_endTime, _teacher,
-					(UserType) session.getAttribute("userType"));
+			Appointment app = ar.editAppointment(_appId, _startTime, _endTime,
+					_teacher, (UserType) session.getAttribute("userType"));
 			result.put("state", "SUCCESS");
 			result.put("appId", app.getId());
 			result.put("startTime", DateUtil.convertDate(app.getStartTime()));
@@ -596,7 +594,7 @@ public class AppointmentController {
 			e.printStackTrace();
 		}
 	}
-	
+
 	/**
 	 * 管理员导出预约
 	 * 

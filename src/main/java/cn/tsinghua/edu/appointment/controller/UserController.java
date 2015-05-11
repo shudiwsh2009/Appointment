@@ -22,7 +22,7 @@ import cn.tsinghua.edu.appointment.repository.UserRepository;
 @Controller
 @RequestMapping("user")
 public class UserController {
-	
+
 	@RequestMapping(value = "register", method = RequestMethod.POST)
 	public void register(@RequestParam("username") String _username,
 			@RequestParam("password") String _password,
@@ -36,13 +36,13 @@ public class UserController {
 			response.sendRedirect("/appointment/register");
 		}
 	}
-	
+
 	@RequestMapping(value = "login", method = RequestMethod.POST)
 	public void login(@RequestParam("username") String _username,
 			@RequestParam("password") String _password,
 			HttpServletResponse response, HttpServletRequest request,
 			HttpSession session, ModelMap model) throws IOException {
-		
+
 		JSONObject result = new JSONObject();
 		UserRepository ur = new UserRepository();
 		try {
@@ -50,9 +50,9 @@ public class UserController {
 			session.setAttribute("userId", user.getId());
 			session.setAttribute("username", _username);
 			session.setAttribute("userType", user.getUserType());
-			if(user.getUserType() == UserType.ADMIN) {
+			if (user.getUserType() == UserType.ADMIN) {
 				result.put("url", "admin");
-			} else if(user.getUserType() == UserType.TEACHER) {
+			} else if (user.getUserType() == UserType.TEACHER) {
 				result.put("url", "teacher");
 			} else {
 				result.put("url", "/");
@@ -75,15 +75,14 @@ public class UserController {
 			e.printStackTrace();
 		}
 	}
-	
+
 	@RequestMapping(value = "logout", method = RequestMethod.POST)
-	public void login(
-			HttpServletResponse response, HttpServletRequest request,
+	public void login(HttpServletResponse response, HttpServletRequest request,
 			HttpSession session, ModelMap model) throws IOException {
 		session.removeAttribute("userId");
 		session.removeAttribute("username");
 		session.removeAttribute("userType");
 		response.sendRedirect("/appointment");
 	}
-	
+
 }

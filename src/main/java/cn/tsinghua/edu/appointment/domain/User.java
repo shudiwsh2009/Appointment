@@ -6,18 +6,18 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection = "user")
 public class User {
-	
+
 	@Id
 	private String id;
 	@Indexed
 	protected String username = "";
 	protected String password = "";
 	protected UserType userType = UserType.STUDENT;
-	
+
 	public User() {
 
 	}
-	
+
 	public User(String u, String p) {
 		username = u;
 		password = p;
@@ -54,5 +54,5 @@ public class User {
 	public void setUserType(UserType userType) {
 		this.userType = userType;
 	}
-	
+
 }

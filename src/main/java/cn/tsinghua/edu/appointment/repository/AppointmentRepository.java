@@ -1,17 +1,9 @@
 package cn.tsinghua.edu.appointment.repository;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipOutputStream;
 
 import cn.tsinghua.edu.appointment.data.MongoAccess;
 import cn.tsinghua.edu.appointment.domain.Appointment;
@@ -537,65 +529,31 @@ public class AppointmentRepository {
 	 * @param appIds
 	 * @param userType
 	 * @return
-	 * @throws ActionRejectException
-	 * @throws EmptyFieldException
+	 * @throws BasicException
 	 * @throws NoExistException
 	 */
 	public String exportAppointment(String[] appIds, UserType userType)
-			throws ActionRejectException, EmptyFieldException, NoExistException {
+			throws BasicException {
 		if (userType == null || userType != UserType.ADMIN) {
 			throw new ActionRejectException("权限不足");
 		} else if (appIds == null) {
 			throw new EmptyFieldException("咨询参数为空");
 		}
-		List<String> filenames = new ArrayList<String>();
-		int index = 0;
+		List<Appointment> appointments = new ArrayList<Appointment>();
 		for (String appId : appIds) {
 			Appointment app = mongo.getAppById(appId);
 			if (app == null) {
 				continue;
 			}
-			String filename = (++index) + "."
-					+ DateUtil.exportDate(app.getStartTime()) + "_"
-					+ DateUtil.exportDate(app.getEndTime()) + "_"
-					+ app.getTeacher() + ExcelUtil.EXPORT_SUFFIX;
-			try {
-				ExcelUtil.exportToExcel(app, filename);
-				filenames.add(filename);
-			} catch (BasicException e) {
-				continue;
-			}
+			appointments.add(app);
 		}
-		if (filenames.isEmpty()) {
+		String filename = "export_" + TimeUtil.getCurrentYMD()
+				+ ExcelUtil.EXCEL_SUFFIX;
+		if (appointments.isEmpty()) {
 			return "";
-		} else if (filenames.size() == 1) {
-			return ExcelUtil.EXPORT_PREFIX + filenames.get(0);
 		} else {
-			try {
-				String zipFileName = "export_" + TimeUtil.getCurrentYMD()
-						+ ExcelUtil.ZIP_SUFFIX;
-				File zipFile = new File(ExcelUtil.DEFAULT_EXPORT_FOLDER
-						+ zipFileName);
-				ZipOutputStream zipOut = new ZipOutputStream(
-						new FileOutputStream(zipFile));
-				int temp = 0;
-				for (String fname : filenames) {
-					File file = new File(ExcelUtil.DEFAULT_EXPORT_FOLDER
-							+ fname);
-					InputStream input = new FileInputStream(file);
-					zipOut.putNextEntry(new ZipEntry(fname));
-					while ((temp = input.read()) != -1) {
-						zipOut.write(temp);
-					}
-					input.close();
-				}
-				zipOut.close();
-				return ExcelUtil.EXPORT_PREFIX + zipFileName;
-			} catch (FileNotFoundException e) {
-				throw new NoExistException("本地文件找不到");
-			} catch (IOException e) {
-				throw new NoExistException("本地文件找不到");
-			}
+			ExcelUtil.exportToExcel(appointments, filename);
+			return ExcelUtil.EXPORT_PREFIX + filename;
 		}
 	}
 

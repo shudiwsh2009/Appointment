@@ -19,11 +19,11 @@ public class Appointment {
 	protected StudentInfo studentInfo = new StudentInfo();
 	protected StudentFeedback studentFeedback = new StudentFeedback();
 	protected TeacherFeedback teacherFeedback = new TeacherFeedback();
-	
+
 	public Appointment() {
-		
+
 	}
-	
+
 	public Appointment(Date s, Date e, String t) {
 		startTime = s;
 		endTime = e;

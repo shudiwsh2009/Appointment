@@ -48,7 +48,7 @@ public class CoreController {
 	public void init(HttpSession session, HttpServletRequest request)
 			throws FormatException {
 		MongoAccess mongo = new MongoAccess();
-		
+
 		User admin = new User("1", "1");
 		admin.setUserType(UserType.ADMIN);
 		mongo.saveUser(admin);

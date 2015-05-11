@@ -31,7 +31,7 @@ public class UserRepository {
 		} else if (password == null || password.equals("")) {
 			throw new EmptyFieldException("密码为空");
 		}
-		if(mongo.getUserByUsername(username) != null) {
+		if (mongo.getUserByUsername(username) != null) {
 			throw new DuplicateFieldException("用户名已被注册");
 		}
 		User user = mongo.addUser(username, password);
