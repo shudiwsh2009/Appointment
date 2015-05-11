@@ -49,38 +49,6 @@
 	</servlet-mapping>
 	<servlet-mapping>
   		<servlet-name>default</servlet-name>
-  		<url-pattern>*.eot</url-pattern>
-	</servlet-mapping>
-	<servlet-mapping>
-  		<servlet-name>default</servlet-name>
-  		<url-pattern>*.woff</url-pattern>
-	</servlet-mapping>
-	<servlet-mapping>
-  		<servlet-name>default</servlet-name>
-  		<url-pattern>*.ttf</url-pattern>
-	</servlet-mapping>
-	<servlet-mapping>
-  		<servlet-name>default</servlet-name>
-  		<url-pattern>*.svg</url-pattern>
-	</servlet-mapping>
-	<servlet-mapping>
-  		<servlet-name>default</servlet-name>
-  		<url-pattern>*.xml</url-pattern>
-	</servlet-mapping>
-	<servlet-mapping>
-  		<servlet-name>default</servlet-name>
-  		<url-pattern>*.pnml</url-pattern>
-	</servlet-mapping>
-	<servlet-mapping>
-  		<servlet-name>default</servlet-name>
-  		<url-pattern>*.epml</url-pattern>
-	</servlet-mapping>
-	<servlet-mapping>
-  		<servlet-name>default</servlet-name>
-  		<url-pattern>*.bpmn</url-pattern>
-	</servlet-mapping>
-	<servlet-mapping>
-  		<servlet-name>default</servlet-name>
   		<url-pattern>*.zip</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping>
@@ -97,7 +65,7 @@
 	</servlet-mapping> 
 	<servlet-mapping>
   		<servlet-name>default</servlet-name>
-  		<url-pattern>*.csv</url-pattern>
+  		<url-pattern>*.xlsx</url-pattern>
 	</servlet-mapping> 
 	<servlet-mapping>
 		<servlet-name>mvc-dispatcher</servlet-name>

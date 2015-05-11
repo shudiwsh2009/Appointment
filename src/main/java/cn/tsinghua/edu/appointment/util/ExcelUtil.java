@@ -16,9 +16,9 @@ import cn.tsinghua.edu.appointment.exception.BasicException;
 
 public class ExcelUtil {
 
+	public static final String DEFAULT_EXPORT_FOLDER = "D:\\Workspace\\apache-tomcat-8.0.21-appointment\\webapps\\appointment\\export\\";
 	// public static final String DEFAULT_EXPORT_FOLDER =
-	// "D:\\Workspace\\apache-tomcat-8.0.21-appointment\\webapps\\appointment\\export\\";
-	public static final String DEFAULT_EXPORT_FOLDER = "/mnt/appointment/apache-tomcat-8.0.22/webapps/appointment/export/";
+	// "/mnt/appointment/apache-tomcat-8.0.22/webapps/appointment/export/";
 	public static final String EXPORT_PREFIX = "export/";
 	public static final String EXCEL_SUFFIX = ".xlsx";
 	public static final String ZIP_SUFFIX = ".zip";
@@ -73,22 +73,24 @@ public class ExcelUtil {
 				cell.setCellValue(app.getStudentFeedback().getScore());
 				cell = row.createCell(18);
 				cell.setCellValue(app.getStudentFeedback().getFeedback());
-				for (int j = 0; j < 12; ++j) {
-					cell = row.createCell(j + 19);
-					char choice = app.getStudentFeedback().getChoices()
-							.charAt(j);
-					switch (choice) {
-					case 'A':
-						cell.setCellValue("非常同意");
-						break;
-					case 'B':
-						cell.setCellValue("一般");
-						break;
-					case 'C':
-						cell.setCellValue("不同意");
-						break;
-					default:
-						break;
+				if (!app.getStudentFeedback().getChoices().isEmpty()) {
+					for (int j = 0; j < 12; ++j) {
+						cell = row.createCell(j + 19);
+						char choice = app.getStudentFeedback().getChoices()
+								.charAt(j);
+						switch (choice) {
+						case 'A':
+							cell.setCellValue("非常同意");
+							break;
+						case 'B':
+							cell.setCellValue("一般");
+							break;
+						case 'C':
+							cell.setCellValue("不同意");
+							break;
+						default:
+							break;
+						}
 					}
 				}
 			}
