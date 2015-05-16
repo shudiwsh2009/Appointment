@@ -1,30 +1,6 @@
 var width=$(window).width();
 var height=$(window).height();
 var student_table_data=[
-//	{appid:'2012012345', teacher:'赵一',	startTime:'15-03-02 15:00',endTime:'15-03-02 16:00', status:'AVAILABLE'},
-//	{appid:'2012012345', teacher:'钱二',	startTime:'15-03-02 15:00',endTime:'15-03-02 16:00', status:'AVAILABLE'},
-//	{appid:'2012012345', teacher:'孙三',	startTime:'15-03-02 15:00',endTime:'15-03-02 16:00', status:'AVAILABLE'},
-//	{appid:'2012012345', teacher:'李四',	startTime:'15-03-02 15:00',endTime:'15-03-02 16:00', status:'AVAILABLE'},
-//	{appid:'2012012345', teacher:'周五',	startTime:'15-03-02 15:00',endTime:'15-03-02 16:00', status:'AVAILABLE'},
-//	{appid:'2012012345', teacher:'吴六',	startTime:'15-03-02 15:00',endTime:'15-03-02 16:00', status:'AVAILABLE'},
-//	{appid:'2012012345', teacher:'赵七',	startTime:'15-03-02 15:00',endTime:'15-03-02 16:00', status:'AVAILABLE'},
-//	{appid:'2012012345', teacher:'钱八',	startTime:'15-03-02 15:00',endTime:'15-03-02 16:00', status:'APPOINTED'},
-//	{appid:'2012012345', teacher:'孙九',	startTime:'15-03-02 15:00',endTime:'15-03-02 16:00', status:'APPOINTED'},
-//	{appid:'2012012345', teacher:'李十',	startTime:'15-03-02 15:00',endTime:'15-03-02 16:00', status:'APPOINTED'},
-//	{appid:'2012012345', teacher:'周十一',	startTime:'15-03-02 15:00',endTime:'15-03-02 16:00', status:'APPOINTED'},
-//	{appid:'2012012345', teacher:'吴十二',	startTime:'15-03-02 15:00',endTime:'15-03-02 16:00', status:'APPOINTED'},
-//	{appid:'2012012345', teacher:'赵赵一',	startTime:'15-03-02 15:00',endTime:'15-03-02 16:00', status:'APPOINTED'},
-//	{appid:'2012012345', teacher:'钱钱二',	startTime:'15-03-02 15:00',endTime:'15-03-03 16:00', status:'APPOINTED'},
-//	{appid:'2012012345', teacher:'孙孙三',	startTime:'15-03-02 15:00',endTime:'15-03-03 16:00', status:'APPOINTED'},
-//	{appid:'2012012345', teacher:'李李四',	startTime:'15-03-02 15:00',endTime:'15-03-03 16:00', status:'FEEDBACK'},
-//	{appid:'2012012345', teacher:'周周五',	startTime:'15-03-02 15:00',endTime:'15-03-03 16:00', status:'FEEDBACK'},
-//	{appid:'2012012345', teacher:'吴吴六',	startTime:'15-03-02 15:00',endTime:'15-03-03 16:00', status:'FEEDBACK'},
-//	{appid:'2012012345', teacher:'赵赵七',	startTime:'15-03-02 15:00',endTime:'15-03-03 16:00', status:'FEEDBACK'},
-//	{appid:'2012012345', teacher:'钱钱八',	startTime:'15-03-02 15:00',endTime:'15-03-03 16:00', status:'FEEDBACK'},
-//	{appid:'2012012345', teacher:'孙孙九',	startTime:'15-03-02 15:00',endTime:'15-03-03 16:00', status:'FEEDBACK'},
-//	{appid:'2012012345', teacher:'李李十',	startTime:'15-03-02 15:00',endTime:'15-03-03 16:00', status:'FEEDBACK'},
-//	{appid:'2012012345', teacher:'周周十一',	startTime:'15-03-02 15:00',endTime:'15-03-03 16:00', status:'FEEDBACK'},
-//	{appid:'2012012345', teacher:'吴吴十二',	startTime:'15-03-02 15:00',endTime:'15-03-03 16:00', status:'FEEDBACK'}
 ];
 
 function addInfo(data){
@@ -39,7 +15,7 @@ function addInfo(data){
 		}else{
 			$('#col3').append('<div class="table_cell" id="cell3_'+i+'"><button type="button" id="cell3b_'+i+'" onclick="yuyue_stu_pre('+i+')">预约</button></div>');
 		}
-	}	
+	}
 }
 
 function optimize(t){
@@ -85,7 +61,7 @@ function check_studentid(num){
 	//studentid_now=$('.feedback_studentid')[len-1].value;
 
 	//return true;
-	
+
 	$.ajax({
 		type:'POST',
 		async:false,
@@ -110,7 +86,7 @@ function check_studentid(num){
 		success:function(data){
 			if (data.state=='SUCCESS'){
 				alert('success');
-				return true;			
+				return true;
 			}
 			else
 				return false;
@@ -120,26 +96,27 @@ function check_studentid(num){
 
 function fankui_stu(num){
 	$('body').append('\
-		<div class="fankui_stu" id="fankui_stu_'+num+'" style="text-align:left;font-size:9px;">\
-			咨询效果反馈问卷<br>\
-			姓名：<input id="fb_name"></input><br>\
-			咨询问题：<br><textarea id="fb_problem"></textarea><br>\
-			我和咨询师对咨询目标的看法是一致的<select id="fb_q1"><option value="">请选择</option><option value="非常同意">非常同意</option><option value="一般">一般</option><option value="不同意">不同意</option></select><br>\
-			我对自己有新的认识<select id="fb_q2"><option value="">请选择</option><option value="非常同意">非常同意</option><option value="一般">一般</option><option value="不同意">不同意</option></select><br>\
-			我对如何解决面临的问题有了新的思路<select id="fb_q3"><option value="">请选择</option><option value="非常同意">非常同意</option><option value="一般">一般</option><option value="不同意">不同意</option></select><br>\
-			了解到有关这一问题的政策信息与知识<select id="fb_q4"><option value="">请选择</option><option value="非常同意">非常同意</option><option value="一般">一般</option><option value="不同意">不同意</option></select><br>\
-			我很清楚接下来需要干什么<select id="fb_q5"><option value="">请选择</option><option value="非常同意">非常同意</option><option value="一般">一般</option><option value="不同意">不同意</option></select><br>\
-			我掌握了认识自己的方法<select id="fb_q6"><option value="">请选择</option><option value="非常同意">非常同意</option><option value="一般">一般</option><option value="不同意">不同意</option></select><br>\
-			我掌握了如何获取更多信息的方法<select id="fb_q7"><option value="">请选择</option><option value="非常同意">非常同意</option><option value="一般">一般</option><option value="不同意">不同意</option></select><br>\
-			我掌握了如何提升自身能力的方法<select id="fb_q8"><option value="">请选择</option><option value="非常同意">非常同意</option><option value="一般">一般</option><option value="不同意">不同意</option></select><br>\
-			我意识到要对自己的学习与发展负责<select id="fb_q9"><option value="">请选择</option><option value="非常同意">非常同意</option><option value="一般">一般</option><option value="不同意">不同意</option></select><br>\
-			我将尝试将咨询中的收获应用于生活中<select id="fb_q10"><option value="">请选择</option><option value="非常同意">非常同意</option><option value="一般">一般</option><option value="不同意">不同意</option></select><br>\
-			通过本次咨询，让我对解决问题更有信心了<select id="fb_q11"><option value="">请选择</option><option value="非常同意">非常同意</option><option value="一般">一般</option><option value="不同意">不同意</option></select><br>\
-			我喜欢我的咨询师，下次还会来预约咨询<select id="fb_q12"><option value="">请选择</option><option value="非常同意">非常同意</option><option value="一般">一般</option><option value="不同意">不同意</option></select><br>\
-			请为本次咨询打分（0~100）：<input id="fb_score"></input><br>\
-			感受和建议：<br><textarea id="fb_feedback"></textarea><br>\
-			<button type="button" onclick="if (getFeedbackData('+num+')) studentPostFeedback(feedbackdata,'+num+');">提交反馈</button>\
-			<button type="button" onclick="$(\'.fankui_stu\').remove();">取消</button>\
+		<div class="fankui_stu" id="fankui_stu_'+num+'" style="text-align:left;font-size:8px;position:absolute;height:606px;top:110px;left:5px;">\
+		<div style="text-align:center;font-size:23px">咨询效果反馈问卷</div><br>\
+			·姓名：<input id="fb_name"></input><br>\
+			·咨询问题：<br><textarea id="fb_problem" style="width:250px;margin-left:20px"></textarea><br>\
+			·我和咨询师对咨询目标的看法是一致的<select id="fb_q1"><option value="">请选择</option><option value="非常同意">非常同意</option><option value="一般">一般</option><option value="不同意">不同意</option></select><br>\
+			·我对自己有新的认识<select id="fb_q2"><option value="">请选择</option><option value="非常同意">非常同意</option><option value="一般">一般</option><option value="不同意">不同意</option></select><br>\
+			·我对如何解决面临的问题有了新的思路<select id="fb_q3"><option value="">请选择</option><option value="非常同意">非常同意</option><option value="一般">一般</option><option value="不同意">不同意</option></select><br>\
+			·了解到有关这一问题的政策信息与知识<select id="fb_q4"><option value="">请选择</option><option value="非常同意">非常同意</option><option value="一般">一般</option><option value="不同意">不同意</option></select><br>\
+			·我很清楚接下来需要干什么<select id="fb_q5"><option value="">请选择</option><option value="非常同意">非常同意</option><option value="一般">一般</option><option value="不同意">不同意</option></select><br>\
+			·我掌握了认识自己的方法<select id="fb_q6"><option value="">请选择</option><option value="非常同意">非常同意</option><option value="一般">一般</option><option value="不同意">不同意</option></select><br>\
+			·我掌握了如何获取更多信息的方法<select id="fb_q7"><option value="">请选择</option><option value="非常同意">非常同意</option><option value="一般">一般</option><option value="不同意">不同意</option></select><br>\
+			·我掌握了如何提升自身能力的方法<select id="fb_q8"><option value="">请选择</option><option value="非常同意">非常同意</option><option value="一般">一般</option><option value="不同意">不同意</option></select><br>\
+			·我意识到要对自己的学习与发展负责<select id="fb_q9"><option value="">请选择</option><option value="非常同意">非常同意</option><option value="一般">一般</option><option value="不同意">不同意</option></select><br>\
+			·我将尝试将咨询中的收获应用于生活中<select id="fb_q10"><option value="">请选择</option><option value="非常同意">非常同意</option><option value="一般">一般</option><option value="不同意">不同意</option></select><br>\
+			·通过本次咨询，让我对解决问题更有信心了<select id="fb_q11"><option value="">请选择</option><option value="非常同意">非常同意</option><option value="一般">一般</option><option value="不同意">不同意</option></select><br>\
+			·我喜欢我的咨询师，下次还会来预约咨询<select id="fb_q12"><option value="">请选择</option><option value="非常同意">非常同意</option><option value="一般">一般</option><option value="不同意">不同意</option></select><br>\
+			·请为本次咨询打分（0~100）：<input id="fb_score" style="width:50px;"></input><br>\
+			·感受和建议：<br><textarea id="fb_feedback" style="width:250px;margin-left:20px"></textarea><br>\
+			<div style="text-align:center;">\
+			<button type="button" onclick="if (getFeedbackData('+num+')) studentPostFeedback(feedbackdata,'+num+');else alert(\'请完整填写\');">提交反馈</button>\
+			<button type="button" onclick="$(\'.fankui_stu\').remove();">取消</button></div>\
 		</div>\
 	');
 	if (feedback.choices!=""){
@@ -152,7 +129,7 @@ function fankui_stu(num){
 			$('#fb_q'+i).val(t=='A'?'非常同意':(t=='B'?'一般':'不同意'));
 		}
 	}
-	optimize('.fankui_stu');
+//	optimize('.fankui_stu');
 }
 
 function fankui_stu_confirm(num){
@@ -182,27 +159,28 @@ function yuyue_stu_pre(num){
 
 function yuyue_stu(num){
 	$('body').append('\
-		<div class="yuyue_stu" id="yuyue_stu_'+num+'" style="text-align:left;">\
-			咨询申请表<br>\
-			姓名：<input id="ap_name"></input><br>\
-			性别：<select id="ap_gender">\
+		<div class="yuyue_stu" id="yuyue_stu_'+num+'" style="text-align:left;height:370px">\
+		<div style="text-align:center;font-size:23px">咨询申请表</div><br>\
+			·姓名：<input id="ap_name"></input><br>\
+			·性别：<select id="ap_gender">\
  			 <option value ="男">男</option>\
  			 <option value ="女">女</option>\
 			</select><br>\
-			学号：<input id="ap_id"></input><br>\
-			院系：<input  id="ap_school"></input><br>\
-			生源地：<input id="ap_hometown"></input><br>\
-			手机：<input id="ap_mobile"></input><br>\
-			Email：<input id="ap_email"></input><br>\
-			以前曾做过学习发展咨询、职业咨询或心理咨询？<select id="ap_experience">\
+			·学号：<input id="ap_id"></input><br>\
+			·院系：<input  id="ap_school"></input><br>\
+			·生源地：<input id="ap_hometown"></input><br>\
+			·手机：<input id="ap_mobile"></input><br>\
+			·Email：<input id="ap_email"></input><br>\
+			·以前曾做过学习发展咨询、职业咨询或心理咨询吗？<select id="ap_experience">\
  			 <option value ="是">是</option>\
  			 <option value ="否">否</option>\
 			</select><br>\
-			请概括您最想要咨询的问题:<br>\
-			<textarea id="ap_problem"></textarea>\
+			·请概括您最想要咨询的问题:<br>\
+			<textarea id="ap_problem"  style="width:250px;margin-left:20px"></textarea>\
 			<br>\
-			<button type="button" onclick="if (getAppointmentData('+num+')) studentPostAppointment(appointmentdata, '+num+');">确定预约</button>\
-			<button type="button" onclick="$(\'.yuyue_stu\').remove();">取消</button>\
+			<div style="text-align:center;">\
+			<button type="button" onclick="if (getAppointmentData('+num+')) studentPostAppointment(appointmentdata, '+num+');else alert(\'请完整填写\');">确定预约</button>\
+			<button type="button" onclick="$(\'.yuyue_stu\').remove();">取消</button></div>\
 		</div>\
 	');
 	optimize('.yuyue_stu');
@@ -263,8 +241,8 @@ function getData(){
 			}
 		}
 	});
-	
-	
+
+
 }
 
 function getAppointmentData(num){
@@ -355,4 +333,3 @@ function studentPostFeedback(postdata, num){
 		}
 	});
 }
-

@@ -12,14 +12,16 @@
 	    <meta content="telephone=no" name="format-detection">
 	    <meta name="viewport" content="width=device-width, maximum-scale=1, initial-scale=1, user-scalable=no">
 		<title>
-			欢迎使用XX预约系统
+			学习与发展指导中心预约系统
 		</title>
 		<link type="text/css" href="css/style.css" rel="stylesheet">
 		<script type="text/javascript" src="js/jquery-2.1.3.min.js"></script>
 	</head>
 	<body>
 		<div id="page_title">
-			XX预约系统-学生预约
+			<img id="titleImage" style="width:100%;" src="img/xxfzzdzx.jpg">
+			<br><br>欢迎使用预约系统<br>请根据您的时间选择咨询师<br>点击相应的预约按钮进行预约<br><br>
+
 		</div>
 		<div id="page_maintable">
 			<div class="table_col" id="col1">
@@ -33,7 +35,7 @@
 			</div>
 			<div class="clearfix"></div>
 		</div>
-		<div id="page_bottom">清华大学学习发展中心</div>
+		<div id="page_bottom"><br><br>清华大学学生学习发展指导中心<br>联系方式：62792453(欧老师)</div>
 	</body>
 	<script type="text/javascript" src="js/main.js"></script>
 	<script type="text/javascript">

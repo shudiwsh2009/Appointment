@@ -1,31 +1,6 @@
 var width=$(window).width();
 var height=$(window).height();
-var student_table_data=[
-	//{appId:'2012012345', teacher:'赵一',	startTime:'15-03-02 15:00',endTime:'15-03-02 16:00', status:'AVAILABLE'},
-	//{appId:'2012012345', teacher:'钱二',	startTime:'15-03-02 15:00',endTime:'15-03-02 16:00', status:'AVAILABLE'},
-	//{appId:'2012012345', teacher:'孙三',	startTime:'15-03-02 15:00',endTime:'15-03-02 16:00', status:'AVAILABLE'},
-	//{appId:'2012012345', teacher:'李四',	startTime:'15-03-02 15:00',endTime:'15-03-02 16:00', status:'AVAILABLE'},
-	//{appId:'2012012345', teacher:'周五',	startTime:'15-03-02 15:00',endTime:'15-03-02 16:00', status:'AVAILABLE'},
-	//{appId:'2012012345', teacher:'吴六',	startTime:'15-03-02 15:00',endTime:'15-03-02 16:00', status:'AVAILABLE'},
-	//{appId:'2012012345', teacher:'赵七',	startTime:'15-03-02 15:00',endTime:'15-03-02 16:00', status:'AVAILABLE'},
-	//{appId:'2012012345', teacher:'钱八',	startTime:'15-03-02 15:00',endTime:'15-03-02 16:00', status:'APPOINTED'},
-	//{appId:'2012012345', teacher:'孙九',	startTime:'15-03-02 15:00',endTime:'15-03-02 16:00', status:'APPOINTED'},
-	//{appId:'2012012345', teacher:'李十',	startTime:'15-03-02 15:00',endTime:'15-03-02 16:00', status:'APPOINTED'},
-	//{appId:'2012012345', teacher:'周十一',	startTime:'15-03-02 15:00',endTime:'15-03-02 16:00', status:'APPOINTED'},
-	//{appId:'2012012345', teacher:'吴十二',	startTime:'15-03-02 15:00',endTime:'15-03-02 16:00', status:'APPOINTED'},
-	//{appId:'2012012345', teacher:'赵赵一',	startTime:'15-03-02 15:00',endTime:'15-03-02 16:00', status:'APPOINTED'},
-	//{appId:'2012012345', teacher:'钱钱二',	startTime:'15-03-02 15:00',endTime:'15-03-03 16:00', status:'APPOINTED'},
-	//{appId:'2012012345', teacher:'孙孙三',	startTime:'15-03-02 15:00',endTime:'15-03-03 16:00', status:'APPOINTED'},
-	//{appId:'2012012345', teacher:'李李四',	startTime:'15-03-02 15:00',endTime:'15-03-03 16:00', status:'FEEDBACK'},
-	//{appId:'2012012345', teacher:'周周五',	startTime:'15-03-02 15:00',endTime:'15-03-03 16:00', status:'FEEDBACK'},
-	//{appId:'2012012345', teacher:'吴吴六',	startTime:'15-03-02 15:00',endTime:'15-03-03 16:00', status:'FEEDBACK'},
-	//{appId:'2012012345', teacher:'赵赵七',	startTime:'15-03-02 15:00',endTime:'15-03-03 16:00', status:'FEEDBACK'},
-	//{appId:'2012012345', teacher:'钱钱八',	startTime:'15-03-02 15:00',endTime:'15-03-03 16:00', status:'FEEDBACK'},
-	//{appId:'2012012345', teacher:'孙孙九',	startTime:'15-03-02 15:00',endTime:'15-03-03 16:00', status:'FEEDBACK'},
-	//{appId:'2012012345', teacher:'李李十',	startTime:'15-03-02 15:00',endTime:'15-03-03 16:00', status:'FEEDBACK'},
-	//{appId:'2012012345', teacher:'周周十一',	startTime:'15-03-02 15:00',endTime:'15-03-03 16:00', status:'FEEDBACK'},
-	//{appId:'20120123', teacher:'吴吴十二',	startTime:'15-03-02 15:00',endTime:'15-03-03 16:00', status:'FEEDBACK'}
-];
+var student_table_data=[];
 
 var feedback;
 
