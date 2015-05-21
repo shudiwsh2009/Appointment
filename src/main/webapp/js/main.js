@@ -32,6 +32,15 @@ function optimize(t){
 		$('#cell1_'+i).height(maxheight);
 		$('#cell2_'+i).height(maxheight);
 		$('#cell3_'+i).height(maxheight);
+		if (i%2==1){
+			$('#cell1_'+i).css('background-color','white');
+			$('#cell2_'+i).css('background-color','white');
+			$('#cell3_'+i).css('background-color','white');
+		}else{
+			$('#cell1_'+i).css('background-color','#f3f3ff');
+			$('#cell2_'+i).css('background-color','#f3f3ff');
+			$('#cell3_'+i).css('background-color','#f3f3ff');
+		}
 	}
 	$(t).css('left',(width-$(t).width())/2-11+'px');
 	$(t).css('top',(height-$(t).height())/2-11+'px');

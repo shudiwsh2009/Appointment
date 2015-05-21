@@ -17,20 +17,20 @@
 		<link type="text/css" href="css/style.css" rel="stylesheet">
 		<script type="text/javascript" src="js/jquery-2.1.3.min.js"></script>
 	</head>
-	<body>
+	<body  background="img/bg.png">
 		<div id="page_title">
 			<img id="titleImage" style="width:100%;" src="img/xxfzzdzx.jpg">
 			<br><br>欢迎使用预约系统<br>请根据您的时间选择咨询师<br>点击相应的预约按钮进行预约<br><br>
 
 		</div>
-		<div id="page_maintable">
-			<div class="table_col" id="col1">
+		<div id="page_maintable" style="text-align:center;">
+			<div class="table_col" id="col1"  style="background-color:white;">
 				<div class="table_head table_cell">时间</div>
 			</div>
-			<div class="table_col" id="col2">
+			<div class="table_col" id="col2"  style="background-color:white;">
 				<div class="table_head table_cell">咨询师</div>
 			</div>
-			<div class="table_col" id="col3">
+			<div class="table_col" id="col3" style="background-color:white;">
 				<div class="table_head table_cell">状态</div>
 			</div>
 			<div class="clearfix"></div>
