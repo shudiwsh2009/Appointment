@@ -6,7 +6,7 @@ var student_table_data=[
 function addInfo(data){
 	student_table_data=data;
 	for (var i in data){
-		$('#col1').append('<div class="table_cell" id="cell1_'+i+'">'+student_table_data[i].startTime+'至<br>'+student_table_data[i].endTime+'</div>');
+		$('#col1').append('<div class="table_cell" id="cell1_'+i+'">'+student_table_data[i].startTime.substr(3)+'-'+student_table_data[i].endTime.split(' ')[1]+'</div>');
 		$('#col2').append('<div class="table_cell" id="cell2_'+i+'">'+student_table_data[i].teacher+'</div>');
 		if (student_table_data[i].status=='APPOINTED'){
 			$('#col3').append('<div class="table_cell" id="cell3_'+i+'"><button type="button" id="cell3b_'+i+'" disabled="true">已预约</button></div>');

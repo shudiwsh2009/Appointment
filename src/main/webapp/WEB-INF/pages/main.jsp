@@ -20,7 +20,7 @@
 	<body  background="img/bg.png">
 		<div id="page_title">
 			<img id="titleImage" style="width:100%;" src="img/xxfzzdzx.jpg">
-			<br><br>欢迎使用预约系统<br>请根据您的时间选择咨询师<br>点击相应的预约按钮进行预约<br><br>
+			<br><br>欢迎使用咨询预约系统<br>请根据您的需要选择相应咨询师进行预约<br><br>
 
 		</div>
 		<div id="page_maintable" style="text-align:center;">
