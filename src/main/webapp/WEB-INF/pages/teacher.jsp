@@ -18,7 +18,7 @@
 		<link type="text/css" href="css/style.css" rel="stylesheet">
 		<script type="text/javascript" src="js/jquery-2.1.3.min.js"></script>
 	</head>
-	<body>
+	<body background="img/bg.png" style="text-align:center;">
 		<div id="page_title">
 			学习与发展指导中心预约系统-资讯师管理
 		</div>

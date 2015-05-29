@@ -1,30 +1,6 @@
 var width=$(window).width();
 var height=$(window).height();
 var student_table_data=[
-                    	//{appId:'2012012345', teacher:'赵一',	startTime:'15-03-02 15:00',endTime:'15-03-02 16:00', status:'AVAILABLE'},
-                    	//{appId:'2012012345', teacher:'钱二',	startTime:'15-03-02 15:00',endTime:'15-03-02 16:00', status:'AVAILABLE'},
-                    	//{appId:'2012012345', teacher:'孙三',	startTime:'15-03-02 15:00',endTime:'15-03-02 16:00', status:'AVAILABLE'},
-                    	//{appId:'2012012345', teacher:'李四',	startTime:'15-03-02 15:00',endTime:'15-03-02 16:00', status:'AVAILABLE'},
-                    	//{appId:'2012012345', teacher:'周五',	startTime:'15-03-02 15:00',endTime:'15-03-02 16:00', status:'AVAILABLE'},
-                    	//{appId:'2012012345', teacher:'吴六',	startTime:'15-03-02 15:00',endTime:'15-03-02 16:00', status:'AVAILABLE'},
-                    	//{appId:'2012012345', teacher:'赵七',	startTime:'15-03-02 15:00',endTime:'15-03-02 16:00', status:'AVAILABLE'},
-                    	//{appId:'2012012345', teacher:'钱八',	startTime:'15-03-02 15:00',endTime:'15-03-02 16:00', status:'APPOINTED'},
-                    	//{appId:'2012012345', teacher:'孙九',	startTime:'15-03-02 15:00',endTime:'15-03-02 16:00', status:'APPOINTED'},
-                    	//{appId:'2012012345', teacher:'李十',	startTime:'15-03-02 15:00',endTime:'15-03-02 16:00', status:'APPOINTED'},
-                    	//{appId:'2012012345', teacher:'周十一',	startTime:'15-03-02 15:00',endTime:'15-03-02 16:00', status:'APPOINTED'},
-                    	//{appId:'2012012345', teacher:'吴十二',	startTime:'15-03-02 15:00',endTime:'15-03-02 16:00', status:'APPOINTED'},
-                    	//{appId:'2012012345', teacher:'赵赵一',	startTime:'15-03-02 15:00',endTime:'15-03-02 16:00', status:'APPOINTED'},
-                    	//{appId:'2012012345', teacher:'钱钱二',	startTime:'15-03-02 15:00',endTime:'15-03-03 16:00', status:'APPOINTED'},
-                    	//{appId:'2012012345', teacher:'孙孙三',	startTime:'15-03-02 15:00',endTime:'15-03-03 16:00', status:'APPOINTED'},
-                    	//{appId:'2012012345', teacher:'李李四',	startTime:'15-03-02 15:00',endTime:'15-03-03 16:00', status:'FEEDBACK'},
-                    	//{appId:'2012012345', teacher:'周周五',	startTime:'15-03-02 15:00',endTime:'15-03-03 16:00', status:'FEEDBACK'},
-                    	//{appId:'2012012345', teacher:'吴吴六',	startTime:'15-03-02 15:00',endTime:'15-03-03 16:00', status:'FEEDBACK'},
-                    	//{appId:'2012012345', teacher:'赵赵七',	startTime:'15-03-02 15:00',endTime:'15-03-03 16:00', status:'FEEDBACK'},
-                    	//{appId:'2012012345', teacher:'钱钱八',	startTime:'15-03-02 15:00',endTime:'15-03-03 16:00', status:'FEEDBACK'},
-                    	//{appId:'2012012345', teacher:'孙孙九',	startTime:'15-03-02 15:00',endTime:'15-03-03 16:00', status:'FEEDBACK'},
-                    	//{appId:'2012012345', teacher:'李李十',	startTime:'15-03-02 15:00',endTime:'15-03-03 16:00', status:'FEEDBACK'},
-                    	//{appId:'2012012345', teacher:'周周十一',	startTime:'15-03-02 15:00',endTime:'15-03-03 16:00', status:'FEEDBACK'},
-                    	//{appId:'20120123', teacher:'吴吴十二',	startTime:'15-03-02 15:00',endTime:'15-03-03 16:00', status:'FEEDBACK'}
 ];
 
 var feedback;
@@ -65,33 +41,36 @@ function addInfo(){
 		}
 	}
 	$('#col0').append('<div class="table_cell" id="cell0_'+'add'+'"><input type="checkbox"></div>');
-	$('#col1').append('<div class="table_cell" id="cell1_'+'add'+'" onclick="admin_add();">点击新增，请输入符合"201505111300"格式的时间</div>');
+	$('#col1').append('<div class="table_cell" id="cell1_'+'add'+'" onclick="admin_add();">点击新增</div>');
 	$('#col2').append('<div class="table_cell" id="cell2_'+'add'+'"></div>');
 	$('#col3').append('<div class="table_cell" id="cell3_'+'add'+'"></div>');
 	$('#col4').append('<div class="table_cell" id="cell4_'+'add'+'"></div>');
 }
 
 function optimize(t){
-	$('#col0').width(width*0.04);
-	$('#col1').width(width*0.34);
-	$('#col2').width(width*0.14);
-	$('#col3').width(width*0.08);
-	$('#col4').width(width*0.08);
-	$('#col0').css('margin-left',width*0.02+'px')
+	$('#col0').width(40);
+	$('#col1').width(345);
+	$('#col2').width(120);
+	$('#col3').width(85);
+	$('#col4').width(85);
+	// $('#col0').css('margin-left',width*0.02+'px')
 	for (var i in student_table_data){
 		$('#cell1_'+i).height($('#cell4_'+i).height());
 		$('#cell2_'+i).height($('#cell4_'+i).height());
 		$('#cell3_'+i).height($('#cell4_'+i).height());
 		$('#cell0_'+i).height($('#cell4_'+i).height());
 	}
-	$('#cell1_'+'add').height($('#cell0_'+'add').height());
-	$('#cell2_'+'add').height($('#cell0_'+'add').height());
-	$('#cell3_'+'add').height($('#cell0_'+'add').height());
-	$('#cell4_'+'add').height($('#cell0_'+'add').height());
+	$('#cell0_'+'add').height(28);
+	$('#cell1_'+'add').height(28);
+	$('#cell2_'+'add').height(28);
+	$('#cell3_'+'add').height(28);
+	$('#cell4_'+'add').height(28);
 
 	$('.table_head').height($('#head_0').height());
 	$(t).css('left',(width-$(t).width())/2-11+'px');
 	$(t).css('top',(height-$(t).height())/2-11+'px');
+	$('#page_maintable').css('margin-left',.5*($(window).width()-(40+345+120+85+85))+'px');
+
 }
 
 
@@ -142,7 +121,7 @@ function fankui_admin(num){
 
 function fankui_tch(num){
 	$('body').append('\
-		<div class="fankui_tch" id="fankui_tch_'+num+'" style="text-align:left;">\
+		<div class="fankui_tch" id="fankui_tch_'+num+'" style="text-align:left;top:100px;height:300px;width:400px;left:100px">\
 			咨询师反馈表<br>\
 			您的姓名：<input id="fb_teacherName"></input><br>\
 			工作证号：<input id="fb_teacherId"></input><br>\
@@ -225,8 +204,9 @@ function fankui_tch_confirm(num){
 function admin_edit(num){
 	$('#cell1_'+num)[0].onclick='';
 	$('#cell1_'+num)[0].innerHTML='<input id="time_st'+num+'" value="'+parseTime2(student_table_data[num].startTime)+'">至<input id="time_ed'+num+'" value="'+parseTime2(student_table_data[num].endTime)+'"">';
-	$('#cell2_'+num)[0].innerHTML='<input id="name'+num+'" value="'+student_table_data[num].teacher+'">';
+	$('#cell2_'+num)[0].innerHTML='<input id="name'+num+'"  style="width:80px" value="'+student_table_data[num].teacher+'">';
 	$('#cell3_'+num)[0].innerHTML='<button type="button" onclick="edit_commit('+num+');">确认</button>';
+	$('#cell4_'+num)[0].innerHTML='<button type="button" onclick="window.location.reload();">取消</button>';
 }
 
 function parseTime2(t){
@@ -255,9 +235,26 @@ console.log(postdata);
 
 function admin_add(){
 	$('#cell1_add')[0].onclick='';
-	$('#cell1_add')[0].innerHTML='<input id="time_st"></input>至<input id="time_ed"></input>';
-	$('#cell2_add')[0].innerHTML='<input id="name"></input>';
+	$('#cell1_add')[0].innerHTML='<input type="text" id="inputDate" style="width:80px" ></input>日，<input style="width:40px" id="time1"></input>时至<input style="width:40px" id="time2"></input>时';
+	$('#cell2_add')[0].innerHTML='<input id="name" style="width:80px"></input>';
 	$('#cell3_add')[0].innerHTML='<button type="button" onclick="add_commit();">确认</button>';
+	$('#cell4_add')[0].innerHTML='<button type="button" onclick="window.location.reload();">取消</button>';
+	$('#inputDate').DatePicker({
+		format:'YY-m-dd',
+		date: $('#inputDate').val(),
+		current: $('#inputDate').val(),
+		starts: 1,
+		position: 'r',
+		onBeforeShow: function(){
+			$('#inputDate').DatePickerSetDate($('#inputDate').val(), true);
+		},
+		onChange: function(formated, dates){
+			$('#inputDate').val(formated);
+			$('#inputDate').val($('#inputDate').val().substr(6,8));
+			$('#inputDate').DatePickerHide();
+		}
+	});
+	optimize();
 }
 
 function parseTime(t){
@@ -266,7 +263,10 @@ function parseTime(t){
 }
 
 function add_commit(){
-	var postdata={startTime:parseTime($("#time_st").val()), endTime:parseTime($("#time_ed").val()), teacher:$("#name").val()};
+	var postdata={
+		startTime:$('#inputDate').val()+' '+($('#time1').val().length<2?'0':'')+$('#time1').val()+':00',
+		endTime:  $('#inputDate').val()+' '+($('#time2').val().length<2?'0':'')+$('#time2').val()+':00',
+		teacher:$("#name").val()};
 	console.log(postdata);
 	$.ajax({
 		type:'POST',

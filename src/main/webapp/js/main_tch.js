@@ -20,10 +20,10 @@ function addInfo_tch(data){
 }
 
 function optimize(t){
-	$('#col1').width(width*0.48);
-	$('#col2').width(width*0.22);
-	$('#col3').width(width*0.24);
-	$('#col1').css('margin-left',width*0.02+'px')
+	$('#col1').width(350);
+	$('#col2').width(150);
+	$('#col3').width(150);
+	$('#col1').css('margin-left',(width-650)/2+'px')
 
 	for (var i in student_table_data){
 		var maxheight=$('#cell1_'+i).height();
@@ -87,7 +87,7 @@ function check_studentid(num){
 
 function fankui_tch(num){
 	$('body').append('\
-		<div class="fankui_tch" id="fankui_tch_'+num+'" style="text-align:left;">\
+	<div class="fankui_tch" id="fankui_tch_'+num+'" style="text-align:left;top:100px;height:300px;width:400px;left:100px">\
 			咨询师反馈表<br>\
 			您的姓名：<input id="fb_teacherName"></input><br>\
 			工作证号：<input id="fb_teacherId"></input><br>\
