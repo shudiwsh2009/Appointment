@@ -15,9 +15,9 @@
 			学习与发展指导中心预约系统
 		</title>
 		<link rel="stylesheet" href="css/datepicker.css" type="text/css" />
+		<script type="text/javascript" src="js/jquery-2.1.3.min.js"></script>
 		<script type="text/javascript" src="js/datepicker.js"></script>
 		<link type="text/css" href="css/style.css" rel="stylesheet">
-		<script type="text/javascript" src="js/jquery-2.1.3.min.js"></script>
 	</head>
 	<body background="img/bg.png"  style="text-align:center;">
 		<div id="page_title">

@@ -20,7 +20,7 @@
 	</head>
 	<body background="img/bg.png" style="text-align:center;">
 		<div id="page_title">
-			学习与发展指导中心预约系统-资讯师管理
+			学习与发展指导中心预约系统-咨询师管理
 		</div>
 		<div id="page_maintable">
 			<div class="table_col" id="col1">
