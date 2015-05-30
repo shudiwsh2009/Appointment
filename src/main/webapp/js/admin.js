@@ -250,7 +250,7 @@ function admin_add(){
 		},
 		onChange: function(formated, dates){
 			$('#inputDate').val(formated);
-			$('#inputDate').val($('#inputDate').val().substr(6,8));
+			$('#inputDate').val($('#inputDate').val().substr(4,10));
 			$('#inputDate').DatePickerHide();
 		}
 	});
