@@ -12,12 +12,13 @@ public class StudentFeedback {
 
     }
 
-    public StudentFeedback(String n, String p, String c, String s, String f) {
-        name = n;
-        problem = p;
-        choices = c;
-        score = s;
-        feedback = f;
+    public StudentFeedback(String name, String problem, String choices,
+                           String score, String feedback) {
+        this.name = name;
+        this.problem = problem;
+        this.choices = choices;
+        this.score = score;
+        this.feedback = feedback;
     }
 
     public String getName() {

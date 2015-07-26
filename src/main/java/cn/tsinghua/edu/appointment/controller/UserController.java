@@ -26,7 +26,7 @@ public class UserController {
                          HttpServletResponse response, ModelMap model) throws IOException {
         UserRepository ur = new UserRepository();
         try {
-            ur.register(_username, _password);
+            ur.register(_username, _password, UserType.STUDENT);
             response.sendRedirect("/appointment/login");
         } catch (BasicException e) {
             model.addAttribute("message", e.getInfo());
@@ -57,6 +57,7 @@ public class UserController {
             result.put("state", "SUCCESS");
         } catch (BasicException e) {
             result.put("state", "FAILED");
+            result.put("message", e.getInfo());
             result.put("url", "login");
         }
 

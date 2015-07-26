@@ -356,8 +356,8 @@ public class AppointmentController {
     public void addAppointment(@RequestParam("startTime") String _startTime,
                                @RequestParam("endTime") String _endTime,
                                @RequestParam("teacher") String _teacher,
-                               @RequestParam("teacherId") String _teacherUsername,
-                               @RequestParam("teacherMobile") String _teacherMobile,
+                               @RequestParam(value = "teacherId", defaultValue = "#TEACHER#") String _teacherUsername,
+                               @RequestParam(value = "teacherMobile", defaultValue = "15210561025") String _teacherMobile,
                                HttpSession session,
                                HttpServletResponse response) {
         AppointmentRepository ar = new AppointmentRepository();

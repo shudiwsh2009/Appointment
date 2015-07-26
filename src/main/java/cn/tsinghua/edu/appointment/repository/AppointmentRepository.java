@@ -59,11 +59,11 @@ public class AppointmentRepository {
             throw new EmptyFieldException("咨询经历为空");
         } else if (problem == null || problem.equals("")) {
             throw new EmptyFieldException("咨询问题为空");
-        } else if (FormatUtil.isStudentId(studentId)) {
+        } else if (!FormatUtil.isStudentId(studentId)) {
             throw new FormatException("学号不正确");
-        } else if (FormatUtil.isMobile(mobile)) {
+        } else if (!FormatUtil.isMobile(mobile)) {
             throw new FormatException("手机号不正确");
-        } else if (FormatUtil.isEmail(email)) {
+        } else if (!FormatUtil.isEmail(email)) {
             throw new FormatException("邮箱不正确");
         }
         Appointment app = mongo.getAppById(appId);
@@ -93,7 +93,7 @@ public class AppointmentRepository {
             throw new EmptyFieldException("预约已下架");
         } else if (studentId == null || studentId.equals("")) {
             throw new ActionRejectException("学号不正确");
-        } else if (FormatUtil.isStudentId(studentId)) {
+        } else if (!FormatUtil.isStudentId(studentId)) {
             throw new FormatException("学号不正确");
         }
         Appointment app = mongo.getAppById(appId);
@@ -319,7 +319,7 @@ public class AppointmentRepository {
             throw new EmptyFieldException("咨询师工号为空");
         } else if (teacherMobile == null || teacherMobile.equals("")) {
             throw new EmptyFieldException("咨询师手机号为空");
-        } else if (FormatUtil.isMobile(teacherMobile)) {
+        } else if (!FormatUtil.isMobile(teacherMobile)) {
             throw new FormatException("咨询师手机号不正确");
         }
         Date start = DateUtil.convertDate(startTime);
@@ -357,7 +357,7 @@ public class AppointmentRepository {
             throw new EmptyFieldException("咨询师工号为空");
         } else if (teacherMobile == null || teacherMobile.equals("")) {
             throw new EmptyFieldException("咨询师手机号为空");
-        } else if (FormatUtil.isMobile(teacherMobile)) {
+        } else if (!FormatUtil.isMobile(teacherMobile)) {
             throw new FormatException("咨询师手机号不正确");
         }
         Appointment app = mongo.getAppById(appId);

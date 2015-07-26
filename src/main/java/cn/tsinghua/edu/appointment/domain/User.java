@@ -14,10 +14,10 @@ public class User {
     protected String password = "";
     protected UserType userType = UserType.STUDENT;
 
-    public User(String u, String p, UserType type) {
-        username = u;
-        password = p;
-        userType = type;
+    public User(String username, String password, UserType userType) {
+        this.username = username;
+        this.password = password;
+        this.userType = userType;
     }
 
     public String getId() {

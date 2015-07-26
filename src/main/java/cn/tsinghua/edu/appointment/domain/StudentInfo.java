@@ -16,17 +16,18 @@ public class StudentInfo {
 
     }
 
-    public StudentInfo(String n, String g, String st, String sc, String h,
-                       String m, String em, String ex, String p) {
-        name = n;
-        gender = g;
-        studentId = st;
-        school = sc;
-        hometown = h;
-        mobile = m;
-        email = em;
-        experience = ex;
-        problem = p;
+    public StudentInfo(String name, String gender, String studentId,
+                       String school, String hometown, String mobile,
+                       String email, String experience, String problem) {
+        this.name = name;
+        this.gender = gender;
+        this.studentId = studentId;
+        this.school = school;
+        this.hometown = hometown;
+        this.mobile = mobile;
+        this.email = email;
+        this.experience = experience;
+        this.problem = problem;
     }
 
     public String getName() {

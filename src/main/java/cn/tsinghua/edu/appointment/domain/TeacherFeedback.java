@@ -13,14 +13,15 @@ public class TeacherFeedback {
 
     }
 
-    public TeacherFeedback(String tn, String ti, String st, String p,
-                           String so, String ad) {
-        teacherName = tn;
-        teacherId = ti;
-        studentName = st;
-        problem = p;
-        solution = so;
-        adviceToCenter = ad;
+    public TeacherFeedback(String teacherName, String teacherId,
+                           String studentName, String problem,
+                           String solution, String adviceToCenter) {
+        this.teacherName = teacherName;
+        this.teacherId = teacherId;
+        this.studentName = studentName;
+        this.problem = problem;
+        this.solution = solution;
+        this.adviceToCenter = adviceToCenter;
     }
 
     public String getTeacherName() {

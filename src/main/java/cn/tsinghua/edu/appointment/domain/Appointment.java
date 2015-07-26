@@ -27,12 +27,13 @@ public class Appointment {
 
     }
 
-    public Appointment(Date s, Date e, String t, String tu, String tm) {
-        startTime = s;
-        endTime = e;
-        teacher = t;
-        teacherUsername = tu;
-        teacherMobile = tm;
+    public Appointment(Date startTime, Date endTime, String teacher,
+                       String teacherUsername, String teacherMobile) {
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.teacher = teacher;
+        this.teacherUsername = teacherUsername;
+        this.teacherMobile = teacherMobile;
     }
 
     public String getId() {
