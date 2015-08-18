@@ -1,5 +1,6 @@
 package cn.tsinghua.edu.appointment.sms;
 
+import cn.tsinghua.edu.appointment.config.EnvConfig;
 import cn.tsinghua.edu.appointment.exception.BasicException;
 import cn.tsinghua.edu.appointment.exception.FormatException;
 import cn.tsinghua.edu.appointment.util.FormatUtil;
@@ -16,6 +17,10 @@ public class SMS {
     public final static String KEY = "";
 
     public static void sendSMS(String mobile, String content) throws BasicException {
+        if (EnvConfig.ENVIRONMENT.equals("DEV")) {
+            System.out.printf("Send SMS:\"%s\" to %s.\r\n", content, mobile);
+            return;
+        }
         if (!FormatUtil.isMobile(mobile)) {
             throw new FormatException("手机号不正确");
         }
