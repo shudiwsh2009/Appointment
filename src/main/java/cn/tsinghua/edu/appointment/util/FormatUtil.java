@@ -18,7 +18,7 @@ public class FormatUtil {
     }
 
     public static boolean isStudentId(String sId) {
-        Pattern p = Pattern.compile("^\\d{9}$");
+        Pattern p = Pattern.compile("^\\d{10}$");
         Matcher m = p.matcher(sId);
         return m.matches();
     }

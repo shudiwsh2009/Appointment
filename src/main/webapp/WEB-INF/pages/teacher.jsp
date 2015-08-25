@@ -29,7 +29,13 @@
 			<div class="table_col" id="col2">
 				<div class="table_head table_cell">咨询师</div>
 			</div>
+			<div class="table_col" id="col5">
+				<div class="table_head table_cell">咨询师电话</div>
+			</div>
 			<div class="table_col" id="col3">
+				<div class="table_head table_cell">状态</div>
+			</div>
+			<div class="table_col" id="col4">
 				<div class="table_head table_cell">状态</div>
 			</div>
 			<div class="clearfix"></div>

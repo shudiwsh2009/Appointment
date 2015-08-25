@@ -9,12 +9,16 @@ function addInfo_tch(data){
 	for (var i in data){
 		$('#col1').append('<div class="table_cell" id="cell1_'+i+'">'+student_table_data[i].startTime+'至'+student_table_data[i].endTime+'</div>');
 		$('#col2').append('<div class="table_cell" id="cell2_'+i+'">'+student_table_data[i].teacher+'</div>');
+		$('#col5').append('<div class="table_cell" id="cell5_'+i+'">'+student_table_data[i].teacherMobile+'</div>');
 		if (student_table_data[i].status=='APPOINTED'){
 			$('#col3').append('<div class="table_cell" id="cell3_'+i+'"><button type="button" id="cell3b_'+i+'" disabled="true">已预约</button></div>');
+			$('#col4').append('<div class="table_cell" id="cell4_'+i+'"><button type="button" id="cell4b_'+i+'" onclick="teacher_lookup('+i+')">查看</button></div>');
 		}else if (student_table_data[i].status=='FEEDBACK'){
-			$('#col3').append('<div class="table_cell" id="cell3_'+i+'"><button type="button" id="cell3b_'+i+'" onclick="fankui_tch_pre('+i+')">反馈</button></div>');
+			$('#col3').append('<div class="table_cell" id="cell3_'+i+'"><button type="button" id="cell3b_'+i+'" onclick="check_studentid('+i+')">反馈</button></div>');
+			$('#col4').append('<div class="table_cell" id="cell4_'+i+'"><button type="button" id="cell4b_'+i+'" onclick="teacher_lookup('+i+')">查看</button></div>');
 		}else{
 			$('#col3').append('<div class="table_cell" id="cell3_'+i+'">未预约</div>');
+			$('#col4').append('<div class="table_cell" id="cell4_'+i+'"><button type="button" id="cell4b_'+i+'" disabled="true">查看</button></div>');
 		}
 	}
 }
@@ -23,21 +27,57 @@ function optimize(t){
 	$('#col1').width(350);
 	$('#col2').width(150);
 	$('#col3').width(150);
-	$('#col1').css('margin-left',(width-650)/2+'px')
+	$('#col4').width(150);
+	$('#col5').width(150);
+
+	$('#col1').css('margin-left',(width-950)/2+'px')
 
 	for (var i in student_table_data){
 		var maxheight=$('#cell1_'+i).height();
 		if (maxheight<$('#cell2_'+i).height()) maxheight=$('#cell2_'+i).height();
 		if (maxheight<$('#cell3_'+i).height()) maxheight=$('#cell3_'+i).height();
+		if (maxheight<$('#cell4_'+i).height()) maxheight=$('#cell4_'+i).height();
+		if (maxheight<$('#cell5_'+i).height()) maxheight=$('#cell5_'+i).height();
+
 
 		$('#cell1_'+i).height(maxheight);
 		$('#cell2_'+i).height(maxheight);
 		$('#cell3_'+i).height(maxheight);
+		$('#cell4_'+i).height(maxheight);
+		$('#cell5_'+i).height(maxheight);
 	}
 	$(t).css('left',(width-$(t).width())/2-11+'px');
 	$(t).css('top',(height-$(t).height())/2-11+'px');
 }
 
+function teacher_lookup(num){
+	$.ajax({
+		type:'POST',
+		async:false,
+		url:'appointment/viewAppointment',
+		data:{appId:student_table_data[num].appId},
+		dataType:'json',
+		success:function(data){
+			if (data.state=='SUCCESS'){
+				$('body').append('\
+					<div class="admin_chakan" style="text-align:left">\
+						姓名：'+data.name+'<br>\
+						性别：'+data.gender+'<br>\
+						院系：'+data.school+'<br>\
+						学号：'+data.studentId+'<br>\
+						手机：'+data.mobile+'<br>\
+						生源地：'+data.hometown+'<br>\
+						邮箱：'+data.email+'<br>\
+						是否使用过本系统：'+data.experience+'<br>\
+						咨询问题：'+data.problem+'<br>\
+						<button type="button" onclick="$(\'.admin_chakan\').remove();">返回</button>\
+					</div>\
+				');
+				optimize('.admin_chakan');
+			}
+		}
+	});
+}
 
 function fankui_tch_pre(num){
 	$('body').append('\
@@ -56,10 +96,10 @@ function fankui_tch_pre(num){
 
 
 function check_studentid(num){
-	var len=$('.feedback_studentid').length;
+	// var len=$('.feedback_studentid').length;
 	var postdata={
-		appId:student_table_data[num].appId,
-		studentId:$('.feedback_studentid')[len-1].value
+		appId:student_table_data[num].appId
+		// studentId:$('.feedback_studentid')[len-1].value
 	};
 
 	$.ajax({
@@ -70,14 +110,14 @@ function check_studentid(num){
 		dataType:'json',
 		success:function(data){
 			if (data.state=='SUCCESS'){
-				$('.fankui_tch_pre').remove();
+				// $('.fankui_tch_pre').remove();
 				feedback=data;
 				fankui_tch(num);
 				return true;
 			}
 			else
 			{
-				alert("用户名或密码错误！");
+				alert("尝试获取数据失败，请联系管理员");
 				return false;
 			}
 		}
