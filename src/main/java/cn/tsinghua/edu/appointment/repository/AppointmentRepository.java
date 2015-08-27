@@ -151,6 +151,121 @@ public class AppointmentRepository {
     }
 
     /**
+     * 咨询师添加咨询
+     */
+    public Appointment addAppointmentByTeacher(String startTime, String endTime,
+                                      String teacher, String teacherMobile,
+                                      UserType userType, String username) throws EmptyFieldException,
+            FormatException, ActionRejectException {
+        if (userType == null || userType != UserType.TEACHER) {
+            throw new ActionRejectException("权限不足");
+        } else if (startTime == null || startTime.equals("")) {
+            throw new EmptyFieldException("开始时间为空");
+        } else if (endTime == null || endTime.equals("")) {
+            throw new EmptyFieldException("结束时间为空");
+        } else if (teacher == null || teacher.equals("")) {
+            throw new EmptyFieldException("咨询师姓名为空");
+        } else if (teacherMobile == null || teacherMobile.equals("")) {
+            throw new EmptyFieldException("咨询师手机号为空");
+        } else if (!FormatUtil.isMobile(teacherMobile)) {
+            throw new FormatException("咨询师手机号不正确");
+        }
+        Date start = DateUtil.convertDate(startTime);
+        Date end = DateUtil.convertDate(endTime);
+        if (start.compareTo(end) >= 1) {
+            throw new FormatException("开始时间不能晚于结束时间");
+        }
+        Appointment newApp = new Appointment(start, end, teacher, username, teacherMobile);
+        mongo.saveApp(newApp);
+        return newApp;
+    }
+
+    /**
+     * 咨询师编辑咨询
+     */
+    public Appointment editAppointmentByTeacher(String appId, String startTime, String endTime,
+                                       String teacher, String teacherMobile,
+                                       UserType userType, String username)
+            throws EmptyFieldException, FormatException, ActionRejectException,
+            NoExistException {
+        if (userType == null || userType != UserType.TEACHER) {
+            throw new ActionRejectException("权限不足");
+        } else if (appId == null || appId.equals("")) {
+            throw new EmptyFieldException("咨询已下架");
+        } else if (startTime == null || startTime.equals("")) {
+            throw new EmptyFieldException("开始时间为空");
+        } else if (endTime == null || endTime.equals("")) {
+            throw new EmptyFieldException("结束时间为空");
+        } else if (teacher == null || teacher.equals("")) {
+            throw new EmptyFieldException("咨询师姓名为空");
+        } else if (teacherMobile == null || teacherMobile.equals("")) {
+            throw new EmptyFieldException("咨询师手机号为空");
+        } else if (!FormatUtil.isMobile(teacherMobile)) {
+            throw new FormatException("咨询师手机号不正确");
+        }
+        Appointment app = mongo.getAppById(appId);
+        if (app == null) {
+            throw new NoExistException("咨询已下架");
+        }
+        Date start = DateUtil.convertDate(startTime);
+        Date end = DateUtil.convertDate(endTime);
+        if (start.compareTo(end) >= 1) {
+            throw new FormatException("开始时间不能晚于结束时间");
+        }
+        app.setStartTime(start);
+        app.setEndTime(end);
+        app.setTeacher(teacher);
+        app.setTeacherMobile(teacherMobile);
+        mongo.saveApp(app);
+        return app;
+    }
+
+    /**
+     * 咨询师删除咨询
+     */
+    public void removeAppointmentByTeacher(String[] appIds, UserType userType, String username)
+            throws EmptyFieldException, ActionRejectException {
+        if (userType == null || userType != UserType.TEACHER) {
+            throw new ActionRejectException("权限不足");
+        } else if (appIds == null) {
+            throw new EmptyFieldException("咨询参数为空");
+        }
+        for (String appId : appIds) {
+            Appointment app = mongo.getAppById(appId);
+            if (app != null && app.getTeacherUsername().equals(username)) {
+                mongo.removeApp(appId);
+            }
+        }
+    }
+
+    /**
+     * 咨询师取消预约
+     */
+    public void cancelAppointmentByTeacher(String[] appIds, UserType userType, String username)
+            throws EmptyFieldException, ActionRejectException {
+        if (userType == null || userType != UserType.TEACHER) {
+            throw new ActionRejectException("权限不足");
+        } else if (appIds == null) {
+            throw new EmptyFieldException("咨询参数为空");
+        }
+        for (String appId : appIds) {
+            Appointment app = mongo.getAppById(appId);
+            if (app == null || !app.getTeacherUsername().equals(username)) {
+                continue;
+            }
+            if (app.getStatus() == Status.APPOINTED
+                    && app.getStartTime().compareTo(new Date()) > 0) {
+                app.setStatus(Status.AVAILABLE);
+                app.setStudentInfo(new StudentInfo());
+                app.setStudentFeedback(new StudentFeedback());
+                app.setTeacherFeedback(new TeacherFeedback());
+                mongo.saveApp(app);
+            }
+        }
+    }
+
+
+    /**
      * 咨询师验证学号
      */
     public Appointment teacherCheck(String appId, UserType userType, String username) throws ActionRejectException,

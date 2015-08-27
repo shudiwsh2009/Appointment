@@ -201,6 +201,150 @@ public class AppointmentController {
     }
 
     /**
+     * 咨询师增加咨询
+     */
+    @RequestMapping(value = "teacher/addAppointment", method = RequestMethod.POST)
+    public void addAppointmentByTeacher(@RequestParam("startTime") String _startTime,
+                               @RequestParam("endTime") String _endTime,
+                               @RequestParam("teacher") String _teacher,
+                               @RequestParam(value = "teacherMobile", defaultValue = "15210561025") String _teacherMobile,
+                               HttpSession session,
+                               HttpServletResponse response) {
+        AppointmentRepository ar = new AppointmentRepository();
+        JSONObject result = new JSONObject();
+        try {
+            Appointment newApp = ar.addAppointmentByTeacher(_startTime, _endTime,
+                    _teacher, _teacherMobile, (UserType) session.getAttribute("userType"),
+                    (String) session.getAttribute("username"));
+            result.put("state", "SUCCESS");
+            result.put("appId", newApp.getId());
+            result.put("startTime", DateUtil.convertDate(newApp.getStartTime()));
+            result.put("endTime", DateUtil.convertDate(newApp.getEndTime()));
+            result.put("teacher", newApp.getTeacher());
+            result.put("teacherMobile", newApp.getTeacherMobile());
+        } catch (BasicException e) {
+            result.put("state", "FAILED");
+            result.put("message", e.getInfo());
+        }
+
+        // send response
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        PrintWriter out;
+        try {
+            out = response.getWriter();
+            out.write(result.toString());
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 咨询师编辑咨询
+     */
+    @RequestMapping(value = "teacher/editAppointment", method = RequestMethod.POST)
+    public void editAppointmentByTeacher(@RequestParam("appId") String _appId,
+                                @RequestParam("startTime") String _startTime,
+                                @RequestParam("endTime") String _endTime,
+                                @RequestParam("teacher") String _teacher,
+                                @RequestParam("teacherMobile") String _teacherMobile,
+                                HttpSession session,
+                                HttpServletResponse response) {
+        AppointmentRepository ar = new AppointmentRepository();
+        JSONObject result = new JSONObject();
+        try {
+            Appointment app = ar.editAppointmentByTeacher(_appId, _startTime, _endTime,
+                    _teacher, _teacherMobile,
+                    (UserType) session.getAttribute("userType"),
+                    (String) session.getAttribute("username"));
+            result.put("state", "SUCCESS");
+            result.put("appId", app.getId());
+            result.put("startTime", DateUtil.convertDate(app.getStartTime()));
+            result.put("endTime", DateUtil.convertDate(app.getEndTime()));
+            result.put("teacher", app.getTeacher());
+            result.put("teacherMobile", app.getTeacherMobile());
+        } catch (BasicException e) {
+            result.put("state", "FAILED");
+            result.put("message", e.getInfo());
+        }
+
+        // send response
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        PrintWriter out;
+        try {
+            out = response.getWriter();
+            out.write(result.toString());
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 咨询师删除咨询
+     */
+    @RequestMapping(value = "teacher/removeAppointment", method = RequestMethod.POST)
+    public void removeAppointmentByTeacher(@RequestParam("appIds[]") String[] _appIds,
+                                  HttpSession session, HttpServletResponse response) {
+        AppointmentRepository ar = new AppointmentRepository();
+        JSONObject result = new JSONObject();
+        try {
+            ar.removeAppointmentByTeacher(_appIds,
+                    (UserType) session.getAttribute("userType"),
+                    (String) session.getAttribute("username"));
+            result.put("state", "SUCCESS");
+        } catch (BasicException e) {
+            result.put("state", "FAILED");
+            result.put("message", e.getInfo());
+        }
+
+        // send response
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        PrintWriter out;
+        try {
+            out = response.getWriter();
+            out.write(result.toString());
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 咨询师取消预约
+     */
+    @RequestMapping(value = "teacher/cancelAppointment", method = RequestMethod.POST)
+    public void cancelAppointmentByTeacher(@RequestParam("appIds[]") String[] _appIds,
+                                  HttpSession session, HttpServletResponse response) {
+        AppointmentRepository ar = new AppointmentRepository();
+        JSONObject result = new JSONObject();
+        try {
+            ar.cancelAppointmentByTeacher(_appIds,
+                    (UserType) session.getAttribute("userType"),
+                    (String) session.getAttribute("username"));
+            result.put("state", "SUCCESS");
+        } catch (BasicException e) {
+            result.put("state", "FAILED");
+            result.put("message", e.getInfo());
+        }
+
+        // send response
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        PrintWriter out;
+        try {
+            out = response.getWriter();
+            out.write(result.toString());
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
+
+    /**
      * 咨询师验证学号
      */
     @RequestMapping(value = "teacherCheck", method = RequestMethod.POST)
