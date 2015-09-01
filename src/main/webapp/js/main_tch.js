@@ -6,8 +6,30 @@ var feedback;
 
 function addInfo_tch(data){
 	student_table_data=data;
+	$('#page_maintable')[0].innerHTML='\
+	<div class="table_col" id="col0">\
+		<div class="table_head table_cell" id="head_0"><button onclick="$(\'.checkbox\').click();">全选</button></div>\
+	</div>\
+	<div class="table_col" id="col1">\
+		<div class="table_head table_cell">时间</div>\
+	</div>\
+	<div class="table_col" id="col2">\
+		<div class="table_head table_cell">咨询师</div>\
+	</div>\
+	<div class="table_col" id="col5">\
+		<div class="table_head table_cell">咨询师电话</div>\
+	</div>\
+	<div class="table_col" id="col3">\
+		<div class="table_head table_cell">状态</div>\
+	</div>\
+	<div class="table_col" id="col4">\
+		<div class="table_head table_cell">状态</div>\
+	</div>\
+	<div class="clearfix"></div>\
+	';
 	for (var i in data){
-		$('#col1').append('<div class="table_cell" id="cell1_'+i+'">'+student_table_data[i].startTime+'至'+student_table_data[i].endTime+'</div>');
+		$('#col0').append('<div class="table_cell" id="cell0_'+i+'"><input class="checkbox" type="checkbox" id="checkbox_'+i+'"></div>');
+		$('#col1').append('<div class="table_cell" id="cell1_'+i+'" onclick="teacher_edit('+i+')">'+student_table_data[i].startTime+'至'+student_table_data[i].endTime+'</div>');
 		$('#col2').append('<div class="table_cell" id="cell2_'+i+'">'+student_table_data[i].teacher+'</div>');
 		$('#col5').append('<div class="table_cell" id="cell5_'+i+'">'+student_table_data[i].teacherMobile+'</div>');
 		if (student_table_data[i].status=='APPOINTED'){
@@ -21,16 +43,24 @@ function addInfo_tch(data){
 			$('#col4').append('<div class="table_cell" id="cell4_'+i+'"><button type="button" id="cell4b_'+i+'" disabled="true">查看</button></div>');
 		}
 	}
+	$('#col0').append('<div class="table_cell" id="cell0_'+'add'+'"><input type="checkbox"></div>');
+	$('#col1').append('<div class="table_cell" id="cell1_'+'add'+'" onclick="teacher_add();">点击新增</div>');
+	$('#col2').append('<div class="table_cell" id="cell2_'+'add'+'"></div>');
+	$('#col3').append('<div class="table_cell" id="cell3_'+'add'+'"></div>');
+	$('#col4').append('<div class="table_cell" id="cell4_'+'add'+'"></div>');
+	$('#col5').append('<div class="table_cell" id="cell5_'+'add'+'"></div>');
 }
 
+
 function optimize(t){
-	$('#col1').width(350);
+	$('#col0').width(40);
+	$('#col1').width(400);
 	$('#col2').width(150);
 	$('#col3').width(150);
 	$('#col4').width(150);
 	$('#col5').width(150);
 
-	$('#col1').css('margin-left',(width-950)/2+'px')
+	$('#col0').css('margin-left',(width-1000)/2+'px')
 
 	for (var i in student_table_data){
 		var maxheight=$('#cell1_'+i).height();
@@ -38,16 +68,25 @@ function optimize(t){
 		if (maxheight<$('#cell3_'+i).height()) maxheight=$('#cell3_'+i).height();
 		if (maxheight<$('#cell4_'+i).height()) maxheight=$('#cell4_'+i).height();
 		if (maxheight<$('#cell5_'+i).height()) maxheight=$('#cell5_'+i).height();
-
+		if (maxheight<$('#cell0_'+i).height()) maxheight=$('#cell0_'+i).height();
 
 		$('#cell1_'+i).height(maxheight);
 		$('#cell2_'+i).height(maxheight);
 		$('#cell3_'+i).height(maxheight);
 		$('#cell4_'+i).height(maxheight);
 		$('#cell5_'+i).height(maxheight);
+		$('#cell0_'+i).height(maxheight);
 	}
 	$(t).css('left',(width-$(t).width())/2-11+'px');
 	$(t).css('top',(height-$(t).height())/2-11+'px');
+
+	$('#cell0_'+'add').height(28);
+	$('#cell1_'+'add').height(28);
+	$('#cell2_'+'add').height(28);
+	$('#cell3_'+'add').height(28);
+	$('#cell4_'+'add').height(28);
+	$('#cell5_'+'add').height(28);
+	$('.table_head').height($('#head_0').height());
 }
 
 function teacher_lookup(num){
@@ -206,6 +245,147 @@ function teacherPostFeedback(postdata, num){
 	});
 }
 
+function teacher_add(){
+	$('#cell1_add')[0].onclick='';
+	$('#cell1_add')[0].innerHTML='<input type="text" id="inputDate" style="width:80px" ></input>日，<input style="width:40px" id="time1"></input>时至<input style="width:40px" id="time2"></input>时';
+	$('#cell2_add')[0].innerHTML='<input id="name" style="width:80px"></input>';
+	$('#cell3_add')[0].innerHTML='<button type="button" onclick="add_commit();">确认</button>';
+	$('#cell4_add')[0].innerHTML='<button type="button" onclick="window.location.reload();">取消</button>';
+	$('#cell5_add')[0].innerHTML='<input id="mobile" style="width:120px"></input>';
+
+	$('#inputDate').DatePicker({
+		format:'YY-m-dd',
+		date: $('#inputDate').val(),
+		current: $('#inputDate').val(),
+		starts: 1,
+		position: 'r',
+		onBeforeShow: function(){
+			$('#inputDate').DatePickerSetDate($('#inputDate').val(), true);
+		},
+		onChange: function(formated, dates){
+			$('#inputDate').val(formated);
+			$('#inputDate').val($('#inputDate').val().substr(4,10));
+			$('#inputDate').DatePickerHide();
+		}
+	});
+	optimize();
+}
+
+
+function add_commit(){
+	var postdata={
+		startTime:$('#inputDate').val()+' '+($('#time1').val().length<2?'0':'')+$('#time1').val()+':00',
+		endTime:  $('#inputDate').val()+' '+($('#time2').val().length<2?'0':'')+$('#time2').val()+':00',
+		teacher:$("#name").val(),
+		teacherMobile:$('#mobile').val()
+	};
+console.log(postdata);
+	$.ajax({
+		type:'POST',
+		async:false,
+		url:'appointment/teacher/addAppointment',
+		data:postdata,
+		dataType:'json',
+		success:function(data){
+			if (data.state=='SUCCESS'){
+				getData();
+			}
+		}
+	});
+}
+
+function teacher_delete(){
+	var postdata={appIds:[]};
+	for (var i in student_table_data)
+	{
+		if ($('#checkbox_'+i)[0].checked)
+		{
+			postdata.appIds.push(student_table_data[i].appId);
+		}
+	}
+//	console.log(postdata);
+	$.ajax({
+		type:'POST',
+		async:false,
+		url:'appointment/teacher/removeAppointment',
+		data:postdata,
+		dataType:'json',
+		success:function(data){
+			if (data.state=='SUCCESS'){
+				getData();
+			}
+		}
+	});
+}
+
+function teacher_cancel(){
+	var postdata={appIds:[]};
+	for (var i in student_table_data)
+	{
+		if ($('#checkbox_'+i)[0].checked)
+		{
+			postdata.appIds.push(student_table_data[i].appId);
+		}
+	}
+
+	$.ajax({
+		type:'POST',
+		async:false,
+		url:'appointment/teacher/cancelAppointment',
+		data:postdata,
+		dataType:'json',
+		success:function(data){
+			if (data.state=='SUCCESS'){
+				getData();
+			}
+		}
+	});
+}
+
+function teacher_edit(num){
+	$('#cell1_'+num)[0].onclick='';
+	$('#cell1_'+num)[0].innerHTML='<input id="time_st'+num+'" value="'+parseTime2(student_table_data[num].startTime)+'">至<input id="time_ed'+num+'" value="'+parseTime2(student_table_data[num].endTime)+'"">';
+	$('#cell2_'+num)[0].innerHTML='<input id="name'+num+'"  style="width:80px" value="'+student_table_data[num].teacher+'">';
+	$('#cell3_'+num)[0].innerHTML='<button type="button" onclick="edit_commit('+num+');">确认</button>';
+	$('#cell4_'+num)[0].innerHTML='<button type="button" onclick="window.location.reload();">取消</button>';
+	$('#cell5_'+num)[0].innerHTML='<input id="mobile'+num+'"  style="width:120px" value="'+student_table_data[num].teacherMobile+'">';
+
+
+}
+
+function parseTime2(t){
+	var s=t.split('-');
+	var r=s[2].split(':');
+	return s[0]+s[1]+r[0]+' '+r[1];
+}
+
+function parseTime(t){
+	var s=t.split(' ');
+	return s[0][0]+s[0][1]+'-'+s[0][2]+s[0][3]+'-'+s[0][4]+s[0][5]+' '+s[1]+':'+s[2];
+}
+
+
+function edit_commit(num){
+	var postdata={
+		appId:student_table_data[num].appId,
+		startTime:parseTime($("#time_st"+num).val()),
+		endTime:parseTime($("#time_ed"+num).val()),
+		teacher:$("#name"+num).val(),
+		teacherMobile:$('#mobile'+num).val()
+	};
+	$.ajax({
+		type:'POST',
+		async:false,
+		url:'appointment/teacher/editAppointment',
+		data:postdata,
+		dataType:'json',
+		success:function(data){
+			if (data.state=='SUCCESS'){
+				getData();
+			}
+		}
+	});
+}
 
 function getData(){
 	$.ajax({

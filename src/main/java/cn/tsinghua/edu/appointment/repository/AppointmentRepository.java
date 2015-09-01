@@ -3,6 +3,7 @@ package cn.tsinghua.edu.appointment.repository;
 import cn.tsinghua.edu.appointment.data.MongoAccess;
 import cn.tsinghua.edu.appointment.domain.*;
 import cn.tsinghua.edu.appointment.exception.*;
+import cn.tsinghua.edu.appointment.sms.SMS;
 import cn.tsinghua.edu.appointment.util.DateUtil;
 import cn.tsinghua.edu.appointment.util.ExcelUtil;
 import cn.tsinghua.edu.appointment.util.FormatUtil;
@@ -81,6 +82,18 @@ public class AppointmentRepository {
         app.setStudentInfo(studentInfo);
         app.setStatus(Status.APPOINTED);
         mongo.saveApp(app);
+
+        //double check
+        Appointment checkApp = mongo.getAppById(appId);
+        if (app.getStudentInfo().getMobile().equals(mobile)
+                && app.getStatus() == Status.APPOINTED) {
+            try {
+                SMS.sendSMS(checkApp.getStudentInfo().getMobile(), "恭喜预定成功");
+                SMS.sendSMS(checkApp.getTeacherMobile(), "有学生预定了");
+            } catch (BasicException e) {
+                return app;
+            }
+        }
         return app;
     }
 

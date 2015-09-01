@@ -1,6 +1,7 @@
 package cn.tsinghua.edu.appointment.sms;
 
 import cn.tsinghua.edu.appointment.config.EnvConfig;
+import cn.tsinghua.edu.appointment.exception.ActionRejectException;
 import cn.tsinghua.edu.appointment.exception.BasicException;
 import cn.tsinghua.edu.appointment.exception.FormatException;
 import cn.tsinghua.edu.appointment.util.FormatUtil;
@@ -16,7 +17,7 @@ public class SMS {
     public final static String UID = "";
     public final static String KEY = "";
 
-    public static void sendSMS(String mobile, String content) throws BasicException {
+    public static void sendSMS(String mobile, String content) throws FormatException, ActionRejectException {
         if (EnvConfig.ENVIRONMENT.equals("DEV")) {
             System.out.printf("Send SMS:\"%s\" to %s.\r\n", content, mobile);
             return;
@@ -35,7 +36,7 @@ public class SMS {
         try {
             client.executeMethod(post);
         } catch (IOException e) {
-            throw new BasicException("连接短信服务器失败");
+            throw new ActionRejectException("连接短信服务器失败");
         }
 
         Header[] headers = post.getRequestHeaders();
@@ -49,7 +50,7 @@ public class SMS {
             result = new String(post.getResponseBodyAsString().getBytes("gbk"));
             System.out.println(result);
         } catch (IOException e) {
-            throw new BasicException("获取网络回馈失败");
+            throw new ActionRejectException("获取网络回馈失败");
         }
         post.releaseConnection();
     }
