@@ -83,6 +83,8 @@ function check_studentid(num){
 				 feedback=data;
 				 fankui_stu(num);
 				return true;
+			} else {
+				alert(data.message);
 			}
 		}
 	});/*
@@ -247,6 +249,8 @@ function getData(){
 			if (data.state=='SUCCESS'){
 				addInfo(data.array);
 				optimize();
+			} else {
+				alert(data.message);
 			}
 		}
 	});
@@ -297,6 +301,8 @@ function studentPostAppointment(postdata, num){
 		success:function(data){
 			if (data.state=='SUCCESS'){
 				yuyue_stu_confirm(num);
+			} else {
+				alert(data.message);
 			}
 		}
 	});
@@ -338,6 +344,8 @@ function studentPostFeedback(postdata, num){
 		success:function(data){
 			if (data.state=='SUCCESS'){
 				fankui_stu_confirm(num);
+			} else {
+				alert(data.message);
 			}
 		}
 	});

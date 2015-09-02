@@ -9,6 +9,7 @@ import cn.tsinghua.edu.appointment.util.ExcelUtil;
 import cn.tsinghua.edu.appointment.util.FormatUtil;
 import cn.tsinghua.edu.appointment.util.TimeUtil;
 
+import javax.swing.*;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -220,10 +221,16 @@ public class AppointmentRepository {
         if (app == null) {
             throw new NoExistException("咨询已下架");
         }
+        if (app.getStatus() == Status.APPOINTED) {
+            throw new ActionRejectException("不能编辑已预约的咨询");
+        }
         Date start = DateUtil.convertDate(startTime);
         Date end = DateUtil.convertDate(endTime);
-        if (start.compareTo(end) >= 1) {
+        if (start.after(end)) {
             throw new FormatException("开始时间不能晚于结束时间");
+        }
+        if (end.before(new Date())) {
+            throw new ActionRejectException("不能编辑已过期咨询");
         }
         app.setStartTime(start);
         app.setEndTime(end);
@@ -492,10 +499,16 @@ public class AppointmentRepository {
         if (app == null) {
             throw new NoExistException("咨询已下架");
         }
+        if (app.getStatus() == Status.APPOINTED) {
+            throw new ActionRejectException("不能编辑已预约的咨询");
+        }
         Date start = DateUtil.convertDate(startTime);
         Date end = DateUtil.convertDate(endTime);
-        if (start.compareTo(end) >= 1) {
+        if (start.after(end)) {
             throw new FormatException("开始时间不能晚于结束时间");
+        }
+        if (end.before(new Date())) {
+            throw new ActionRejectException("不能编辑已过期咨询");
         }
         if (!mongo.existUserByUsername(teacherUsername)) {
             mongo.addUser(teacherUsername, UserRepository.TEACHER_DEFAULT_PASSWORD, UserType.TEACHER);

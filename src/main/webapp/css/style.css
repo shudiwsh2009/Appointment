@@ -110,9 +110,12 @@ select{
 
 #page_title{
 	color: #622;
+	text-align:center;
+	font-size: 30px;
+	margin: 15px;
 }
 #page_maintable{
-
+	margin-top: 15px;
 }
 #page_bottom{
 	color: #ccc;
@@ -123,6 +126,7 @@ select{
 	border: 1px solid #ccc;
 	border-right: 0;
 	border-bottom: 0;
+	background-color: white;
 }
 #col3, #col4{
 	border-right: 1px solid #ccc

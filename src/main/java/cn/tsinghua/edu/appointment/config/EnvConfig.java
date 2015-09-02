@@ -6,5 +6,5 @@ package cn.tsinghua.edu.appointment.config;
 public class EnvConfig {
 
     public final static String ENVIRONMENT = "DEV";
-
+//    public final static String ENVIRONMENT = "ONLINE";
 }

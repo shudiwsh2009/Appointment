@@ -14,8 +14,8 @@ import java.io.IOException;
 
 public class SMS {
 
-    public final static String UID = "";
-    public final static String KEY = "";
+    public final static String UID = "shudiwsh2009";
+    public final static String KEY = "946fee2e7ad699b065f1";
 
     public static void sendSMS(String mobile, String content) throws FormatException, ActionRejectException {
         if (EnvConfig.ENVIRONMENT.equals("DEV")) {

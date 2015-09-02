@@ -76,6 +76,22 @@ function optimize(t){
 		$('#cell4_'+i).height(maxheight);
 		$('#cell5_'+i).height(maxheight);
 		$('#cell0_'+i).height(maxheight);
+
+		if (i%2==0){
+			$('#cell1_'+i).css('background-color','white');
+			$('#cell2_'+i).css('background-color','white');
+			$('#cell3_'+i).css('background-color','white');
+			$('#cell4_'+i).css('background-color','white');
+			$('#cell5_'+i).css('background-color','white');
+			$('#cell0_'+i).css('background-color','white');
+		}else{
+			$('#cell1_'+i).css('background-color','#f5f5fa');
+			$('#cell2_'+i).css('background-color','#f5f5fa');
+			$('#cell3_'+i).css('background-color','#f5f5fa');
+			$('#cell4_'+i).css('background-color','#f5f5fa');
+			$('#cell5_'+i).css('background-color','#f5f5fa');
+			$('#cell0_'+i).css('background-color','#f5f5fa');
+		}
 	}
 	$(t).css('left',(width-$(t).width())/2-11+'px');
 	$(t).css('top',(height-$(t).height())/2-11+'px');
@@ -113,6 +129,8 @@ function teacher_lookup(num){
 					</div>\
 				');
 				optimize('.admin_chakan');
+			} else {
+				alert(data.message);
 			}
 		}
 	});
@@ -240,6 +258,8 @@ function teacherPostFeedback(postdata, num){
 		success:function(data){
 			if (data.state=='SUCCESS'){
 				fankui_tch_confirm(num);
+			} else {
+				alert(data.message);
 			}
 		}
 	});
@@ -289,6 +309,8 @@ console.log(postdata);
 		success:function(data){
 			if (data.state=='SUCCESS'){
 				getData();
+			} else {
+				alert(data.message);
 			}
 		}
 	});
@@ -313,6 +335,8 @@ function teacher_delete(){
 		success:function(data){
 			if (data.state=='SUCCESS'){
 				getData();
+			} else {
+				alert(data.message);
 			}
 		}
 	});
@@ -337,6 +361,8 @@ function teacher_cancel(){
 		success:function(data){
 			if (data.state=='SUCCESS'){
 				getData();
+			} else {
+				alert(data.message);
 			}
 		}
 	});
@@ -344,32 +370,48 @@ function teacher_cancel(){
 
 function teacher_edit(num){
 	$('#cell1_'+num)[0].onclick='';
-	$('#cell1_'+num)[0].innerHTML='<input id="time_st'+num+'" value="'+parseTime2(student_table_data[num].startTime)+'">至<input id="time_ed'+num+'" value="'+parseTime2(student_table_data[num].endTime)+'"">';
+	$('#cell1_'+num)[0].innerHTML='<input type="text" id="inputDate" style="width:80px" ></input>日，<input style="width:40px" id="time1"></input>时至<input style="width:40px" id="time2"></input>时';
 	$('#cell2_'+num)[0].innerHTML='<input id="name'+num+'"  style="width:80px" value="'+student_table_data[num].teacher+'">';
 	$('#cell3_'+num)[0].innerHTML='<button type="button" onclick="edit_commit('+num+');">确认</button>';
 	$('#cell4_'+num)[0].innerHTML='<button type="button" onclick="window.location.reload();">取消</button>';
 	$('#cell5_'+num)[0].innerHTML='<input id="mobile'+num+'"  style="width:120px" value="'+student_table_data[num].teacherMobile+'">';
-
+	$('#inputDate').DatePicker({
+		format:'YY-m-dd',
+		date: $('#inputDate').val(),
+		current: $('#inputDate').val(),
+		starts: 1,
+		position: 'r',
+		onBeforeShow: function(){
+			$('#inputDate').DatePickerSetDate($('#inputDate').val(), true);
+		},
+		onChange: function(formated, dates){
+			$('#inputDate').val(formated);
+			$('#inputDate').val($('#inputDate').val().substr(4,10));
+			$('#inputDate').DatePickerHide();
+		}
+	});
+	optimize();
 
 }
 
 function parseTime2(t){
-	var s=t.split('-');
-	var r=s[2].split(':');
-	return s[0]+s[1]+r[0]+' '+r[1];
+	var tt=t.split(' ');
+	var s=tt[0].split('-');
+	var r=tt[1].split(':');
+	return s[0]+s[1]+s[2]+r[0]+r[1];
 }
 
 function parseTime(t){
 	var s=t.split(' ');
-	return s[0][0]+s[0][1]+'-'+s[0][2]+s[0][3]+'-'+s[0][4]+s[0][5]+' '+s[1]+':'+s[2];
+	return s[0][0]+s[0][1]+s[0][2]+s[0][3]+'-'+s[0][4]+s[0][5]+'-'+s[0][6]+s[0][7]+' '+s[0][8]+s[0][9]+':'+s[0][10]+s[0][11];
 }
 
 
 function edit_commit(num){
 	var postdata={
 		appId:student_table_data[num].appId,
-		startTime:parseTime($("#time_st"+num).val()),
-		endTime:parseTime($("#time_ed"+num).val()),
+		startTime:$('#inputDate').val()+' '+($('#time1').val().length<2?'0':'')+$('#time1').val()+':00',
+		endTime:  $('#inputDate').val()+' '+($('#time2').val().length<2?'0':'')+$('#time2').val()+':00',
 		teacher:$("#name"+num).val(),
 		teacherMobile:$('#mobile'+num).val()
 	};
@@ -382,6 +424,8 @@ function edit_commit(num){
 		success:function(data){
 			if (data.state=='SUCCESS'){
 				getData();
+			} else {
+				alert(data.message);
 			}
 		}
 	});
@@ -398,6 +442,8 @@ function getData(){
 				addInfo_tch(data.array);
 				student_table_data=data.array;
 				optimize();
+			} else {
+				alert(data.message);
 			}
 		}
 	});
