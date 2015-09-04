@@ -3,10 +3,8 @@ package cn.tsinghua.edu.appointment.domain;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
-import sun.util.resources.LocaleData;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 
 @Document(collection = "appointment")
 public class Appointment {

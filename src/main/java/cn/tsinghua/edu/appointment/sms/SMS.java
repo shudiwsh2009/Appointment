@@ -3,7 +3,6 @@ package cn.tsinghua.edu.appointment.sms;
 import cn.tsinghua.edu.appointment.config.EnvConfig;
 import cn.tsinghua.edu.appointment.domain.Appointment;
 import cn.tsinghua.edu.appointment.exception.ActionRejectException;
-import cn.tsinghua.edu.appointment.exception.BasicException;
 import cn.tsinghua.edu.appointment.exception.FormatException;
 import cn.tsinghua.edu.appointment.util.FormatUtil;
 import org.apache.commons.httpclient.Header;
@@ -12,6 +11,9 @@ import org.apache.commons.httpclient.NameValuePair;
 import org.apache.commons.httpclient.methods.PostMethod;
 
 import java.io.IOException;
+import java.time.format.TextStyle;
+import java.util.Formatter;
+import java.util.Locale;
 
 public class SMS {
 
@@ -34,7 +36,6 @@ public class SMS {
 
     public static void sendSMS(Appointment app) {
         // send sms to student
-
     }
 
     public static void sendSMS(String mobile, String content) throws FormatException, ActionRejectException {

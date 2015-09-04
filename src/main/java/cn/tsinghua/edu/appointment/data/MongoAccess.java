@@ -13,7 +13,6 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 
 public class MongoAccess {

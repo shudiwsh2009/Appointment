@@ -11,8 +11,8 @@ public class UserRepository {
 
     private MongoAccess mongo = new MongoAccess();
 
-    public static final String ADMIN_DEAULT_PASSWORD = "@ADMIN@";
-    public static final String TEACHER_DEFAULT_PASSWORD = "@TEACHER@";
+    public static final String ADMIN_DEAULT_PASSWORD = "THXXFZZX";
+    public static final String TEACHER_DEFAULT_PASSWORD = "thxxfzzx";
 
     public User login(String username, String password)
             throws EmptyFieldException, NoExistException {

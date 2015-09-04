@@ -17,9 +17,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.Date;
 import java.util.List;
 
 @Controller
@@ -207,11 +204,11 @@ public class AppointmentController {
      */
     @RequestMapping(value = "teacher/addAppointment", method = RequestMethod.POST)
     public void addAppointmentByTeacher(@RequestParam("startTime") String _startTime,
-                               @RequestParam("endTime") String _endTime,
-                               @RequestParam("teacher") String _teacher,
-                               @RequestParam(value = "teacherMobile", defaultValue = "15210561025") String _teacherMobile,
-                               HttpSession session,
-                               HttpServletResponse response) {
+                                        @RequestParam("endTime") String _endTime,
+                                        @RequestParam("teacher") String _teacher,
+                                        @RequestParam(value = "teacherMobile", defaultValue = "15210561025") String _teacherMobile,
+                                        HttpSession session,
+                                        HttpServletResponse response) {
         AppointmentRepository ar = new AppointmentRepository();
         JSONObject result = new JSONObject();
         try {
@@ -247,12 +244,12 @@ public class AppointmentController {
      */
     @RequestMapping(value = "teacher/editAppointment", method = RequestMethod.POST)
     public void editAppointmentByTeacher(@RequestParam("appId") String _appId,
-                                @RequestParam("startTime") String _startTime,
-                                @RequestParam("endTime") String _endTime,
-                                @RequestParam("teacher") String _teacher,
-                                @RequestParam("teacherMobile") String _teacherMobile,
-                                HttpSession session,
-                                HttpServletResponse response) {
+                                         @RequestParam("startTime") String _startTime,
+                                         @RequestParam("endTime") String _endTime,
+                                         @RequestParam("teacher") String _teacher,
+                                         @RequestParam("teacherMobile") String _teacherMobile,
+                                         HttpSession session,
+                                         HttpServletResponse response) {
         AppointmentRepository ar = new AppointmentRepository();
         JSONObject result = new JSONObject();
         try {
@@ -289,7 +286,7 @@ public class AppointmentController {
      */
     @RequestMapping(value = "teacher/removeAppointment", method = RequestMethod.POST)
     public void removeAppointmentByTeacher(@RequestParam("appIds[]") String[] _appIds,
-                                  HttpSession session, HttpServletResponse response) {
+                                           HttpSession session, HttpServletResponse response) {
         AppointmentRepository ar = new AppointmentRepository();
         JSONObject result = new JSONObject();
         try {
@@ -320,7 +317,7 @@ public class AppointmentController {
      */
     @RequestMapping(value = "teacher/cancelAppointment", method = RequestMethod.POST)
     public void cancelAppointmentByTeacher(@RequestParam("appIds[]") String[] _appIds,
-                                  HttpSession session, HttpServletResponse response) {
+                                           HttpSession session, HttpServletResponse response) {
         AppointmentRepository ar = new AppointmentRepository();
         JSONObject result = new JSONObject();
         try {

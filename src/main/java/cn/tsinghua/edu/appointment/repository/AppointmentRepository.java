@@ -9,11 +9,8 @@ import cn.tsinghua.edu.appointment.util.ExcelUtil;
 import cn.tsinghua.edu.appointment.util.FormatUtil;
 import cn.tsinghua.edu.appointment.util.TimeUtil;
 
-import javax.swing.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 public class AppointmentRepository {
@@ -164,8 +161,8 @@ public class AppointmentRepository {
      * 咨询师添加咨询
      */
     public Appointment addAppointmentByTeacher(String startTime, String endTime,
-                                      String teacher, String teacherMobile,
-                                      UserType userType, String username) throws EmptyFieldException,
+                                               String teacher, String teacherMobile,
+                                               UserType userType, String username) throws EmptyFieldException,
             FormatException, ActionRejectException {
         if (userType == null || userType != UserType.TEACHER) {
             throw new ActionRejectException("权限不足");
@@ -194,8 +191,8 @@ public class AppointmentRepository {
      * 咨询师编辑咨询
      */
     public Appointment editAppointmentByTeacher(String appId, String startTime, String endTime,
-                                       String teacher, String teacherMobile,
-                                       UserType userType, String username)
+                                                String teacher, String teacherMobile,
+                                                UserType userType, String username)
             throws EmptyFieldException, FormatException, ActionRejectException,
             NoExistException {
         if (userType == null || userType != UserType.TEACHER) {
