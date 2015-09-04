@@ -1,37 +1,28 @@
 package cn.tsinghua.edu.appointment.util;
 
-import cn.tsinghua.edu.appointment.exception.FormatException;
-
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 
 public class DateUtil {
 
-    public static String convertDate(Date d) throws FormatException {
-        try {
-            DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-            return df.format(d);
-        } catch (Exception e) {
-            throw new FormatException("日期格式错误");
-        }
+    public static final String ZONE_ID = "Asia/Shanghai";
+    public static final String DATE_PATTERN = "yyyy-MM-dd HH:mm";
+
+    public static String getYYMMDD(LocalDateTime d) {
+        return d.format(DateTimeFormatter.ofPattern("yyyy/MM/dd", Locale.CHINA));
     }
 
-    public static Date convertDate(String s) throws FormatException {
-        try {
-            DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-            return df.parse(s);
-        } catch (Exception e) {
-            throw new FormatException("日期格式错误");
-        }
+    public static String convertDate(LocalDateTime d) {
+        return d.format(DateTimeFormatter.ofPattern(DATE_PATTERN, Locale.CHINA));
     }
 
-    public static String getYYMMDD(Date d) throws FormatException {
-        try {
-            DateFormat df = new SimpleDateFormat("yyyy/MM/dd");
-            return df.format(d);
-        } catch (Exception e) {
-            throw new FormatException("日期格式错误");
-        }
+    public static LocalDateTime convertDate(String s) {
+        return LocalDateTime.parse(s, DateTimeFormatter.ofPattern(DATE_PATTERN, Locale.CHINA));
+    }
+
+    public static LocalDateTime getLocalNow() {
+        return LocalDateTime.now(ZoneId.of(ZONE_ID));
     }
 }

@@ -10,6 +10,7 @@ import cn.tsinghua.edu.appointment.util.FormatUtil;
 import cn.tsinghua.edu.appointment.util.TimeUtil;
 
 import javax.swing.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -23,15 +24,10 @@ public class AppointmentRepository {
      * 查看前后一周内的所有咨询
      */
     public List<Appointment> getAppointmentsBetween() throws BasicException {
-        Calendar cal = Calendar.getInstance();
-        cal.set(Calendar.HOUR_OF_DAY, 0);
-        cal.set(Calendar.MINUTE, 0);
-        cal.set(Calendar.SECOND, 0);
-        Calendar fromCal = (Calendar) cal.clone();
-        fromCal.add(Calendar.DAY_OF_MONTH, -7);
-        Calendar toCal = (Calendar) cal.clone();
-        toCal.add(Calendar.DAY_OF_MONTH, 7);
-        return mongo.getAppsBetweenDates(fromCal.getTime(), toCal.getTime());
+        LocalDateTime now = DateUtil.getLocalNow();
+        LocalDateTime from = now.minusDays(7L);
+        LocalDateTime to = now.plusDays(7L);
+        return mongo.getAppsBetweenDates(from, to);
     }
 
     /**
@@ -72,7 +68,7 @@ public class AppointmentRepository {
         if (app == null) {
             throw new NoExistException("咨询已下架");
         }
-        if (app.getStartTime().compareTo(new Date()) < 0) {
+        if (app.getStartTime().isBefore(DateUtil.getLocalNow())) {
             throw new ActionRejectException("该咨询已过期");
         }
         if (app.getStatus() != Status.AVAILABLE) {
@@ -114,7 +110,7 @@ public class AppointmentRepository {
         if (app == null) {
             throw new NoExistException("预约已下架");
         }
-        if (app.getStartTime().compareTo(new Date()) > 0) {
+        if (app.getStartTime().isAfter(DateUtil.getLocalNow())) {
             throw new ActionRejectException("咨询未开始，不能反馈");
         }
         if (app.getStatus() == Status.AVAILABLE) {
@@ -151,7 +147,7 @@ public class AppointmentRepository {
         if (app == null) {
             throw new NoExistException("预约已下架");
         }
-        if (app.getStartTime().compareTo(new Date()) > 0) {
+        if (app.getStartTime().isAfter(DateUtil.getLocalNow())) {
             throw new ActionRejectException("咨询未开始，不能反馈");
         }
         if (app.getStatus() == Status.AVAILABLE) {
@@ -184,9 +180,9 @@ public class AppointmentRepository {
         } else if (!FormatUtil.isMobile(teacherMobile)) {
             throw new FormatException("咨询师手机号不正确");
         }
-        Date start = DateUtil.convertDate(startTime);
-        Date end = DateUtil.convertDate(endTime);
-        if (start.compareTo(end) >= 1) {
+        LocalDateTime start = DateUtil.convertDate(startTime);
+        LocalDateTime end = DateUtil.convertDate(endTime);
+        if (start.isAfter(end)) {
             throw new FormatException("开始时间不能晚于结束时间");
         }
         Appointment newApp = new Appointment(start, end, teacher, username, teacherMobile);
@@ -224,12 +220,12 @@ public class AppointmentRepository {
         if (app.getStatus() == Status.APPOINTED) {
             throw new ActionRejectException("不能编辑已预约的咨询");
         }
-        Date start = DateUtil.convertDate(startTime);
-        Date end = DateUtil.convertDate(endTime);
-        if (start.after(end)) {
+        LocalDateTime start = DateUtil.convertDate(startTime);
+        LocalDateTime end = DateUtil.convertDate(endTime);
+        if (start.isAfter(end)) {
             throw new FormatException("开始时间不能晚于结束时间");
         }
-        if (end.before(new Date())) {
+        if (end.isBefore(DateUtil.getLocalNow())) {
             throw new ActionRejectException("不能编辑已过期咨询");
         }
         app.setStartTime(start);
@@ -274,7 +270,7 @@ public class AppointmentRepository {
                 continue;
             }
             if (app.getStatus() == Status.APPOINTED
-                    && app.getStartTime().compareTo(new Date()) > 0) {
+                    && app.getStartTime().isAfter(DateUtil.getLocalNow())) {
                 app.setStatus(Status.AVAILABLE);
                 app.setStudentInfo(new StudentInfo());
                 app.setStudentFeedback(new StudentFeedback());
@@ -301,7 +297,7 @@ public class AppointmentRepository {
         if (app == null) {
             throw new NoExistException("预约已下架");
         }
-        if (app.getStartTime().compareTo(new Date()) > 0) {
+        if (app.getStartTime().isAfter(DateUtil.getLocalNow())) {
             throw new ActionRejectException("咨询未开始，不能反馈");
         }
         if (app.getStatus() == Status.AVAILABLE) {
@@ -348,7 +344,7 @@ public class AppointmentRepository {
         if (app == null) {
             throw new NoExistException("预约已下架");
         }
-        if (app.getStartTime().compareTo(new Date()) > 0) {
+        if (app.getStartTime().isAfter(DateUtil.getLocalNow())) {
             throw new ActionRejectException("咨询未开始，不能反馈");
         }
         if (app.getStatus() == Status.AVAILABLE) {
@@ -378,7 +374,7 @@ public class AppointmentRepository {
         if (app == null) {
             throw new NoExistException("预约已下架");
         }
-        if (app.getStartTime().compareTo(new Date()) > 0) {
+        if (app.getStartTime().isAfter(DateUtil.getLocalNow())) {
             throw new ActionRejectException("咨询未开始，不能反馈");
         }
         if (app.getStatus() == Status.AVAILABLE) {
@@ -419,7 +415,7 @@ public class AppointmentRepository {
         if (app == null) {
             throw new NoExistException("预约已下架");
         }
-        if (app.getStartTime().compareTo(new Date()) > 0) {
+        if (app.getStartTime().isAfter(DateUtil.getLocalNow())) {
             throw new ActionRejectException("咨询未开始，不能反馈");
         }
         if (app.getStatus() == Status.AVAILABLE) {
@@ -457,9 +453,9 @@ public class AppointmentRepository {
         } else if (!FormatUtil.isMobile(teacherMobile)) {
             throw new FormatException("咨询师手机号不正确");
         }
-        Date start = DateUtil.convertDate(startTime);
-        Date end = DateUtil.convertDate(endTime);
-        if (start.compareTo(end) >= 1) {
+        LocalDateTime start = DateUtil.convertDate(startTime);
+        LocalDateTime end = DateUtil.convertDate(endTime);
+        if (start.isAfter(end)) {
             throw new FormatException("开始时间不能晚于结束时间");
         }
         if (!mongo.existUserByUsername(teacherUsername)) {
@@ -502,12 +498,12 @@ public class AppointmentRepository {
         if (app.getStatus() == Status.APPOINTED) {
             throw new ActionRejectException("不能编辑已预约的咨询");
         }
-        Date start = DateUtil.convertDate(startTime);
-        Date end = DateUtil.convertDate(endTime);
-        if (start.after(end)) {
+        LocalDateTime start = DateUtil.convertDate(startTime);
+        LocalDateTime end = DateUtil.convertDate(endTime);
+        if (start.isAfter(end)) {
             throw new FormatException("开始时间不能晚于结束时间");
         }
-        if (end.before(new Date())) {
+        if (end.isBefore(DateUtil.getLocalNow())) {
             throw new ActionRejectException("不能编辑已过期咨询");
         }
         if (!mongo.existUserByUsername(teacherUsername)) {
@@ -553,7 +549,7 @@ public class AppointmentRepository {
                 continue;
             }
             if (app.getStatus() == Status.APPOINTED
-                    && app.getStartTime().compareTo(new Date()) > 0) {
+                    && app.getStartTime().isAfter(DateUtil.getLocalNow())) {
                 app.setStatus(Status.AVAILABLE);
                 app.setStudentInfo(new StudentInfo());
                 app.setStudentFeedback(new StudentFeedback());

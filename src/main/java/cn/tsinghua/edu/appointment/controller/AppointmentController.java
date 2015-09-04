@@ -17,6 +17,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
 
@@ -42,7 +44,7 @@ public class AppointmentController {
                     continue;
                 }
                 if (app.getStatus() == Status.AVAILABLE
-                        && app.getStartTime().compareTo(new Date()) < 0) {
+                        && app.getStartTime().isBefore(DateUtil.getLocalNow())) {
                     continue;
                 }
                 JSONObject object = new JSONObject();
@@ -60,7 +62,7 @@ public class AppointmentController {
                 if (app.getStatus() == Status.AVAILABLE) {
                     object.put("status", Status.AVAILABLE.toString());
                 } else if (app.getStatus() == Status.APPOINTED
-                        && app.getStartTime().compareTo(new Date()) < 0) {
+                        && app.getStartTime().isBefore(DateUtil.getLocalNow())) {
                     object.put("status", Status.FEEDBACK.toString());
                 } else {
                     object.put("status", Status.APPOINTED.toString());

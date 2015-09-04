@@ -3,7 +3,9 @@ package cn.tsinghua.edu.appointment.domain;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
+import sun.util.resources.LocaleData;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Document(collection = "appointment")
@@ -12,8 +14,8 @@ public class Appointment {
     @Id
     private String id;
     @Indexed
-    protected Date startTime = new Date();
-    protected Date endTime = new Date();
+    protected LocalDateTime startTime = LocalDateTime.now();
+    protected LocalDateTime endTime = LocalDateTime.now();
     protected Status status = Status.AVAILABLE;
     protected String teacher = "";
     @Indexed
@@ -27,7 +29,7 @@ public class Appointment {
 
     }
 
-    public Appointment(Date startTime, Date endTime, String teacher,
+    public Appointment(LocalDateTime startTime, LocalDateTime endTime, String teacher,
                        String teacherUsername, String teacherMobile) {
         this.startTime = startTime;
         this.endTime = endTime;
@@ -44,19 +46,19 @@ public class Appointment {
         this.id = id;
     }
 
-    public Date getStartTime() {
+    public LocalDateTime getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(Date startTime) {
+    public void setStartTime(LocalDateTime startTime) {
         this.startTime = startTime;
     }
 
-    public Date getEndTime() {
+    public LocalDateTime getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(Date endTime) {
+    public void setEndTime(LocalDateTime endTime) {
         this.endTime = endTime;
     }
 

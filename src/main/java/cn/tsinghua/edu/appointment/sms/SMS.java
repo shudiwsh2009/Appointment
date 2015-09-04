@@ -1,6 +1,7 @@
 package cn.tsinghua.edu.appointment.sms;
 
 import cn.tsinghua.edu.appointment.config.EnvConfig;
+import cn.tsinghua.edu.appointment.domain.Appointment;
 import cn.tsinghua.edu.appointment.exception.ActionRejectException;
 import cn.tsinghua.edu.appointment.exception.BasicException;
 import cn.tsinghua.edu.appointment.exception.FormatException;
@@ -16,6 +17,25 @@ public class SMS {
 
     public final static String UID = "shudiwsh2009";
     public final static String KEY = "946fee2e7ad699b065f1";
+    public final static String SUCCESS_STUDENT = "%s同学你好，你已成功预约学习" +
+            "发展中心咨询。具体时间星期%s（%s月%s日）%s-%s，地点：老10号楼103室（" +
+            "汽车系11号楼南侧，文图北侧，六教往北好汉坡西侧）。请按时赴约。";
+    public final static String SUCCESS_TEACHER = "%s咨询师您好，%s同学已预约您" +
+            "咨询，时间星期%s（%s月%s日）%s-%s，地点：老10号楼103室（汽车系11号楼" +
+            "南侧，文图北侧，六教往北好汉坡西侧）。感谢您拨冗为同学提供辅导。";
+    public final static String REMINDER_STUDENT = "【学习发展中心温馨提示】%s同" +
+            "学你好，您已预约明天（%s月%s日）%s-%s%s咨询师的一对一咨询，地点：老10" +
+            "号楼103室（汽车系11号楼南侧，文图北侧，六教往北好汉坡西侧）。请按时赴约" +
+            "，如有特殊情况请致电62792453。";
+    public final static String REMINDER_TEACHER = "【学习发展中心温馨提示】%s咨" +
+            "询师您好，%s同学已预约您明天（%s月%s日）%s-%s的一对一咨询，地点：老10" +
+            "号楼103室（汽车系11号楼南侧，文图北侧，六教往北好汉坡西侧）。感谢您拨冗" +
+            "指导学生，如有特殊情况请致电62792453。";
+
+    public static void sendSMS(Appointment app) {
+        // send sms to student
+
+    }
 
     public static void sendSMS(String mobile, String content) throws FormatException, ActionRejectException {
         if (EnvConfig.ENVIRONMENT.equals("DEV")) {
