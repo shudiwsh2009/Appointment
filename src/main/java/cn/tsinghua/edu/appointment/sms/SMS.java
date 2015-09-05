@@ -56,7 +56,8 @@ public class SMS {
     }
 
     public static void sendSMS(String mobile, String content) throws FormatException, ActionRejectException {
-        if (EnvConfig.ENVIRONMENT.equals("DEV")) {
+        if (!System.getenv("APPOINTMENT_ENV").equals("ONLINE")
+                && !EnvConfig.ENVIRONMENT.equals("ONLINE")) {
             System.out.printf("Send SMS:\"%s\" to %s.\r\n", content, mobile);
             return;
         }
