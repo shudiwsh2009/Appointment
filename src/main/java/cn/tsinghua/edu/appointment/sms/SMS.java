@@ -17,8 +17,8 @@ import java.util.Locale;
 
 public class SMS {
 
-    public final static String UID = "shudiwsh2009";
-    public final static String KEY = "946fee2e7ad699b065f1";
+    public static String UID = "";
+    public static String KEY = "";
     public final static String SUCCESS_STUDENT = "%s同学你好，你已成功预约学习" +
             "发展中心咨询。具体时间星期%s（%s月%s日）%s-%s，地点：老10号楼103室（" +
             "汽车系11号楼南侧，文图北侧，六教往北好汉坡西侧）。请按时赴约。";
@@ -33,6 +33,17 @@ public class SMS {
             "询师您好，%s同学已预约您明天（%s月%s日）%s-%s的一对一咨询，地点：老10" +
             "号楼103室（汽车系11号楼南侧，文图北侧，六教往北好汉坡西侧）。感谢您拨冗" +
             "指导学生，如有特殊情况请致电62792453。";
+
+    static {
+        String uid = System.getenv("APPOINTMENT_SMS_UID");
+        if (uid != null && !uid.equals("")) {
+            SMS.UID = uid;
+        }
+        String key = System.getenv("APPOINTMENT_SMS_KEY");
+        if (key != null && !key.equals("")) {
+            SMS.KEY = key;
+        }
+    }
 
     public static void sendSMS(Appointment app) throws ActionRejectException, FormatException {
         // send sms to student
@@ -56,8 +67,9 @@ public class SMS {
     }
 
     public static void sendSMS(String mobile, String content) throws FormatException, ActionRejectException {
-        if (!System.getenv("APPOINTMENT_ENV").equals("ONLINE")
-                && !EnvConfig.ENVIRONMENT.equals("ONLINE")) {
+        if ((!System.getenv("APPOINTMENT_ENV").equals("ONLINE")
+                && !EnvConfig.ENVIRONMENT.equals("ONLINE"))
+                || UID.equals("") || KEY.equals("")) {
             System.out.printf("Send SMS:\"%s\" to %s.\r\n", content, mobile);
             return;
         }
