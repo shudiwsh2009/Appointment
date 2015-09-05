@@ -4,6 +4,7 @@ import cn.tsinghua.edu.appointment.config.EnvConfig;
 import cn.tsinghua.edu.appointment.domain.Appointment;
 import cn.tsinghua.edu.appointment.exception.ActionRejectException;
 import cn.tsinghua.edu.appointment.exception.FormatException;
+import cn.tsinghua.edu.appointment.util.DateUtil;
 import cn.tsinghua.edu.appointment.util.FormatUtil;
 import org.apache.commons.httpclient.Header;
 import org.apache.commons.httpclient.HttpClient;
@@ -12,7 +13,6 @@ import org.apache.commons.httpclient.methods.PostMethod;
 
 import java.io.IOException;
 import java.time.format.TextStyle;
-import java.util.Formatter;
 import java.util.Locale;
 
 public class SMS {
@@ -34,8 +34,25 @@ public class SMS {
             "号楼103室（汽车系11号楼南侧，文图北侧，六教往北好汉坡西侧）。感谢您拨冗" +
             "指导学生，如有特殊情况请致电62792453。";
 
-    public static void sendSMS(Appointment app) {
+    public static void sendSMS(Appointment app) throws ActionRejectException, FormatException {
         // send sms to student
+        String studentSMS = String.format(Locale.CHINA, SUCCESS_STUDENT,
+                app.getStudentInfo().getName(),
+                app.getStartTime().getDayOfWeek().getDisplayName(TextStyle.NARROW, Locale.CHINA),
+                app.getStartTime().getMonthValue(),
+                app.getStartTime().getDayOfMonth(),
+                DateUtil.getHHmm(app.getStartTime()),
+                DateUtil.getHHmm(app.getEndTime()));
+        String teacherSMS = String.format(Locale.CHINA, SUCCESS_TEACHER,
+                app.getTeacher(),
+                app.getStudentInfo().getName(),
+                app.getStartTime().getDayOfWeek().getDisplayName(TextStyle.NARROW, Locale.CHINA),
+                app.getStartTime().getMonthValue(),
+                app.getStartTime().getDayOfMonth(),
+                DateUtil.getHHmm(app.getStartTime()),
+                DateUtil.getHHmm(app.getEndTime()));
+        sendSMS(app.getStudentInfo().getMobile(), studentSMS);
+        sendSMS(app.getTeacherMobile(), teacherSMS);
     }
 
     public static void sendSMS(String mobile, String content) throws FormatException, ActionRejectException {

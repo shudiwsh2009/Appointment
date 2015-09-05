@@ -82,8 +82,7 @@ public class AppointmentRepository {
         if (app.getStudentInfo().getMobile().equals(mobile)
                 && app.getStatus() == Status.APPOINTED) {
             try {
-                SMS.sendSMS(checkApp.getStudentInfo().getMobile(), "恭喜预定成功");
-                SMS.sendSMS(checkApp.getTeacherMobile(), "有学生预定了");
+                SMS.sendSMS(checkApp);
             } catch (BasicException e) {
                 return app;
             }

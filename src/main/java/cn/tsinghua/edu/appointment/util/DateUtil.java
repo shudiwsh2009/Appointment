@@ -14,6 +14,10 @@ public class DateUtil {
         return d.format(DateTimeFormatter.ofPattern("yyyy/MM/dd", Locale.CHINA));
     }
 
+    public static String getHHmm(LocalDateTime d) {
+        return d.format(DateTimeFormatter.ofPattern("HH:mm", Locale.CHINA));
+    }
+
     public static String convertDate(LocalDateTime d) {
         return d.format(DateTimeFormatter.ofPattern(DATE_PATTERN, Locale.CHINA));
     }
