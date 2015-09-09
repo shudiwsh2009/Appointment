@@ -16,6 +16,12 @@ function addInfo(){
 			<div class="table_col" id="col2">\
 				<div class="table_head table_cell">咨询师</div>\
 			</div>\
+			<div class="table_col" id="col5">\
+				<div class="table_head table_cell">咨询师编号</div>\
+			</div>\
+			<div class="table_col" id="col6">\
+				<div class="table_head table_cell">咨询师手机</div>\
+			</div>\
 			<div class="table_col" id="col3">\
 				<div class="table_head table_cell">状态</div>\
 			</div>\
@@ -28,6 +34,9 @@ function addInfo(){
 		$('#col0').append('<div class="table_cell" id="cell0_'+i+'"><input class="checkbox" type="checkbox" id="checkbox_'+i+'"></div>');
 		$('#col1').append('<div class="table_cell" id="cell1_'+i+'" onclick="admin_edit('+i+')">'+student_table_data[i].startTime+'至'+student_table_data[i].endTime+'</div>');
 		$('#col2').append('<div class="table_cell" id="cell2_'+i+'">'+student_table_data[i].teacher+'</div>');
+		$('#col5').append('<div class="table_cell" id="cell5_'+i+'">'+student_table_data[i].teacherId+'</div>');
+		$('#col6').append('<div class="table_cell" id="cell6_'+i+'">'+student_table_data[i].teacherMobile+'</div>');
+
 		if (student_table_data[i].status=='AVAILABLE'){
 			$('#col3').append('<div class="table_cell" id="cell3_'+i+'">未预约×</div>');
 			$('#col4').append('<div class="table_cell" id="cell4_'+i+'"><button type="button" id="cell4b_'+i+'" disabled="disabled">查看</button></div>');
@@ -45,12 +54,16 @@ function addInfo(){
 	$('#col2').append('<div class="table_cell" id="cell2_'+'add'+'"></div>');
 	$('#col3').append('<div class="table_cell" id="cell3_'+'add'+'"></div>');
 	$('#col4').append('<div class="table_cell" id="cell4_'+'add'+'"></div>');
+	$('#col5').append('<div class="table_cell" id="cell5_'+'add'+'"></div>');
+	$('#col6').append('<div class="table_cell" id="cell6_'+'add'+'"></div>');
 }
 
 function optimize(t){
 	$('#col0').width(40);
-	$('#col1').width(345);
+	$('#col1').width(405);
 	$('#col2').width(120);
+	$('#col5').width(160);
+	$('#col6').width(160);
 	$('#col3').width(85);
 	$('#col4').width(85);
 	// $('#col0').css('margin-left',width*0.02+'px')
@@ -58,18 +71,40 @@ function optimize(t){
 		$('#cell1_'+i).height($('#cell4_'+i).height());
 		$('#cell2_'+i).height($('#cell4_'+i).height());
 		$('#cell3_'+i).height($('#cell4_'+i).height());
+		$('#cell5_'+i).height($('#cell4_'+i).height());
+		$('#cell6_'+i).height($('#cell4_'+i).height());
 		$('#cell0_'+i).height($('#cell4_'+i).height());
+
+		if (i%2==0){
+			$('#cell1_'+i).css('background-color','white');
+			$('#cell2_'+i).css('background-color','white');
+			$('#cell3_'+i).css('background-color','white');
+			$('#cell4_'+i).css('background-color','white');
+			$('#cell5_'+i).css('background-color','white');
+			$('#cell6_'+i).css('background-color','white');
+			$('#cell0_'+i).css('background-color','white');
+		}else{
+			$('#cell1_'+i).css('background-color','#f5f5fa');
+			$('#cell2_'+i).css('background-color','#f5f5fa');
+			$('#cell3_'+i).css('background-color','#f5f5fa');
+			$('#cell4_'+i).css('background-color','#f5f5fa');
+			$('#cell5_'+i).css('background-color','#f5f5fa');
+			$('#cell6_'+i).css('background-color','#f5f5fa');
+			$('#cell0_'+i).css('background-color','#f5f5fa');
+		}
 	}
 	$('#cell0_'+'add').height(28);
 	$('#cell1_'+'add').height(28);
 	$('#cell2_'+'add').height(28);
 	$('#cell3_'+'add').height(28);
 	$('#cell4_'+'add').height(28);
+	$('#cell5_'+'add').height(28);
+	$('#cell6_'+'add').height(28);
 
 	$('.table_head').height($('#head_0').height());
 	$(t).css('left',(width-$(t).width())/2-11+'px');
 	$(t).css('top',(height-$(t).height())/2-11+'px');
-	$('#page_maintable').css('margin-left',.5*($(window).width()-(40+345+120+85+85))+'px');
+	$('#page_maintable').css('margin-left',.5*($(window).width()-(40+405+120+85+85+320))+'px');
 
 }
 
@@ -98,6 +133,8 @@ function admin_chakan(num){
 					</div>\
 				');
 				optimize('.admin_chakan');
+			} else {
+				alert(data.message);
 			}
 		}
 	});
@@ -114,6 +151,8 @@ function fankui_admin(num){
 			if (data.state=='SUCCESS'){
 				feedback=data;
 				fankui_tch(num);
+			} else {
+				alert(data.message);
 			}
 		}
 	});
@@ -183,6 +222,8 @@ function adminPostFeedback(postdata, num){
 		success:function(data){
 			if (data.state=='SUCCESS'){
 				fankui_tch_confirm(num);
+			} else {
+				alert(data.message);
 			}
 		}
 	});
@@ -203,10 +244,28 @@ function fankui_tch_confirm(num){
 
 function admin_edit(num){
 	$('#cell1_'+num)[0].onclick='';
-	$('#cell1_'+num)[0].innerHTML='<input id="time_st'+num+'" value="'+parseTime2(student_table_data[num].startTime)+'">至<input id="time_ed'+num+'" value="'+parseTime2(student_table_data[num].endTime)+'"">';
+	$('#cell1_'+num)[0].innerHTML='<input type="text" id="inputDate" style="width:80px" ></input>日，<input style="width:40px" id="time1"></input>时至<input style="width:40px" id="time2"></input>时';
 	$('#cell2_'+num)[0].innerHTML='<input id="name'+num+'"  style="width:80px" value="'+student_table_data[num].teacher+'">';
 	$('#cell3_'+num)[0].innerHTML='<button type="button" onclick="edit_commit('+num+');">确认</button>';
 	$('#cell4_'+num)[0].innerHTML='<button type="button" onclick="window.location.reload();">取消</button>';
+	$('#cell5_'+num)[0].innerHTML='<input id="tec_id'+num+'"  style="width:120px" value="'+student_table_data[num].teacherId+'">';
+	$('#cell6_'+num)[0].innerHTML='<input id="mobile'+num+'"  style="width:120px" value="'+student_table_data[num].teacherMobile+'">';
+	$('#inputDate').DatePicker({
+		format:'YY-m-dd',
+		date: $('#inputDate').val(),
+		current: $('#inputDate').val(),
+		starts: 1,
+		position: 'r',
+		onBeforeShow: function(){
+			$('#inputDate').DatePickerSetDate($('#inputDate').val(), true);
+		},
+		onChange: function(formated, dates){
+			$('#inputDate').val(formated);
+			$('#inputDate').val($('#inputDate').val().substr(4,10));
+			$('#inputDate').DatePickerHide();
+		}
+	});
+	optimize();
 }
 
 function parseTime2(t){
@@ -217,8 +276,15 @@ function parseTime2(t){
 }
 
 function edit_commit(num){
-	var postdata={appId:student_table_data[num].appId, startTime:parseTime($("#time_st"+num).val()), endTime:parseTime($("#time_ed"+num).val()), teacher:$("#name"+num).val()};
-console.log(postdata);
+	var postdata={
+		appId:student_table_data[num].appId,
+		startTime:$('#inputDate').val()+' '+($('#time1').val().length<2?'0':'')+$('#time1').val()+':00',
+		endTime:  $('#inputDate').val()+' '+($('#time2').val().length<2?'0':'')+$('#time2').val()+':00',
+		teacher:$("#name"+num).val(),
+		teacherId:$('#tec_id'+num).val(),
+		teacherMobile:$('#mobile'+num).val()
+	};
+// console.log(postdata);
 	$.ajax({
 		type:'POST',
 		async:false,
@@ -228,6 +294,8 @@ console.log(postdata);
 		success:function(data){
 			if (data.state=='SUCCESS'){
 				getData();
+			} else {
+				alert(data.message);
 			}
 		}
 	});
@@ -239,6 +307,9 @@ function admin_add(){
 	$('#cell2_add')[0].innerHTML='<input id="name" style="width:80px"></input>';
 	$('#cell3_add')[0].innerHTML='<button type="button" onclick="add_commit();">确认</button>';
 	$('#cell4_add')[0].innerHTML='<button type="button" onclick="window.location.reload();">取消</button>';
+	$('#cell5_add')[0].innerHTML='<input id="tec_id" style="width:120px"></input>';
+	$('#cell6_add')[0].innerHTML='<input id="mobile" style="width:120px"></input>';
+
 	$('#inputDate').DatePicker({
 		format:'YY-m-dd',
 		date: $('#inputDate').val(),
@@ -266,8 +337,11 @@ function add_commit(){
 	var postdata={
 		startTime:$('#inputDate').val()+' '+($('#time1').val().length<2?'0':'')+$('#time1').val()+':00',
 		endTime:  $('#inputDate').val()+' '+($('#time2').val().length<2?'0':'')+$('#time2').val()+':00',
-		teacher:$("#name").val()};
-	console.log(postdata);
+		teacher:$("#name").val(),
+		teacherId:$("#tec_id").val(),
+		teacherMobile:$("#mobile").val(),
+	};
+	// console.log(postdata);
 	$.ajax({
 		type:'POST',
 		async:false,
@@ -277,6 +351,8 @@ function add_commit(){
 		success:function(data){
 			if (data.state=='SUCCESS'){
 				getData();
+			} else {
+				alert(data.message);
 			}
 		}
 	});
@@ -301,6 +377,8 @@ function admin_delete(){
 		success:function(data){
 			if (data.state=='SUCCESS'){
 				getData();
+			} else {
+				alert(data.message);
 			}
 		}
 	});
@@ -325,6 +403,8 @@ function admin_cancel(){
 		success:function(data){
 			if (data.state=='SUCCESS'){
 				getData();
+			} else {
+				alert(data.message);
 			}
 		}
 	});
@@ -368,6 +448,8 @@ function getData(){
 				student_table_data=data.array;
 				addInfo();
 				optimize();
+			} else {
+				alert(data.message);
 			}
 		}
 	});
