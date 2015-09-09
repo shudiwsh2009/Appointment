@@ -81,11 +81,7 @@ public class AppointmentRepository {
         Appointment checkApp = mongo.getAppById(appId);
         if (app.getStudentInfo().getMobile().equals(mobile)
                 && app.getStatus() == Status.APPOINTED) {
-            try {
-                SMS.sendSMS(checkApp);
-            } catch (BasicException e) {
-                return app;
-            }
+            SMS.sendSuccessSMS(checkApp);
         }
         return app;
     }
