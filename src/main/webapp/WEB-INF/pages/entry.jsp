@@ -26,10 +26,10 @@
 			<div class="tch_login">
 				请选择用户类型
 				<br><br>
-				<a href="/student">
+				<a href="student">
 				<button type="button" style="width:100px;font-size:16px;margin-bottom:10px;">我是学生</button></a>
 				<br>
-				<a href="/teacher">
+				<a href="teacher">
 				<button type="button" style="width:100px;font-size:16px;">我是咨询师</button></a>
 				<br>
 			</div>
