@@ -118,8 +118,11 @@ select{
 	margin-top: 15px;
 }
 #page_bottom{
-	color: #ccc;
-	font-style: italic;
+  color: #ccc;
+  text-align:center;
+  position: relative;
+  bottom: 5px;
+  width:100%;
 }
 .table_col{
 	float: left;

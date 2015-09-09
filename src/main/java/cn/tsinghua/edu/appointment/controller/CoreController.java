@@ -16,12 +16,17 @@ public class CoreController {
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public String mainPage() {
-        return "main";
+        return "entry";
     }
 
     @RequestMapping(value = "login", method = RequestMethod.GET)
     public String loginPage() {
         return "login";
+    }
+
+    @RequestMapping(value = "student", method = RequestMethod.GET)
+    public String studentPage() {
+        return "main";
     }
 
     @RequestMapping(value = "admin", method = RequestMethod.GET)
@@ -40,15 +45,6 @@ public class CoreController {
             return "teacher";
         }
         return "login";
-    }
-
-    @RequestMapping(value = "init", method = RequestMethod.GET)
-    public void init()
-            throws FormatException {
-        MongoAccess mongo = new MongoAccess();
-
-        User admin = new User("1", "1", UserType.ADMIN);
-        mongo.saveUser(admin);
     }
 
 }

@@ -28,9 +28,9 @@
 		<button onclick="teacher_delete();">删除</button>
 		<button onclick="teacher_cancel();">取消预约</button>
 
-		<div id="page_maintable">
+		<div id="page_maintable" style="font-size:10px;">
 			<div class="table_col" id="col0">
-				<div class="table_head table_cell" id="head_0"><button onclick="$('.checkbox').click();">全选</button></div>
+				<div class="table_head table_cell" id="head_0"><button onclick="$('.checkbox').click();" style="padding:0px;">全选</button></div>
 			</div>
 			<div class="table_col" id="col1">
 				<div class="table_head table_cell">时间</div>
@@ -39,7 +39,7 @@
 				<div class="table_head table_cell">咨询师</div>
 			</div>
 			<div class="table_col" id="col5">
-				<div class="table_head table_cell">咨询师电话</div>
+				<div class="table_head table_cell">电话</div>
 			</div>
 			<div class="table_col" id="col3">
 				<div class="table_head table_cell">状态</div>

@@ -8,7 +8,7 @@ function addInfo_tch(data){
 	student_table_data=data;
 	$('#page_maintable')[0].innerHTML='\
 	<div class="table_col" id="col0">\
-		<div class="table_head table_cell" id="head_0"><button onclick="$(\'.checkbox\').click();">全选</button></div>\
+		<div class="table_head table_cell" id="head_0"><button onclick="$(\'.checkbox\').click();"  style="padding:0px;">全选</button></div>\
 	</div>\
 	<div class="table_col" id="col1">\
 		<div class="table_head table_cell">时间</div>\
@@ -29,11 +29,12 @@ function addInfo_tch(data){
 	';
 	for (var i in data){
 		$('#col0').append('<div class="table_cell" id="cell0_'+i+'"><input class="checkbox" type="checkbox" id="checkbox_'+i+'"></div>');
-		$('#col1').append('<div class="table_cell" id="cell1_'+i+'" onclick="teacher_edit('+i+')">'+student_table_data[i].startTime+'至'+student_table_data[i].endTime+'</div>');
+		$('#col1').append('<div class="table_cell" id="cell1_'+i+'" onclick="teacher_edit('+i+')">'+student_table_data[i].startTime.substr(2)+'-'+student_table_data[i].endTime.split(' ')[1]+'</div>');
+		//$('#col1').append('<div class="table_cell" id="cell1_'+i+'" onclick="teacher_edit('+i+')">'+student_table_data[i].startTime+'至'+student_table_data[i].endTime+'</div>');
 		$('#col2').append('<div class="table_cell" id="cell2_'+i+'">'+student_table_data[i].teacher+'</div>');
 		$('#col5').append('<div class="table_cell" id="cell5_'+i+'">'+student_table_data[i].teacherMobile+'</div>');
 		if (student_table_data[i].status=='APPOINTED'){
-			$('#col3').append('<div class="table_cell" id="cell3_'+i+'"><button type="button" id="cell3b_'+i+'" disabled="true">已预约</button></div>');
+			$('#col3').append('<div class="table_cell" id="cell3_'+i+'">已预约</div>');
 			$('#col4').append('<div class="table_cell" id="cell4_'+i+'"><button type="button" id="cell4b_'+i+'" onclick="teacher_lookup('+i+')">查看</button></div>');
 		}else if (student_table_data[i].status=='FEEDBACK'){
 			$('#col3').append('<div class="table_cell" id="cell3_'+i+'"><button type="button" id="cell3b_'+i+'" onclick="check_studentid('+i+')">反馈</button></div>');
@@ -53,14 +54,14 @@ function addInfo_tch(data){
 
 
 function optimize(t){
-	$('#col0').width(40);
-	$('#col1').width(400);
-	$('#col2').width(150);
-	$('#col3').width(150);
-	$('#col4').width(150);
-	$('#col5').width(150);
+	$('#col0').width(20);
+	$('#col1').width(80);
+	$('#col2').width(44);
+	$('#col3').width(40);
+	$('#col4').width(40);
+	$('#col5').width(76);
 
-	$('#col0').css('margin-left',(width-1000)/2+'px')
+	$('#col0').css('margin-left',(width-300)/2+'px');
 
 	for (var i in student_table_data){
 		var maxheight=$('#cell1_'+i).height();
@@ -96,12 +97,14 @@ function optimize(t){
 	$(t).css('left',(width-$(t).width())/2-11+'px');
 	$(t).css('top',(height-$(t).height())/2-11+'px');
 
-	$('#cell0_'+'add').height(28);
-	$('#cell1_'+'add').height(28);
-	$('#cell2_'+'add').height(28);
-	$('#cell3_'+'add').height(28);
-	$('#cell4_'+'add').height(28);
-	$('#cell5_'+'add').height(28);
+	var s=28;
+	if (t=='add') s=68;
+	$('#cell0_'+'add').height(s);
+	$('#cell1_'+'add').height(s);
+	$('#cell2_'+'add').height(s);
+	$('#cell3_'+'add').height(s);
+	$('#cell4_'+'add').height(s);
+	$('#cell5_'+'add').height(s);
 	$('.table_head').height($('#head_0').height());
 }
 
@@ -184,17 +187,17 @@ function check_studentid(num){
 
 function fankui_tch(num){
 	$('body').append('\
-	<div class="fankui_tch" id="fankui_tch_'+num+'" style="text-align:left;top:100px;height:300px;width:400px;left:100px">\
+	<div class="fankui_tch" id="fankui_tch_'+num+'" style="font-size:11px;text-align:left;top:100px;height:380px;width:200px;left:100px">\
 			咨询师反馈表<br>\
-			您的姓名：<input id="fb_teacherName"></input><br>\
-			工作证号：<input id="fb_teacherId"></input><br>\
-			来访者姓名：<input id="fb_studentName"></input><br>\
+			您的姓名：<input id="fb_teacherName" style="padding:0px;"></input><br>\
+			工作证号：<input id="fb_teacherId" style="padding:0px;"></input><br>\
+			来访者姓名：<input id="fb_studentName" style="padding:0px;"></input><br>\
 			来访者问题描述：<br>\
-			<textarea id="fb_problem"></textarea><br>\
+			<textarea id="fb_problem" style="padding:0px;"></textarea><br>\
 			咨询师提供的问题解决方法：<br>\
-			<textarea id="fb_solution"></textarea><br>\
+			<textarea id="fb_solution" style="padding:0px;"></textarea><br>\
 			对中心的工作建议：<br>\
-			<textarea id="fb_advice"></textarea><br>\
+			<textarea id="fb_advice" style="padding:0px;"></textarea><br>\
 			<button type="button" onclick="if (getFeedbackData('+num+')) teacherPostFeedback(feedbackdata,'+num+');">提交反馈</button>\
 			<button type="button" onclick="$(\'.fankui_tch\').remove();">取消</button>\
 		</div>\
@@ -288,7 +291,7 @@ function teacher_add(){
 			$('#inputDate').DatePickerHide();
 		}
 	});
-	optimize();
+	optimize('add');
 }
 
 
@@ -369,12 +372,13 @@ function teacher_cancel(){
 }
 
 function teacher_edit(num){
+	$('#cell1_'+num).height(68);
 	$('#cell1_'+num)[0].onclick='';
-	$('#cell1_'+num)[0].innerHTML='<input type="text" id="inputDate" style="width:80px" ></input>日，<input style="width:40px" id="time1"></input>时至<input style="width:40px" id="time2"></input>时';
-	$('#cell2_'+num)[0].innerHTML='<input id="name'+num+'"  style="width:80px" value="'+student_table_data[num].teacher+'">';
+	$('#cell1_'+num)[0].innerHTML='<input type="text" id="inputDate" style="width:74px;border:1px solid #ccc;padding:0px;margin:0px;" ></input>日，<input style="width:40px;border:1px solid #ccc;padding:0px;margin:0px;" id="time1"></input>时至<input style="width:40px;border:1px solid #ccc;padding:0px;margin:0px;" id="time2"></input>时';
+	$('#cell2_'+num)[0].innerHTML='<input id="name'+num+'"  style="width:38px;border:1px solid #ccc;padding:0px;margin:0px;" value="'+student_table_data[num].teacher+'">';
 	$('#cell3_'+num)[0].innerHTML='<button type="button" onclick="edit_commit('+num+');">确认</button>';
 	$('#cell4_'+num)[0].innerHTML='<button type="button" onclick="window.location.reload();">取消</button>';
-	$('#cell5_'+num)[0].innerHTML='<input id="mobile'+num+'"  style="width:120px" value="'+student_table_data[num].teacherMobile+'">';
+	$('#cell5_'+num)[0].innerHTML='<input id="mobile'+num+'"  style="width:70px;border:1px solid #ccc;padding:0px;margin:0px;" value="'+student_table_data[num].teacherMobile+'">';
 	$('#inputDate').DatePicker({
 		format:'YY-m-dd',
 		date: $('#inputDate').val(),
