@@ -17,22 +17,16 @@ import java.util.Locale;
 
 public class SMS {
 
-    public final static String SUCCESS_STUDENT = "%s同学你好，你已成功预约学习" +
-            "发展中心咨询。具体时间星期%s（%s月%s日）%s-%s，地点：老10号楼103室（" +
-            "汽车系11号楼南侧，文图北侧，六教往北好汉坡西侧）。请按时赴约。";
+    public final static String SUCCESS_STUDENT = "%s同学你好，你已成功预约星期" +
+            "%s（%s月%s日）%s-%s咨询，地点：老10号楼103室。电话：62792453。";
     public final static String SUCCESS_TEACHER = "%s咨询师您好，%s同学已预约您" +
-            "咨询，时间星期%s（%s月%s日）%s-%s，地点：老10号楼103室（汽车系11号楼" +
-            "南侧，文图北侧，六教往北好汉坡西侧）。感谢您拨冗为同学提供辅导。";
-    public final static String REMINDER_STUDENT = "【学习发展中心温馨提示】%s同" +
-            "学你好，您已预约明天（%s月%s日）%s-%s%s咨询师的一对一咨询，地点：老10" +
-            "号楼103室（汽车系11号楼南侧，文图北侧，六教往北好汉坡西侧）。请按时赴约" +
-            "，如有特殊情况请致电62792453。";
-    public final static String REMINDER_TEACHER = "【学习发展中心温馨提示】%s咨" +
-            "询师您好，%s同学已预约您明天（%s月%s日）%s-%s的一对一咨询，地点：老10" +
-            "号楼103室（汽车系11号楼南侧，文图北侧，六教往北好汉坡西侧）。感谢您拨冗" +
-            "指导学生，如有特殊情况请致电62792453。";
+            "星期%s（%s月%s日）%s-%s咨询，地点：老10号楼103室。电话：62792453。";
+    public final static String REMINDER_STUDENT = "%s同学你好，你已成功预约明天" +
+            "%s-%s咨询，地点：老10号楼103室。电话：62792453。";
+    public final static String REMINDER_TEACHER = "%s咨询师您好，%s同学已预约您" +
+            "明天%s-%s咨询，地点：老10号楼103室。电话：62792453。";
 
-    public static void sendSuccessSMS(Appointment app) {
+    public static void sendSuccessSMS(Appointment app) throws FormatException {
         String studentSMS = String.format(Locale.CHINA, SUCCESS_STUDENT,
                 app.getStudentInfo().getName(),
                 app.getStartTime().getDayOfWeek().getDisplayName(TextStyle.NARROW, Locale.CHINA),
@@ -62,26 +56,21 @@ public class SMS {
     }
 
     public static void sendReminderSMS(Appointment app) {
-        String studentSMS = String.format(Locale.CHINA, REMINDER_STUDENT,
-                app.getStudentInfo().getName(),
-                app.getStartTime().getMonthValue(),
-                app.getStartTime().getDayOfMonth(),
-                DateUtil.getHHmm(app.getStartTime()),
-                DateUtil.getHHmm(app.getEndTime()),
-                app.getTeacher());
-        String teacherSMS = String.format(Locale.CHINA, REMINDER_TEACHER,
-                app.getTeacher(),
-                app.getStudentInfo().getName(),
-                app.getStartTime().getMonthValue(),
-                app.getStartTime().getDayOfMonth(),
-                DateUtil.getHHmm(app.getStartTime()),
-                DateUtil.getHHmm(app.getEndTime()));
         try {
+            String studentSMS = String.format(Locale.CHINA, REMINDER_STUDENT,
+                    app.getStudentInfo().getName(),
+                    DateUtil.getHHmm(app.getStartTime()),
+                    DateUtil.getHHmm(app.getEndTime()));
             sendSMS(app.getStudentInfo().getMobile(), studentSMS);
         } catch (BasicException e) {
             System.err.println(e.getInfo());
         } finally {
             try {
+                String teacherSMS = String.format(Locale.CHINA, REMINDER_TEACHER,
+                        app.getTeacher(),
+                        app.getStudentInfo().getName(),
+                        DateUtil.getHHmm(app.getStartTime()),
+                        DateUtil.getHHmm(app.getEndTime()));
                 sendSMS(app.getTeacherMobile(), teacherSMS);
             } catch (BasicException e) {
                 System.err.println(e.getInfo());
