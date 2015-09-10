@@ -12,6 +12,7 @@ import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -66,8 +67,14 @@ public class MongoAccess {
                 Appointment.class);
     }
 
-    public List<Appointment> getAppsBetweenDates(LocalDateTime from, LocalDateTime to) {
+    public List<Appointment> getAppsBetweenDates(LocalDate from, LocalDate to) {
         Query query = new Query(Criteria.where("startTime").gte(from).lte(to));
+        query.with(new Sort(Direction.ASC, "startTime"));
+        return MONGO.find(query, Appointment.class);
+    }
+
+    public List<Appointment> getAppsAfterDates(LocalDate from) {
+        Query query = new Query(Criteria.where("startTime").gte(from));
         query.with(new Sort(Direction.ASC, "startTime"));
         return MONGO.find(query, Appointment.class);
     }
