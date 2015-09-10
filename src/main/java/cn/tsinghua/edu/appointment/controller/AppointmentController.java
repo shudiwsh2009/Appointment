@@ -2,10 +2,13 @@ package cn.tsinghua.edu.appointment.controller;
 
 import cn.tsinghua.edu.appointment.domain.Appointment;
 import cn.tsinghua.edu.appointment.domain.Status;
+import cn.tsinghua.edu.appointment.domain.User;
 import cn.tsinghua.edu.appointment.domain.UserType;
 import cn.tsinghua.edu.appointment.exception.ActionRejectException;
 import cn.tsinghua.edu.appointment.exception.BasicException;
+import cn.tsinghua.edu.appointment.exception.NoExistException;
 import cn.tsinghua.edu.appointment.repository.AppointmentRepository;
+import cn.tsinghua.edu.appointment.repository.UserRepository;
 import cn.tsinghua.edu.appointment.util.DateUtil;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -145,6 +148,7 @@ public class AppointmentController {
     public void teacherViewAppointments(HttpSession session,
                                         HttpServletResponse response) {
         AppointmentRepository ar = new AppointmentRepository();
+        UserRepository ur = new UserRepository();
         UserType userType = (UserType) session.getAttribute("userType");
         String username = (String) session.getAttribute("username");
         JSONObject result = new JSONObject();
@@ -153,6 +157,12 @@ public class AppointmentController {
             if (userType != UserType.TEACHER) {
                 throw new ActionRejectException("权限不足");
             }
+            User teacherUser = ur.getUserByUsername(username);
+            if (teacherUser == null) {
+                throw new NoExistException("咨询师账户失效");
+            }
+            result.put("teacher", teacherUser.getFullname());
+            result.put("teacherMobile", teacherUser.getMobile());
             List<Appointment> appList = ar.getAppointmentsBetween();
             for (Appointment app : appList) {
                 if (!username.equals(app.getTeacherUsername())) {

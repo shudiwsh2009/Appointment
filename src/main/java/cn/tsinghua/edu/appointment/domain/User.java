@@ -12,12 +12,22 @@ public class User {
     @Indexed
     protected String username = "";
     protected String password = "";
+    protected String fullname = "";
+    protected String mobile = "";
     protected UserType userType = UserType.STUDENT;
 
     public User(String username, String password, UserType userType) {
         this.username = username;
         this.password = password;
         this.userType = userType;
+    }
+
+    public User(String u, String p, String f, String m, UserType t) {
+        username = u;
+        password = p;
+        fullname = f;
+        mobile = m;
+        userType = t;
     }
 
     public String getId() {
@@ -34,6 +44,22 @@ public class User {
 
     public UserType getUserType() {
         return userType;
+    }
+
+    public String getFullname() {
+        return fullname;
+    }
+
+    public void setFullname(String fullname) {
+        this.fullname = fullname;
+    }
+
+    public String getMobile() {
+        return mobile;
+    }
+
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
     }
 
 }

@@ -33,6 +33,12 @@ public class MongoAccess {
         return newUser;
     }
 
+    public User addUser(String _username, String _password, String _fullname, String _mobile, UserType _type) {
+        User newUser = new User(_username, _password, _fullname, _mobile, _type);
+        MONGO.save(newUser);
+        return newUser;
+    }
+
     public User saveUser(User _user) {
         MONGO.save(_user);
         return _user;
