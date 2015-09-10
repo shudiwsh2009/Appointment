@@ -201,11 +201,20 @@ function yuyue_stu_confirm(num){
 	$('.yuyue_stu').remove();
 	$('#cell3b_'+num).attr('disabled','true');
 	$('#cell3b_'+num).text('已预约');
+	// $('body').append('\
+	// 	<div class="yuyue_stu_success">\
+	// 		您已预约<br>'+student_table_data[num].startTime+'<br>'+student_table_data[num].endTime+'。请等待中心老师与你联系!\
+	// 		<br>\
+	// 		感谢使用中心咨询预约系统！<br>\
+	// 		<button type="button" onclick="$(\'.yuyue_stu_success\').remove();">确定</button>\
+	// 	</div>\
+	// ');
 	$('body').append('\
 		<div class="yuyue_stu_success">\
-			您已预约<br>'+student_table_data[num].startTime+'<br>'+student_table_data[num].endTime+'。请等待中心老师与你联系!\
+			你已预约成功，\
 			<br>\
-			感谢使用中心咨询预约系统！<br>\
+			请关注短信提醒。\
+			<br>\
 			<button type="button" onclick="$(\'.yuyue_stu_success\').remove();">确定</button>\
 		</div>\
 	');
