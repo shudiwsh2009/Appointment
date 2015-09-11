@@ -1,6 +1,8 @@
 var width=$(window).width();
 var height=$(window).height();
 var student_table_data=[];
+var teacher = "";
+var teacherMobile = "";
 
 var feedback;
 
@@ -271,10 +273,10 @@ function teacherPostFeedback(postdata, num){
 function teacher_add(){
 	$('#cell1_add')[0].onclick='';
 	$('#cell1_add')[0].innerHTML='<input type="text" id="inputDate" style="width:80px" ></input>日，<input style="width:40px" id="time1"></input>时至<input style="width:40px" id="time2"></input>时';
-	$('#cell2_add')[0].innerHTML='<input id="name" style="width:80px"></input>';
+	$('#cell2_add')[0].innerHTML='<input id="name" style="width:80px" value="' + teacher + '"></input>';
 	$('#cell3_add')[0].innerHTML='<button type="button" onclick="add_commit();">确认</button>';
 	$('#cell4_add')[0].innerHTML='<button type="button" onclick="window.location.reload();">取消</button>';
-	$('#cell5_add')[0].innerHTML='<input id="mobile" style="width:120px"></input>';
+	$('#cell5_add')[0].innerHTML='<input id="mobile" style="width:120px" value="' + teacherMobile + '"></input>';
 
 	$('#inputDate').DatePicker({
 		format:'YY-m-dd',
@@ -439,12 +441,14 @@ function getData(){
 	$.ajax({
 		type:'GET',
 		async:false,
-		url:'appointment/viewAppointments',
+		url:'appointment/teacher/viewAppointments',
 		dataType:'json',
 		success:function(data){
 			if (data.state=='SUCCESS'){
 				addInfo_tch(data.array);
 				student_table_data=data.array;
+				teacher = data.teacher;
+				teacherMobile = data.teacherMobile;
 				optimize();
 			} else {
 				alert(data.message);

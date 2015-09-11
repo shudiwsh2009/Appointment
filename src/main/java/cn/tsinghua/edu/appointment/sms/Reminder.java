@@ -22,7 +22,7 @@ public class Reminder {
         LocalDate tomorrow = LocalDate.now(ZoneId.of(DateUtil.ZONE_ID)).plusDays(1L);
         LocalDateTime from = LocalDateTime.of(tomorrow, LocalTime.MIN);
         LocalDateTime to = LocalDateTime.of(tomorrow, LocalTime.MAX);
-        List<Appointment> apps = this.mongo.getAppsBetweenDates(from, to);
+        List<Appointment> apps = this.mongo.getAppsBetweenDateTimes(from, to);
         apps.forEach((app) -> {
             if (app.getStatus() == Status.APPOINTED) {
                 SMS.sendReminderSMS(app);

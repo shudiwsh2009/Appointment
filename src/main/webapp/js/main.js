@@ -252,7 +252,7 @@ function getData(){
 	$.ajax({
 		type:'GET',
 		async:false,
-		url:'appointment/viewAppointments',
+		url:'appointment/student/viewAppointments',
 		dataType:'json',
 		success:function(data){
 			if (data.state=='SUCCESS'){

@@ -16,6 +16,10 @@ public class User {
     protected String mobile = "";
     protected UserType userType = UserType.STUDENT;
 
+    public User() {
+
+    }
+
     public User(String username, String password, UserType userType) {
         this.username = username;
         this.password = password;

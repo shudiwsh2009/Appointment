@@ -163,7 +163,7 @@ public class AppointmentController {
             }
             result.put("teacher", teacherUser.getFullname());
             result.put("teacherMobile", teacherUser.getMobile());
-            List<Appointment> appList = ar.getAppointmentsBetween();
+            List<Appointment> appList = ar.getAppointmentsForTeacher();
             for (Appointment app : appList) {
                 if (!username.equals(app.getTeacherUsername())) {
                     continue;

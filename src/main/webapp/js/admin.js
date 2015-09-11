@@ -441,7 +441,7 @@ function getData(){
 	$.ajax({
 		type:'GET',
 		async:false,
-		url:'appointment/viewAppointments',
+		url:'appointment/admin/viewAppointments',
 		dataType:'json',
 		success:function(data){
 			if (data.state=='SUCCESS'){

@@ -23,8 +23,8 @@ public class AppointmentRepository {
      */
     public List<Appointment> getAppointmentsBetween() throws BasicException {
         LocalDate today = DateUtil.getLocalToday();
-        LocalDate from = today.plusDays(7L);
-        LocalDate to = today.minusDays(7L);
+        LocalDate from = today.minusDays(7L);
+        LocalDate to = today.plusDays(7L);
         return mongo.getAppsBetweenDates(from, to);
     }
 
@@ -33,8 +33,8 @@ public class AppointmentRepository {
      */
     public List<Appointment> getAppointmentsForStudent() throws BasicException {
         LocalDate today = DateUtil.getLocalToday();
-        LocalDate from = today.plusDays(7L);
-        LocalDate to = today.minusDays(7L);
+        LocalDate from = today.minusDays(7L);
+        LocalDate to = today.plusDays(7L);
         return mongo.getAppsBetweenDates(from, to);
     }
 
