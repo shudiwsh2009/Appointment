@@ -472,6 +472,28 @@ function admin_export(){
 	});
 }
 
+function admin_query() {
+	var postData = {
+		fromTime: $('#queryDate').val(),
+	};
+	$.ajax({
+		type:'POST',
+		async:false,
+		url:'appointment/admin/queryAppointments',
+		data:postData,
+		dataType:'json',
+		success:function(data){
+			if (data.state=='SUCCESS') {
+				student_table_data=data.array;
+				addInfo();
+				optimize();
+			} else {
+				alert(data.message);
+			}
+		}
+	});
+}
+
 function admin_logout() {
 	$.ajax({
 		type:'GET',

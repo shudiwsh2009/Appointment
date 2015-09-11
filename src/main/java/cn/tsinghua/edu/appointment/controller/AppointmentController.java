@@ -270,7 +270,7 @@ public class AppointmentController {
     /**
      * 管理员查看指定日期30天以内的所有咨询
      */
-    @RequestMapping(value = "admin/queryAppointments", method = RequestMethod.GET)
+    @RequestMapping(value = "admin/queryAppointments", method = RequestMethod.POST)
     public void adminQueryAppointments(@RequestParam("fromTime") String _fromTime,
                                        HttpSession session,
                                        HttpServletResponse response) {
