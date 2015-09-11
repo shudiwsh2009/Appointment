@@ -272,7 +272,8 @@ function teacherPostFeedback(postdata, num){
 
 function teacher_add(){
 	$('#cell1_add')[0].onclick='';
-	$('#cell1_add')[0].innerHTML='<input type="text" id="inputDate" style="width:80px" ></input>日，<input style="width:40px" id="time1"></input>时至<input style="width:40px" id="time2"></input>时';
+	$('#cell1_add')[0].innerHTML='<input type="text" id="inputDate" style="width:60px" ></input>日<br><input style="width:20px" id="time1"></input>时<input style="width:20px" id="minute1"></input>分' + 
+		'<br><input style="width:20px" id="time2"></input>时<input style="width:20px" id="minute2"></input>分';
 	$('#cell2_add')[0].innerHTML='<input id="name" style="width:80px" value="' + teacher + '"></input>';
 	$('#cell3_add')[0].innerHTML='<button type="button" onclick="add_commit();">确认</button>';
 	$('#cell4_add')[0].innerHTML='<button type="button" onclick="window.location.reload();">取消</button>';
@@ -298,13 +299,28 @@ function teacher_add(){
 
 
 function add_commit(){
+	var startTime = $('#inputDate').val()+' '+($('#time1').val().length<2?'0':'')+$('#time1').val() + ":";
+	if ($('#minute1').val().length == 0) {
+		startTime += "00";
+	} else if ($('#minute1').val().length == 1) {
+		startTime += "0" + $('#minute1').val();
+	} else {
+		startTime += $('#minute1').val();
+	}
+	var endTime = $('#inputDate').val()+' '+($('#time2').val().length<2?'0':'')+$('#time2').val() + ":";
+	if ($('#minute2').val().length == 0) {
+		endTime += "00";
+	} else if ($('#minute2').val().length == 1) {
+		endTime += "0" + $('#minute2').val();
+	} else {
+		endTime += $('#minute2').val();
+	}
 	var postdata={
-		startTime:$('#inputDate').val()+' '+($('#time1').val().length<2?'0':'')+$('#time1').val()+':00',
-		endTime:  $('#inputDate').val()+' '+($('#time2').val().length<2?'0':'')+$('#time2').val()+':00',
+		startTime:startTime,
+		endTime:endTime,
 		teacher:$("#name").val(),
 		teacherMobile:$('#mobile').val()
 	};
-console.log(postdata);
 	$.ajax({
 		type:'POST',
 		async:false,
@@ -376,7 +392,9 @@ function teacher_cancel(){
 function teacher_edit(num){
 	$('#cell1_'+num).height(68);
 	$('#cell1_'+num)[0].onclick='';
-	$('#cell1_'+num)[0].innerHTML='<input type="text" id="inputDate" style="width:74px;border:1px solid #ccc;padding:0px;margin:0px;" ></input>日，<input style="width:40px;border:1px solid #ccc;padding:0px;margin:0px;" id="time1"></input>时至<input style="width:40px;border:1px solid #ccc;padding:0px;margin:0px;" id="time2"></input>时';
+	// $('#cell1_'+num)[0].innerHTML='<input type="text" id="inputDate" style="width:74px;border:1px solid #ccc;padding:0px;margin:0px;" ></input>日，<input style="width:40px;border:1px solid #ccc;padding:0px;margin:0px;" id="time1"></input>时至<input style="width:40px;border:1px solid #ccc;padding:0px;margin:0px;" id="time2"></input>时';
+	$('#cell1_'+num)[0].innerHTML='<input type="text" id="inputDate" style="width:60px" ></input>日<br><input style="width:20px" id="time1"></input>时<input style="width:20px" id="minute1"></input>分' + 
+		'<br><input style="width:20px" id="time2"></input>时<input style="width:20px" id="minute2"></input>分';
 	$('#cell2_'+num)[0].innerHTML='<input id="name'+num+'"  style="width:38px;border:1px solid #ccc;padding:0px;margin:0px;" value="'+student_table_data[num].teacher+'">';
 	$('#cell3_'+num)[0].innerHTML='<button type="button" onclick="edit_commit('+num+');">确认</button>';
 	$('#cell4_'+num)[0].innerHTML='<button type="button" onclick="window.location.reload();">取消</button>';
@@ -414,10 +432,26 @@ function parseTime(t){
 
 
 function edit_commit(num){
+	var startTime = $('#inputDate').val()+' '+($('#time1').val().length<2?'0':'')+$('#time1').val() + ":";
+	if ($('#minute1').val().length == 0) {
+		startTime += "00";
+	} else if ($('#minute1').val().length == 1) {
+		startTime += "0" + $('#minute1').val();
+	} else {
+		startTime += $('#minute1').val();
+	}
+	var endTime = $('#inputDate').val()+' '+($('#time2').val().length<2?'0':'')+$('#time2').val() + ":";
+	if ($('#minute2').val().length == 0) {
+		endTime += "00";
+	} else if ($('#minute2').val().length == 1) {
+		endTime += "0" + $('#minute2').val();
+	} else {
+		endTime += $('#minute2').val();
+	}
 	var postdata={
 		appId:student_table_data[num].appId,
-		startTime:$('#inputDate').val()+' '+($('#time1').val().length<2?'0':'')+$('#time1').val()+':00',
-		endTime:  $('#inputDate').val()+' '+($('#time2').val().length<2?'0':'')+$('#time2').val()+':00',
+		startTime:startTime,
+		endTime:endTime,
 		teacher:$("#name"+num).val(),
 		teacherMobile:$('#mobile'+num).val()
 	};
