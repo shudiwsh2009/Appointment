@@ -19,6 +19,11 @@ public class CoreController {
         return "entry";
     }
 
+    @RequestMapping(value = "entry", method = RequestMethod.GET)
+    public String entryPage() {
+        return "entry";
+    }
+
     @RequestMapping(value = "login", method = RequestMethod.GET)
     public String loginPage() {
         return "login";

@@ -437,6 +437,23 @@ function edit_commit(num){
 	});
 }
 
+function teacher_logout() {
+	$.ajax({
+		type:'GET',
+		async:false,
+		url:'user/logout',
+		data:{},
+		dataType:'json',
+		success:function(data){
+			if (data.state=='SUCCESS'){
+				window.location.href=data.url;
+			}else{
+
+			}
+		}
+	});
+}
+
 function getData(){
 	$.ajax({
 		type:'GET',

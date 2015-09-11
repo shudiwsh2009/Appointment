@@ -27,6 +27,7 @@
 		<button onclick="teacher_add();">新增</button>
 		<button onclick="teacher_delete();">删除</button>
 		<button onclick="teacher_cancel();">取消预约</button>
+		<button onclick="teacher_logout();" style="float:right;margin-right:10px">退出登录</button>
 
 		<div id="page_maintable" style="font-size:10px;">
 			<div class="table_col" id="col0">

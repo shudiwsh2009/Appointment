@@ -27,6 +27,7 @@
 		<button onclick="admin_delete();">删除</button>
 		<button onclick="admin_cancel();">取消预约</button>
 		<button onclick="admin_export();">导出选定预约</button>
+		<button onclick="admin_logout();" style="margin-left:20px">退出登录</button>
 		<div id="page_maintable">
 
 		</div>
