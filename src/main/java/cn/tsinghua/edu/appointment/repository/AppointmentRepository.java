@@ -9,6 +9,7 @@ import cn.tsinghua.edu.appointment.util.ExcelUtil;
 import cn.tsinghua.edu.appointment.util.FormatUtil;
 import cn.tsinghua.edu.appointment.util.TimeUtil;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,9 +22,37 @@ public class AppointmentRepository {
      * 查看前后一周内的所有咨询
      */
     public List<Appointment> getAppointmentsBetween() throws BasicException {
-        LocalDateTime now = DateUtil.getLocalNow();
-        LocalDateTime from = now.minusDays(7L);
-        LocalDateTime to = now.plusDays(7L);
+        LocalDate today = DateUtil.getLocalToday();
+        LocalDate from = today.minusDays(7L);
+        LocalDate to = today.plusDays(7L);
+        return mongo.getAppsBetweenDates(from, to);
+    }
+
+    /**
+     * 学生查看前后一周内的所有咨询
+     */
+    public List<Appointment> getAppointmentsForStudent() throws BasicException {
+        LocalDate today = DateUtil.getLocalToday();
+        LocalDate from = today.minusDays(7L);
+        LocalDate to = today.plusDays(7L);
+        return mongo.getAppsBetweenDates(from, to);
+    }
+
+    /**
+     * 咨询师查看前后一周内的所有咨询
+     */
+    public List<Appointment> getAppointmentsForTeacher() throws BasicException {
+        LocalDate today = DateUtil.getLocalToday();
+        LocalDate from = today.minusDays(7L);
+        return mongo.getAppsAfterDates(from);
+    }
+
+    /**
+     * 管理员查看指定日期后30天内的所有咨询
+     */
+    public List<Appointment> getAppointmentsForAdmin(String _from) throws BasicException {
+        LocalDate from = DateUtil.convertDate(_from);
+        LocalDate to = from.plusDays(30L);
         return mongo.getAppsBetweenDates(from, to);
     }
 
@@ -158,7 +187,7 @@ public class AppointmentRepository {
     public Appointment addAppointmentByTeacher(String startTime, String endTime,
                                                String teacher, String teacherMobile,
                                                UserType userType, String username) throws EmptyFieldException,
-            FormatException, ActionRejectException {
+            FormatException, ActionRejectException, NoExistException {
         if (userType == null || userType != UserType.TEACHER) {
             throw new ActionRejectException("权限不足");
         } else if (startTime == null || startTime.equals("")) {
@@ -172,11 +201,20 @@ public class AppointmentRepository {
         } else if (!FormatUtil.isMobile(teacherMobile)) {
             throw new FormatException("咨询师手机号不正确");
         }
-        LocalDateTime start = DateUtil.convertDate(startTime);
-        LocalDateTime end = DateUtil.convertDate(endTime);
+        LocalDateTime start = DateUtil.convertDateTime(startTime);
+        LocalDateTime end = DateUtil.convertDateTime(endTime);
         if (start.isAfter(end)) {
             throw new FormatException("开始时间不能晚于结束时间");
         }
+
+        User teacherUser = mongo.getUserByUsername(username);
+        if (teacherUser == null) {
+            throw new NoExistException("咨询师账户失效");
+        }
+        teacherUser.setFullname(teacher);
+        teacherUser.setMobile(teacherMobile);
+        mongo.saveUser(teacherUser);
+
         Appointment newApp = new Appointment(start, end, teacher, username, teacherMobile);
         mongo.saveApp(newApp);
         return newApp;
@@ -212,14 +250,23 @@ public class AppointmentRepository {
         if (app.getStatus() == Status.APPOINTED) {
             throw new ActionRejectException("不能编辑已预约的咨询");
         }
-        LocalDateTime start = DateUtil.convertDate(startTime);
-        LocalDateTime end = DateUtil.convertDate(endTime);
+        LocalDateTime start = DateUtil.convertDateTime(startTime);
+        LocalDateTime end = DateUtil.convertDateTime(endTime);
         if (start.isAfter(end)) {
             throw new FormatException("开始时间不能晚于结束时间");
         }
         if (end.isBefore(DateUtil.getLocalNow())) {
             throw new ActionRejectException("不能编辑已过期咨询");
         }
+
+        User teacherUser = mongo.getUserByUsername(username);
+        if (teacherUser == null) {
+            throw new NoExistException("咨询师账户失效");
+        }
+        teacherUser.setFullname(teacher);
+        teacherUser.setMobile(teacherMobile);
+        mongo.saveUser(teacherUser);
+
         app.setStartTime(start);
         app.setEndTime(end);
         app.setTeacher(teacher);
@@ -445,13 +492,18 @@ public class AppointmentRepository {
         } else if (!FormatUtil.isMobile(teacherMobile)) {
             throw new FormatException("咨询师手机号不正确");
         }
-        LocalDateTime start = DateUtil.convertDate(startTime);
-        LocalDateTime end = DateUtil.convertDate(endTime);
+        LocalDateTime start = DateUtil.convertDateTime(startTime);
+        LocalDateTime end = DateUtil.convertDateTime(endTime);
         if (start.isAfter(end)) {
             throw new FormatException("开始时间不能晚于结束时间");
         }
-        if (!mongo.existUserByUsername(teacherUsername)) {
-            mongo.addUser(teacherUsername, UserRepository.TEACHER_DEFAULT_PASSWORD, UserType.TEACHER);
+        User teacherUser = mongo.getUserByUsername(teacherUsername);
+        if (teacherUser == null) {
+            mongo.addUser(teacherUsername, UserRepository.TEACHER_DEFAULT_PASSWORD, teacher, teacherMobile, UserType.TEACHER);
+        } else {
+            teacherUser.setFullname(teacher);
+            teacherUser.setMobile(teacherMobile);
+            mongo.saveUser(teacherUser);
         }
         Appointment newApp = new Appointment(start, end, teacher, teacherUsername, teacherMobile);
         mongo.saveApp(newApp);
@@ -490,16 +542,21 @@ public class AppointmentRepository {
         if (app.getStatus() == Status.APPOINTED) {
             throw new ActionRejectException("不能编辑已预约的咨询");
         }
-        LocalDateTime start = DateUtil.convertDate(startTime);
-        LocalDateTime end = DateUtil.convertDate(endTime);
+        LocalDateTime start = DateUtil.convertDateTime(startTime);
+        LocalDateTime end = DateUtil.convertDateTime(endTime);
         if (start.isAfter(end)) {
             throw new FormatException("开始时间不能晚于结束时间");
         }
         if (end.isBefore(DateUtil.getLocalNow())) {
             throw new ActionRejectException("不能编辑已过期咨询");
         }
-        if (!mongo.existUserByUsername(teacherUsername)) {
-            mongo.addUser(teacherUsername, UserRepository.TEACHER_DEFAULT_PASSWORD, UserType.TEACHER);
+        User teacherUser = mongo.getUserByUsername(teacherUsername);
+        if (teacherUser == null) {
+            mongo.addUser(teacherUsername, UserRepository.TEACHER_DEFAULT_PASSWORD, teacher, teacherMobile, UserType.TEACHER);
+        } else {
+            teacherUser.setFullname(teacher);
+            teacherUser.setMobile(teacherMobile);
+            mongo.saveUser(teacherUser);
         }
         app.setStartTime(start);
         app.setEndTime(end);

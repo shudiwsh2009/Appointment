@@ -52,7 +52,7 @@ public class UserController {
             } else if (user.getUserType() == UserType.TEACHER) {
                 result.put("url", "teacher");
             } else {
-                result.put("url", "/");
+                result.put("url", "entry");
             }
             result.put("state", "SUCCESS");
         } catch (BasicException e) {
@@ -74,13 +74,28 @@ public class UserController {
         }
     }
 
-    @RequestMapping(value = "logout", method = RequestMethod.POST)
+    @RequestMapping(value = "logout", method = RequestMethod.GET)
     public void login(HttpServletResponse response,
                       HttpSession session) throws IOException {
+        JSONObject result = new JSONObject();
+        UserType userType = (UserType) session.getAttribute("userType");
         session.removeAttribute("userId");
         session.removeAttribute("username");
         session.removeAttribute("userType");
-        response.sendRedirect("/appointment");
+        result.put("url", userType == UserType.ADMIN ? "admin" : "entry");
+        result.put("state", "SUCCESS");
+
+        // send response
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        PrintWriter out;
+        try {
+            out = response.getWriter();
+            out.write(result.toString());
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
 
 }

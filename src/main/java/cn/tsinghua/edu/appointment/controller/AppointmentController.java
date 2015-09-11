@@ -2,9 +2,13 @@ package cn.tsinghua.edu.appointment.controller;
 
 import cn.tsinghua.edu.appointment.domain.Appointment;
 import cn.tsinghua.edu.appointment.domain.Status;
+import cn.tsinghua.edu.appointment.domain.User;
 import cn.tsinghua.edu.appointment.domain.UserType;
+import cn.tsinghua.edu.appointment.exception.ActionRejectException;
 import cn.tsinghua.edu.appointment.exception.BasicException;
+import cn.tsinghua.edu.appointment.exception.NoExistException;
 import cn.tsinghua.edu.appointment.repository.AppointmentRepository;
+import cn.tsinghua.edu.appointment.repository.UserRepository;
 import cn.tsinghua.edu.appointment.util.DateUtil;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -47,8 +51,8 @@ public class AppointmentController {
                 JSONObject object = new JSONObject();
                 object.put("appId", app.getId());
                 object.put("startTime",
-                        DateUtil.convertDate(app.getStartTime()));
-                object.put("endTime", DateUtil.convertDate(app.getEndTime()));
+                        DateUtil.convertDateTime(app.getStartTime()));
+                object.put("endTime", DateUtil.convertDateTime(app.getEndTime()));
                 object.put("teacher", app.getTeacher());
                 if (userType == UserType.ADMIN) {
                     object.put("teacherId", app.getTeacherUsername());
@@ -56,6 +60,242 @@ public class AppointmentController {
                 } else if (userType == UserType.TEACHER) {
                     object.put("teacherMobile", app.getTeacherMobile());
                 }
+                if (app.getStatus() == Status.AVAILABLE) {
+                    object.put("status", Status.AVAILABLE.toString());
+                } else if (app.getStatus() == Status.APPOINTED
+                        && app.getStartTime().isBefore(DateUtil.getLocalNow())) {
+                    object.put("status", Status.FEEDBACK.toString());
+                } else {
+                    object.put("status", Status.APPOINTED.toString());
+                }
+                array.put(object);
+            }
+            result.put("array", array);
+            result.put("state", "SUCCESS");
+        } catch (BasicException e) {
+            result.put("state", "FAILED");
+            result.put("message", e.getInfo());
+        }
+
+        // send response
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        PrintWriter out;
+        try {
+            out = response.getWriter();
+            out.write(result.toString());
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 学生查看前后一周内的所有咨询
+     */
+    @RequestMapping(value = "student/viewAppointments", method = RequestMethod.GET)
+    public void studnetViewAppointments(HttpServletResponse response) {
+        AppointmentRepository ar = new AppointmentRepository();
+        JSONObject result = new JSONObject();
+        JSONArray array = new JSONArray();
+        try {
+            List<Appointment> appList = ar.getAppointmentsForStudent();
+            for (Appointment app : appList) {
+                if (app.getStatus() == Status.AVAILABLE
+                        && app.getStartTime().isBefore(DateUtil.getLocalNow())) {
+                    continue;
+                }
+                JSONObject object = new JSONObject();
+                object.put("appId", app.getId());
+                object.put("startTime",
+                        DateUtil.convertDateTime(app.getStartTime()));
+                object.put("endTime", DateUtil.convertDateTime(app.getEndTime()));
+                object.put("teacher", app.getTeacher());
+                if (app.getStatus() == Status.AVAILABLE) {
+                    object.put("status", Status.AVAILABLE.toString());
+                } else if (app.getStatus() == Status.APPOINTED
+                        && app.getStartTime().isBefore(DateUtil.getLocalNow())) {
+                    object.put("status", Status.FEEDBACK.toString());
+                } else {
+                    object.put("status", Status.APPOINTED.toString());
+                }
+                array.put(object);
+            }
+            result.put("array", array);
+            result.put("state", "SUCCESS");
+        } catch (BasicException e) {
+            result.put("state", "FAILED");
+            result.put("message", e.getInfo());
+        }
+
+        // send response
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        PrintWriter out;
+        try {
+            out = response.getWriter();
+            out.write(result.toString());
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 咨询师查看负一周以后的所有咨询
+     */
+    @RequestMapping(value = "teacher/viewAppointments", method = RequestMethod.GET)
+    public void teacherViewAppointments(HttpSession session,
+                                        HttpServletResponse response) {
+        AppointmentRepository ar = new AppointmentRepository();
+        UserRepository ur = new UserRepository();
+        UserType userType = (UserType) session.getAttribute("userType");
+        String username = (String) session.getAttribute("username");
+        JSONObject result = new JSONObject();
+        JSONArray array = new JSONArray();
+        try {
+            if (userType != UserType.TEACHER) {
+                throw new ActionRejectException("权限不足");
+            }
+            User teacherUser = ur.getUserByUsername(username);
+            if (teacherUser == null) {
+                throw new NoExistException("咨询师账户失效");
+            }
+            result.put("teacher", teacherUser.getFullname());
+            result.put("teacherMobile", teacherUser.getMobile());
+            List<Appointment> appList = ar.getAppointmentsForTeacher();
+            for (Appointment app : appList) {
+                if (!username.equals(app.getTeacherUsername())) {
+                    continue;
+                }
+                if (app.getStatus() == Status.AVAILABLE
+                        && app.getStartTime().isBefore(DateUtil.getLocalNow())) {
+                    continue;
+                }
+                JSONObject object = new JSONObject();
+                object.put("appId", app.getId());
+                object.put("startTime",
+                        DateUtil.convertDateTime(app.getStartTime()));
+                object.put("endTime", DateUtil.convertDateTime(app.getEndTime()));
+                object.put("teacher", app.getTeacher());
+                object.put("teacherMobile", app.getTeacherMobile());
+                if (app.getStatus() == Status.AVAILABLE) {
+                    object.put("status", Status.AVAILABLE.toString());
+                } else if (app.getStatus() == Status.APPOINTED
+                        && app.getStartTime().isBefore(DateUtil.getLocalNow())) {
+                    object.put("status", Status.FEEDBACK.toString());
+                } else {
+                    object.put("status", Status.APPOINTED.toString());
+                }
+                array.put(object);
+            }
+            result.put("array", array);
+            result.put("state", "SUCCESS");
+        } catch (BasicException e) {
+            result.put("state", "FAILED");
+            result.put("message", e.getInfo());
+        }
+
+        // send response
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        PrintWriter out;
+        try {
+            out = response.getWriter();
+            out.write(result.toString());
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 管理员查看负一周以后的所有咨询
+     */
+    @RequestMapping(value = "admin/viewAppointments", method = RequestMethod.GET)
+    public void adminViewAppointments(HttpSession session,
+                                      HttpServletResponse response) {
+        AppointmentRepository ar = new AppointmentRepository();
+        UserType userType = (UserType) session.getAttribute("userType");
+        JSONObject result = new JSONObject();
+        JSONArray array = new JSONArray();
+        try {
+            if (userType != UserType.ADMIN) {
+                throw new ActionRejectException("权限不足");
+            }
+            List<Appointment> appList = ar.getAppointmentsForTeacher();
+            for (Appointment app : appList) {
+                if (app.getStatus() == Status.AVAILABLE
+                        && app.getStartTime().isBefore(DateUtil.getLocalNow())) {
+                    continue;
+                }
+                JSONObject object = new JSONObject();
+                object.put("appId", app.getId());
+                object.put("startTime",
+                        DateUtil.convertDateTime(app.getStartTime()));
+                object.put("endTime", DateUtil.convertDateTime(app.getEndTime()));
+                object.put("teacher", app.getTeacher());
+                object.put("teacherId", app.getTeacherUsername());
+                object.put("teacherMobile", app.getTeacherMobile());
+                if (app.getStatus() == Status.AVAILABLE) {
+                    object.put("status", Status.AVAILABLE.toString());
+                } else if (app.getStatus() == Status.APPOINTED
+                        && app.getStartTime().isBefore(DateUtil.getLocalNow())) {
+                    object.put("status", Status.FEEDBACK.toString());
+                } else {
+                    object.put("status", Status.APPOINTED.toString());
+                }
+                array.put(object);
+            }
+            result.put("array", array);
+            result.put("state", "SUCCESS");
+        } catch (BasicException e) {
+            result.put("state", "FAILED");
+            result.put("message", e.getInfo());
+        }
+
+        // send response
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        PrintWriter out;
+        try {
+            out = response.getWriter();
+            out.write(result.toString());
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 管理员查看指定日期30天以内的所有咨询
+     */
+    @RequestMapping(value = "admin/queryAppointments", method = RequestMethod.POST)
+    public void adminQueryAppointments(@RequestParam("fromTime") String _fromTime,
+                                       HttpSession session,
+                                       HttpServletResponse response) {
+        AppointmentRepository ar = new AppointmentRepository();
+        UserType userType = (UserType) session.getAttribute("userType");
+        JSONObject result = new JSONObject();
+        JSONArray array = new JSONArray();
+        try {
+            if (userType != UserType.ADMIN) {
+                throw new ActionRejectException("权限不足");
+            }
+            List<Appointment> appList = ar.getAppointmentsForAdmin(_fromTime);
+            for (Appointment app : appList) {
+                if (app.getStatus() == Status.AVAILABLE
+                        && app.getStartTime().isBefore(DateUtil.getLocalNow())) {
+                    continue;
+                }
+                JSONObject object = new JSONObject();
+                object.put("appId", app.getId());
+                object.put("startTime",
+                        DateUtil.convertDateTime(app.getStartTime()));
+                object.put("endTime", DateUtil.convertDateTime(app.getEndTime()));
+                object.put("teacher", app.getTeacher());
+                object.put("teacherId", app.getTeacherUsername());
+                object.put("teacherMobile", app.getTeacherMobile());
                 if (app.getStatus() == Status.AVAILABLE) {
                     object.put("status", Status.AVAILABLE.toString());
                 } else if (app.getStatus() == Status.APPOINTED
@@ -107,8 +347,8 @@ public class AppointmentController {
             Appointment app = ar.makeAppointment(_appId, _name, _gender,
                     _studentId, _school, _hometown, _mobile, _email,
                     _experience, _problem);
-            result.put("startTime", DateUtil.convertDate(app.getStartTime()));
-            result.put("endTime", DateUtil.convertDate(app.getEndTime()));
+            result.put("startTime", DateUtil.convertDateTime(app.getStartTime()));
+            result.put("endTime", DateUtil.convertDateTime(app.getEndTime()));
             result.put("teacher", app.getTeacher());
             result.put("state", "SUCCESS");
         } catch (BasicException e) {
@@ -217,8 +457,8 @@ public class AppointmentController {
                     (String) session.getAttribute("username"));
             result.put("state", "SUCCESS");
             result.put("appId", newApp.getId());
-            result.put("startTime", DateUtil.convertDate(newApp.getStartTime()));
-            result.put("endTime", DateUtil.convertDate(newApp.getEndTime()));
+            result.put("startTime", DateUtil.convertDateTime(newApp.getStartTime()));
+            result.put("endTime", DateUtil.convertDateTime(newApp.getEndTime()));
             result.put("teacher", newApp.getTeacher());
             result.put("teacherMobile", newApp.getTeacherMobile());
         } catch (BasicException e) {
@@ -259,8 +499,8 @@ public class AppointmentController {
                     (String) session.getAttribute("username"));
             result.put("state", "SUCCESS");
             result.put("appId", app.getId());
-            result.put("startTime", DateUtil.convertDate(app.getStartTime()));
-            result.put("endTime", DateUtil.convertDate(app.getEndTime()));
+            result.put("startTime", DateUtil.convertDateTime(app.getStartTime()));
+            result.put("endTime", DateUtil.convertDateTime(app.getEndTime()));
             result.put("teacher", app.getTeacher());
             result.put("teacherMobile", app.getTeacherMobile());
         } catch (BasicException e) {
@@ -510,8 +750,8 @@ public class AppointmentController {
                     _teacher, _teacherUsername, _teacherMobile, (UserType) session.getAttribute("userType"));
             result.put("state", "SUCCESS");
             result.put("appId", newApp.getId());
-            result.put("startTime", DateUtil.convertDate(newApp.getStartTime()));
-            result.put("endTime", DateUtil.convertDate(newApp.getEndTime()));
+            result.put("startTime", DateUtil.convertDateTime(newApp.getStartTime()));
+            result.put("endTime", DateUtil.convertDateTime(newApp.getEndTime()));
             result.put("teacher", newApp.getTeacher());
             result.put("teacherId", newApp.getTeacherUsername());
             result.put("teacherMobile", newApp.getTeacherMobile());
@@ -553,8 +793,8 @@ public class AppointmentController {
                     (UserType) session.getAttribute("userType"));
             result.put("state", "SUCCESS");
             result.put("appId", app.getId());
-            result.put("startTime", DateUtil.convertDate(app.getStartTime()));
-            result.put("endTime", DateUtil.convertDate(app.getEndTime()));
+            result.put("startTime", DateUtil.convertDateTime(app.getStartTime()));
+            result.put("endTime", DateUtil.convertDateTime(app.getEndTime()));
             result.put("teacher", app.getTeacher());
             result.put("teacherId", app.getTeacherUsername());
             result.put("teacherMobile", app.getTeacherMobile());

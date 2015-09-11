@@ -244,7 +244,8 @@ function fankui_tch_confirm(num){
 
 function admin_edit(num){
 	$('#cell1_'+num)[0].onclick='';
-	$('#cell1_'+num)[0].innerHTML='<input type="text" id="inputDate" style="width:80px" ></input>日，<input style="width:40px" id="time1"></input>时至<input style="width:40px" id="time2"></input>时';
+	$('#cell1_'+num)[0].innerHTML='<input type="text" id="inputDate" style="width:80px" ></input>日，<input style="width:20px" id="time1"></input>时<input style="width:20px" id="minute1"></input>分' + 
+		'至<input style="width:20px" id="time2"></input>时<input style="width:20px" id="minute2"></input>分';
 	$('#cell2_'+num)[0].innerHTML='<input id="name'+num+'"  style="width:80px" value="'+student_table_data[num].teacher+'">';
 	$('#cell3_'+num)[0].innerHTML='<button type="button" onclick="edit_commit('+num+');">确认</button>';
 	$('#cell4_'+num)[0].innerHTML='<button type="button" onclick="window.location.reload();">取消</button>';
@@ -276,10 +277,26 @@ function parseTime2(t){
 }
 
 function edit_commit(num){
+	var startTime = $('#inputDate').val()+' '+($('#time1').val().length<2?'0':'')+$('#time1').val() + ":";
+	if ($('#minute1').val().length == 0) {
+		startTime += "00";
+	} else if ($('#minute1').val().length == 1) {
+		startTime += "0" + $('#minute1').val();
+	} else {
+		startTime += $('#minute1').val();
+	}
+	var endTime = $('#inputDate').val()+' '+($('#time2').val().length<2?'0':'')+$('#time2').val() + ":";
+	if ($('#minute2').val().length == 0) {
+		endTime += "00";
+	} else if ($('#minute2').val().length == 1) {
+		endTime += "0" + $('#minute2').val();
+	} else {
+		endTime += $('#minute2').val();
+	}
 	var postdata={
 		appId:student_table_data[num].appId,
-		startTime:$('#inputDate').val()+' '+($('#time1').val().length<2?'0':'')+$('#time1').val()+':00',
-		endTime:  $('#inputDate').val()+' '+($('#time2').val().length<2?'0':'')+$('#time2').val()+':00',
+		startTime:startTime,
+		endTime:endTime,
 		teacher:$("#name"+num).val(),
 		teacherId:$('#tec_id'+num).val(),
 		teacherMobile:$('#mobile'+num).val()
@@ -303,7 +320,9 @@ function edit_commit(num){
 
 function admin_add(){
 	$('#cell1_add')[0].onclick='';
-	$('#cell1_add')[0].innerHTML='<input type="text" id="inputDate" style="width:80px" ></input>日，<input style="width:40px" id="time1"></input>时至<input style="width:40px" id="time2"></input>时';
+	$('#cell1_add')[0].innerHTML='<input type="text" id="inputDate" style="width:80px" ></input>日，<input style="width:20px" id="time1"></input>时<input style="width:20px" id="minute1"></input>分' + 
+		'至<input style="width:20px" id="time2"></input>时<input style="width:20px" id="minute2"></input>分';
+	// $('#cell1_add')[0].innerHTML='<input type="text" id="inputDate" style="width:80px" ></input>日，<input style="width:40px" id="time1"></input>时至<input style="width:40px" id="time2"></input>时';
 	$('#cell2_add')[0].innerHTML='<input id="name" style="width:80px"></input>';
 	$('#cell3_add')[0].innerHTML='<button type="button" onclick="add_commit();">确认</button>';
 	$('#cell4_add')[0].innerHTML='<button type="button" onclick="window.location.reload();">取消</button>';
@@ -334,9 +353,25 @@ function parseTime(t){
 }
 
 function add_commit(){
+	var startTime = $('#inputDate').val()+' '+($('#time1').val().length<2?'0':'')+$('#time1').val() + ":";
+	if ($('#minute1').val().length == 0) {
+		startTime += "00";
+	} else if ($('#minute1').val().length == 1) {
+		startTime += "0" + $('#minute1').val();
+	} else {
+		startTime += $('#minute1').val();
+	}
+	var endTime = $('#inputDate').val()+' '+($('#time2').val().length<2?'0':'')+$('#time2').val() + ":";
+	if ($('#minute2').val().length == 0) {
+		endTime += "00";
+	} else if ($('#minute2').val().length == 1) {
+		endTime += "0" + $('#minute2').val();
+	} else {
+		endTime += $('#minute2').val();
+	}
 	var postdata={
-		startTime:$('#inputDate').val()+' '+($('#time1').val().length<2?'0':'')+$('#time1').val()+':00',
-		endTime:  $('#inputDate').val()+' '+($('#time2').val().length<2?'0':'')+$('#time2').val()+':00',
+		startTime: startTime,
+		endTime: endTime,
 		teacher:$("#name").val(),
 		teacherId:$("#tec_id").val(),
 		teacherMobile:$("#mobile").val(),
@@ -437,11 +472,50 @@ function admin_export(){
 	});
 }
 
+function admin_query() {
+	var postData = {
+		fromTime: $('#queryDate').val(),
+	};
+	$.ajax({
+		type:'POST',
+		async:false,
+		url:'appointment/admin/queryAppointments',
+		data:postData,
+		dataType:'json',
+		success:function(data){
+			if (data.state=='SUCCESS') {
+				student_table_data=data.array;
+				addInfo();
+				optimize();
+			} else {
+				alert(data.message);
+			}
+		}
+	});
+}
+
+function admin_logout() {
+	$.ajax({
+		type:'GET',
+		async:false,
+		url:'user/logout',
+		data:{},
+		dataType:'json',
+		success:function(data){
+			if (data.state=='SUCCESS'){
+				window.location.href=data.url;
+			}else{
+
+			}
+		}
+	});
+}
+
 function getData(){
 	$.ajax({
 		type:'GET',
 		async:false,
-		url:'appointment/viewAppointments',
+		url:'appointment/admin/viewAppointments',
 		dataType:'json',
 		success:function(data){
 			if (data.state=='SUCCESS'){

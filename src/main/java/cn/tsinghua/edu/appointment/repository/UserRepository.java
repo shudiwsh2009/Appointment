@@ -44,4 +44,8 @@ public class UserRepository {
         return user;
     }
 
+    public User getUserByUsername(String _username) {
+        return mongo.getUserByUsername(_username);
+    }
+
 }
