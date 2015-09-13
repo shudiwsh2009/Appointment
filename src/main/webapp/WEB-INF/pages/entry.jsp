@@ -66,7 +66,7 @@
 			学习与发展指导中心预约系统
 		</div>
 		<div class="main_container">
-			<a href="#">
+			<a href="student">
 				<div class="choose_mode">
 					<img style="float:left;height:20mm;" src="img/student.png"><div class="user_type">学生预约</div><div class="enter">进入 ＞</div>
 					<div class="clearfix"></div>
@@ -75,7 +75,7 @@
 
 			<div style="border-bottom:1px solid #ddd;text-align:center;"></div>
 
-			<a href="#">
+			<a href="teacher">
 				<div class="choose_mode">
 					<img style="float:left;height:20mm;" src="img/teacher.png"><div class="user_type">咨询师登录</div><div class="enter">进入 ＞</div>
 					<div class="clearfix"></div>
