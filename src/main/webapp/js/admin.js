@@ -394,6 +394,18 @@ function add_commit(){
 }
 
 function admin_delete(){
+	$('body').append('\
+		<div class="delete_admin_pre">\
+			确认删除选中的咨询记录？\
+			<br>\
+			<button type="button" onclick="$(\'.delete_admin_pre\').remove();admin_delete_confirm();">确认</button>\
+			<button type="button" onclick="$(\'.delete_admin_pre\').remove();">取消</button>\
+		</div>\
+	');
+	optimize('.delete_admin_pre');
+}
+
+function admin_delete_confirm(){
 	var postdata={appIds:[]};
 	for (var i in student_table_data)
 	{
@@ -420,6 +432,18 @@ function admin_delete(){
 }
 
 function admin_cancel(){
+	$('body').append('\
+		<div class="cancel_admin_pre">\
+			确认取消选中的预约记录？\
+			<br>\
+			<button type="button" onclick="$(\'.cancel_admin_pre\').remove();admin_cancel_confirm();">确认</button>\
+			<button type="button" onclick="$(\'.cancel_admin_pre\').remove();">取消</button>\
+		</div>\
+	');
+	optimize('.cancel_admin_pre');
+}
+
+function admin_cancel_confirm(){
 	var postdata={appIds:[]};
 	for (var i in student_table_data)
 	{

@@ -2,6 +2,7 @@ package cn.tsinghua.edu.appointment.data;
 
 import cn.tsinghua.edu.appointment.config.SpringMongoConfig;
 import cn.tsinghua.edu.appointment.domain.Appointment;
+import cn.tsinghua.edu.appointment.domain.Status;
 import cn.tsinghua.edu.appointment.domain.User;
 import cn.tsinghua.edu.appointment.domain.UserType;
 import org.springframework.context.ApplicationContext;
@@ -75,18 +76,21 @@ public class MongoAccess {
 
     public List<Appointment> getAppsBetweenDateTimes(LocalDateTime from, LocalDateTime to) {
         Query query = new Query(Criteria.where("startTime").gte(from).lte(to));
+        query.addCriteria(Criteria.where("status").ne(Status.DELETED));
         query.with(new Sort(Direction.ASC, "startTime"));
         return MONGO.find(query, Appointment.class);
     }
 
     public List<Appointment> getAppsBetweenDates(LocalDate from, LocalDate to) {
         Query query = new Query(Criteria.where("startTime").gte(from).lte(to));
+        query.addCriteria(Criteria.where("status").ne(Status.DELETED));
         query.with(new Sort(Direction.ASC, "startTime"));
         return MONGO.find(query, Appointment.class);
     }
 
     public List<Appointment> getAppsAfterDates(LocalDate from) {
         Query query = new Query(Criteria.where("startTime").gte(from));
+        query.addCriteria(Criteria.where("status").ne(Status.DELETED));
         query.with(new Sort(Direction.ASC, "startTime"));
         return MONGO.find(query, Appointment.class);
     }

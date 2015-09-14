@@ -338,6 +338,18 @@ function add_commit(){
 }
 
 function teacher_delete(){
+	$('body').append('\
+		<div class="delete_teacher_pre">\
+			确认删除选中的咨询记录？\
+			<br>\
+			<button type="button" onclick="$(\'.delete_teacher_pre\').remove();teacher_delete_confirm();">确认</button>\
+			<button type="button" onclick="$(\'.delete_teacher_pre\').remove();">取消</button>\
+		</div>\
+	');
+	optimize('.delete_teacher_pre');
+}
+
+function teacher_delete_confirm(){
 	var postdata={appIds:[]};
 	for (var i in student_table_data)
 	{
@@ -364,6 +376,18 @@ function teacher_delete(){
 }
 
 function teacher_cancel(){
+	$('body').append('\
+		<div class="cancel_teacher_pre">\
+			确认取消选中的预约记录？\
+			<br>\
+			<button type="button" onclick="$(\'.cancel_teacher_pre\').remove();teacher_cancel_confirm();">确认</button>\
+			<button type="button" onclick="$(\'.cancel_teacher_pre\').remove();">取消</button>\
+		</div>\
+	');
+	optimize('.cancel_teacher_pre');
+}
+
+function teacher_cancel_confirm(){
 	var postdata={appIds:[]};
 	for (var i in student_table_data)
 	{

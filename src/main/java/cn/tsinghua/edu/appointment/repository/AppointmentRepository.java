@@ -288,7 +288,9 @@ public class AppointmentRepository {
         for (String appId : appIds) {
             Appointment app = mongo.getAppById(appId);
             if (app != null && app.getTeacherUsername().equals(username)) {
-                mongo.removeApp(appId);
+                app.setStatus(Status.DELETED);
+                mongo.saveApp(app);
+//                mongo.removeApp(appId);
             }
         }
     }
@@ -578,7 +580,12 @@ public class AppointmentRepository {
             throw new EmptyFieldException("咨询参数为空");
         }
         for (String appId : appIds) {
-            mongo.removeApp(appId);
+            Appointment app = mongo.getAppById(appId);
+            if (app != null) {
+                app.setStatus(Status.DELETED);
+                mongo.saveApp(app);
+            }
+//            mongo.removeApp(appId);
         }
     }
 
