@@ -6,7 +6,7 @@ import java.util.regex.Pattern;
 public class FormatUtil {
 
     public static boolean isMobile(String mobile) {
-        Pattern p = Pattern.compile("^((13[0-9])|(15[^4,\\D])|(18[0,5-9]))\\d{8}$");
+        Pattern p = Pattern.compile("(^(13\\d|14[57]|15[^4,\\D]|17[678]|18\\d)\\d{8}|170[059]\\d{7})$");
         Matcher m = p.matcher(mobile);
         return m.matches();
     }
