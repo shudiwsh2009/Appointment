@@ -31,7 +31,8 @@ function addInfo_tch(data){
 	';
 	for (var i in data){
 		$('#col0').append('<div class="table_cell" id="cell0_'+i+'"><input class="checkbox" type="checkbox" id="checkbox_'+i+'"></div>');
-		$('#col1').append('<div class="table_cell" id="cell1_'+i+'" onclick="teacher_edit('+i+')">'+student_table_data[i].startTime.substr(2)+'-'+student_table_data[i].endTime.split(' ')[1]+'</div>');
+		$('#col1').append('<div class="table_cell" id="cell1_'+i+'" onclick="teacher_edit('+i+')">'+student_table_data[i].startTime.split(' ')[0].substr(2)+'<br>'
+				+student_table_data[i].startTime.split(' ')[1]+'-'+student_table_data[i].endTime.split(' ')[1]+'</div>');
 		//$('#col1').append('<div class="table_cell" id="cell1_'+i+'" onclick="teacher_edit('+i+')">'+student_table_data[i].startTime+'至'+student_table_data[i].endTime+'</div>');
 		$('#col2').append('<div class="table_cell" id="cell2_'+i+'">'+student_table_data[i].teacher+'</div>');
 		$('#col5').append('<div class="table_cell" id="cell5_'+i+'">'+student_table_data[i].teacherMobile+'</div>');
@@ -272,8 +273,8 @@ function teacherPostFeedback(postdata, num){
 
 function teacher_add(){
 	$('#cell1_add')[0].onclick='';
-	$('#cell1_add')[0].innerHTML='<input type="text" id="inputDate" style="width:60px" ></input>日<br><input style="width:20px" id="time1"></input>时<input style="width:20px" id="minute1"></input>分' + 
-		'<br><input style="width:20px" id="time2"></input>时<input style="width:20px" id="minute2"></input>分';
+	$('#cell1_add')[0].innerHTML='<input type="text" id="inputDate" style="width:60px" ></input><br><input style="width:15px" id="time1"></input>时<input style="width:15px" id="minute1"></input>分' + 
+		'<br><input style="width:15px" id="time2"></input>时<input style="width:15px" id="minute2"></input>分';
 	$('#cell2_add')[0].innerHTML='<input id="name" style="width:80px" value="' + teacher + '"></input>';
 	$('#cell3_add')[0].innerHTML='<button type="button" onclick="add_commit();">确认</button>';
 	$('#cell4_add')[0].innerHTML='<button type="button" onclick="window.location.reload();">取消</button>';
@@ -417,8 +418,8 @@ function teacher_edit(num){
 	$('#cell1_'+num).height(68);
 	$('#cell1_'+num)[0].onclick='';
 	// $('#cell1_'+num)[0].innerHTML='<input type="text" id="inputDate" style="width:74px;border:1px solid #ccc;padding:0px;margin:0px;" ></input>日，<input style="width:40px;border:1px solid #ccc;padding:0px;margin:0px;" id="time1"></input>时至<input style="width:40px;border:1px solid #ccc;padding:0px;margin:0px;" id="time2"></input>时';
-	$('#cell1_'+num)[0].innerHTML='<input type="text" id="inputDate" style="width:60px" ></input>日<br><input style="width:20px" id="time1"></input>时<input style="width:20px" id="minute1"></input>分' + 
-		'<br><input style="width:20px" id="time2"></input>时<input style="width:20px" id="minute2"></input>分';
+	$('#cell1_'+num)[0].innerHTML='<input type="text" id="inputDate" style="width:60px" ></input><br><input style="width:15px" id="time1"></input>时<input style="width:15px" id="minute1"></input>分' + 
+		'<br><input style="width:15px" id="time2"></input>时<input style="width:15px" id="minute2"></input>分';
 	$('#cell2_'+num)[0].innerHTML='<input id="name'+num+'"  style="width:38px;border:1px solid #ccc;padding:0px;margin:0px;" value="'+student_table_data[num].teacher+'">';
 	$('#cell3_'+num)[0].innerHTML='<button type="button" onclick="edit_commit('+num+');">确认</button>';
 	$('#cell4_'+num)[0].innerHTML='<button type="button" onclick="window.location.reload();">取消</button>';
@@ -428,7 +429,7 @@ function teacher_edit(num){
 		date: $('#inputDate').val(),
 		current: $('#inputDate').val(),
 		starts: 1,
-		position: 'r',
+		position: 'relative',
 		onBeforeShow: function(){
 			$('#inputDate').DatePickerSetDate($('#inputDate').val(), true);
 		},
