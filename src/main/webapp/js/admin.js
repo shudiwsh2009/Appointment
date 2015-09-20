@@ -246,7 +246,7 @@ function admin_edit(num){
 	$('#cell1_'+num)[0].onclick='';
 	$('#cell1_'+num)[0].innerHTML='<input type="text" id="inputDate" style="width:80px" ></input>日，<input style="width:20px" id="time1"></input>时<input style="width:20px" id="minute1"></input>分' + 
 		'至<input style="width:20px" id="time2"></input>时<input style="width:20px" id="minute2"></input>分';
-	$('#cell2_'+num)[0].innerHTML='<input id="name'+num+'"  style="width:80px" value="'+student_table_data[num].teacher+'">';
+	$('#cell2_'+num)[0].innerHTML='<input id="name'+num+'"  style="width:60px" value="'+student_table_data[num].teacher+'"><button type="button" onclick="search_user(' + num + ');">搜索</button>';
 	$('#cell3_'+num)[0].innerHTML='<button type="button" onclick="edit_commit('+num+');">确认</button>';
 	$('#cell4_'+num)[0].innerHTML='<button type="button" onclick="window.location.reload();">取消</button>';
 	$('#cell5_'+num)[0].innerHTML='<input id="tec_id'+num+'"  style="width:120px" value="'+student_table_data[num].teacherId+'">';
@@ -323,7 +323,7 @@ function admin_add(){
 	$('#cell1_add')[0].innerHTML='<input type="text" id="inputDate" style="width:80px" ></input>日，<input style="width:20px" id="time1"></input>时<input style="width:20px" id="minute1"></input>分' + 
 		'至<input style="width:20px" id="time2"></input>时<input style="width:20px" id="minute2"></input>分';
 	// $('#cell1_add')[0].innerHTML='<input type="text" id="inputDate" style="width:80px" ></input>日，<input style="width:40px" id="time1"></input>时至<input style="width:40px" id="time2"></input>时';
-	$('#cell2_add')[0].innerHTML='<input id="name" style="width:80px"></input>';
+	$('#cell2_add')[0].innerHTML='<input id="name" style="width:60px"></input><button type="button" onclick="search_user();">搜索</button>';
 	$('#cell3_add')[0].innerHTML='<button type="button" onclick="add_commit();">确认</button>';
 	$('#cell4_add')[0].innerHTML='<button type="button" onclick="window.location.reload();">取消</button>';
 	$('#cell5_add')[0].innerHTML='<input id="tec_id" style="width:120px"></input>';
@@ -513,6 +513,28 @@ function admin_query() {
 				optimize();
 			} else {
 				alert(data.message);
+			}
+		}
+	});
+}
+
+function search_user(num) {
+	var postData = {
+		teacher: $("#name" + (num === undefined ? "" : num)).val(),
+		teacherId: $("#tec_id" + (num === undefined ? "" : num)).val(),
+		teacherMobile: $("#mobile" + (num === undefined ? "" : num)).val(),
+	};
+	$.ajax({
+		type: "POST",
+		async: false,
+		url: "user/search",
+		data: postData, 
+		dataType: "json",
+		success: function(data) {
+			if (data.state == "SUCCESS") {
+				$("#name" + (num === undefined ? "" : num)).val(data.teacher);
+				$("#tec_id" + (num === undefined ? "" : num)).val(data.teacherId);
+				$("#mobile" + (num === undefined ? "" : num)).val(data.teacherMobile);
 			}
 		}
 	});

@@ -48,4 +48,25 @@ public class UserRepository {
         return mongo.getUserByUsername(_username);
     }
 
+    public User searchUser(String _fullname, String _username, String _mobile)
+            throws EmptyFieldException, NoExistException {
+        if (_fullname == null || _username == null || _mobile == null) {
+            throw new EmptyFieldException("");
+        }
+        User user = null;
+        if (user == null && !_fullname.equals("")) {
+            user = mongo.getUserByFullname(_fullname);
+        }
+        if (user == null && !_username.equals("")) {
+            user = mongo.getUserByUsername(_username);
+        }
+        if (user == null && !_mobile.equals("")) {
+            user = mongo.getUserByMobile(_mobile);
+        }
+        if (user == null) {
+            throw new NoExistException("用户不存在");
+        }
+        return user;
+    }
+
 }

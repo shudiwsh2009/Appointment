@@ -98,4 +98,35 @@ public class UserController {
         }
     }
 
+    @RequestMapping(value = "search", method = RequestMethod.POST)
+    public void searchUser(@RequestParam("teacher") String _fullname,
+                           @RequestParam("teacherId") String _username,
+                           @RequestParam("teacherMobile") String _mobile,
+                           HttpServletResponse response) throws IOException {
+        JSONObject result = new JSONObject();
+        UserRepository ur = new UserRepository();
+        try {
+            User user = ur.searchUser(_fullname, _username, _mobile);
+            result.put("teacher", user.getFullname());
+            result.put("teacherId", user.getUsername());
+            result.put("teacherMobile", user.getMobile());
+            result.put("state", "SUCCESS");
+        } catch (BasicException e) {
+            result.put("state", "FAILED");
+            result.put("message", e.getInfo());
+        }
+
+        // send response
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        PrintWriter out;
+        try {
+            out = response.getWriter();
+            out.write(result.toString());
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
+
 }

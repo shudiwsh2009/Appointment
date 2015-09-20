@@ -50,9 +50,14 @@ public class MongoAccess {
                 .is(_username)), User.class);
     }
 
-    public boolean existUserByUsername(String _username) {
-        return MongoAccess.MONGO.exists(new Query(Criteria.where("username")
-                .is(_username)), User.class);
+    public User getUserByFullname(String _fullname) {
+        return MongoAccess.MONGO.findOne(new Query(Criteria.where("fullname")
+                .is(_fullname)), User.class);
+    }
+
+    public User getUserByMobile(String _mobile) {
+        return MongoAccess.MONGO.findOne(new Query(Criteria.where("mobile")
+                .is(_mobile)), User.class);
     }
 
 	/*
