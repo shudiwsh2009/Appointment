@@ -30,7 +30,7 @@
             <configuration>
               <transformers>
                 <transformer>
-                  <mainClass>cn.tsinghua.edu.appointment.sms.Reminder</mainClass>
+                  <mainClass>cn.edu.tsinghua.appointment.sms.Reminder</mainClass>
                 </transformer>
               </transformers>
             </configuration>
