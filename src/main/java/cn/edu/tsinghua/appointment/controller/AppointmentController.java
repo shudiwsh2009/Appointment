@@ -596,9 +596,12 @@ public class AppointmentController {
             Appointment app = ar.teacherCheck(_appId,
                     (UserType) session.getAttribute("userType"),
                     (String) session.getAttribute("username"));
-            result.put("teacherName", app.getTeacherFeedback().getTeacherName());
-            result.put("teacherId", app.getTeacherFeedback().getTeacherId());
-            result.put("studentName", app.getTeacherFeedback().getStudentName());
+            result.put("teacherName", app.getTeacherFeedback().getTeacherName().equals("")
+                ? app.getTeacher() : app.getTeacherFeedback().getTeacherName());
+            result.put("teacherId", app.getTeacherFeedback().getTeacherId().equals("")
+                ? app.getTeacherUsername() : app.getTeacherFeedback().getTeacherId());
+            result.put("studentName", app.getTeacherFeedback().getStudentName().equals("")
+                ? app.getStudentInfo().getName() : app.getTeacherFeedback().getStudentName());
             result.put("problem", app.getTeacherFeedback().getProblem());
             result.put("solution", app.getTeacherFeedback().getSolution());
             result.put("advice", app.getTeacherFeedback().getAdviceToCenter());
@@ -670,9 +673,12 @@ public class AppointmentController {
         try {
             Appointment app = ar.adminCheck(_appId,
                     (UserType) session.getAttribute("userType"));
-            result.put("teacherName", app.getTeacherFeedback().getTeacherName());
-            result.put("teacherId", app.getTeacherFeedback().getTeacherId());
-            result.put("studentName", app.getTeacherFeedback().getStudentName());
+            result.put("teacherName", app.getTeacherFeedback().getTeacherName().equals("")
+                    ? app.getTeacher() : app.getTeacherFeedback().getTeacherName());
+            result.put("teacherId", app.getTeacherFeedback().getTeacherId().equals("")
+                    ? app.getTeacherUsername() : app.getTeacherFeedback().getTeacherId());
+            result.put("studentName", app.getTeacherFeedback().getStudentName().equals("")
+                    ? app.getStudentInfo().getName() : app.getTeacherFeedback().getStudentName());
             result.put("problem", app.getTeacherFeedback().getProblem());
             result.put("solution", app.getTeacherFeedback().getSolution());
             result.put("advice", app.getTeacherFeedback().getAdviceToCenter());
