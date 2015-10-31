@@ -18,13 +18,13 @@ import java.util.Locale;
 public class SMS {
 
     public final static String SUCCESS_STUDENT = "%s你好，你已成功预约星期%s" +
-            "（%s月%s日）%s-%s咨询，地点：老10号楼103室。电话：62792453。";
+            "（%s月%s日）%s-%s咨询，地点：紫荆C楼407室。电话：62792453。";
     public final static String SUCCESS_TEACHER = "%s您好，%s已预约您星期%s（" +
-            "%s月%s日）%s-%s咨询，地点：老10号楼103室。电话：62792453。";
+            "%s月%s日）%s-%s咨询，地点：紫荆C楼407室。电话：62792453。";
     public final static String REMINDER_STUDENT = "温馨提示：%s你好，你已成功" +
-            "预约明天%s-%s咨询，地点：老10号楼103室。电话：62792453。";
+            "预约明天%s-%s咨询，地点：紫荆C楼407室。电话：62792453。";
     public final static String REMINDER_TEACHER = "温馨提示：%s您好，%s已预约" +
-            "您明天%s-%s咨询，地点：老10号楼103室。电话：62792453。";
+            "您明天%s-%s咨询，地点：紫荆C楼407室。电话：62792453。";
 
     public static void sendSuccessSMS(Appointment app) throws FormatException {
         String studentSMS = String.format(Locale.CHINA, SUCCESS_STUDENT,
