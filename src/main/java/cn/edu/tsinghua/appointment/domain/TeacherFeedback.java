@@ -24,6 +24,11 @@ public class TeacherFeedback {
         this.adviceToCenter = adviceToCenter;
     }
 
+    public boolean isEmpty() {
+        return teacherName.equals("") || teacherId.equals("") || studentName.equals("")
+                || problem.equals("") || solution.equals("") || adviceToCenter.equals("");
+    }
+
     public String getTeacherName() {
         return teacherName;
     }

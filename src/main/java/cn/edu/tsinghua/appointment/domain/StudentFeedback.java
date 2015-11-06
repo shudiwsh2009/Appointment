@@ -21,6 +21,11 @@ public class StudentFeedback {
         this.feedback = feedback;
     }
 
+    public boolean isEmpty() {
+        return name.equals("") || problem.equals("") || choices.equals("")
+                || score.equals("") || feedback.equals("");
+    }
+
     public String getName() {
         return name;
     }

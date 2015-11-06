@@ -25,6 +25,9 @@ public class SMS {
             "预约明天%s-%s咨询，地点：紫荆C楼407室。电话：62792453。";
     public final static String REMINDER_TEACHER = "温馨提示：%s您好，%s已预约" +
             "您明天%s-%s咨询，地点：紫荆C楼407室。电话：62792453。";
+    public final static String FEEDBACK_STUDENT = "温馨提示：%s你好，感谢使用" +
+            "我们的一对一咨询服务，请再次登录乐学预约界面，为咨询师反馈评分，帮助" +
+            "我们成长。";
 
     public static void sendSuccessSMS(Appointment app) throws FormatException {
         String studentSMS = String.format(Locale.CHINA, SUCCESS_STUDENT,
@@ -78,7 +81,17 @@ public class SMS {
         }
     }
 
-    public static void sendSMS(String mobile, String content) throws FormatException, ActionRejectException {
+    public static void sendFeedbackSMS(Appointment app) {
+        try {
+            String studentSMS = String.format(Locale.CHINA, FEEDBACK_STUDENT,
+                    app.getStudentInfo().getName());
+            sendSMS(app.getStudentInfo().getMobile(), studentSMS);
+        } catch (BasicException e) {
+            System.err.println(e.getInfo());
+        }
+    }
+
+    private static void sendSMS(String mobile, String content) throws FormatException, ActionRejectException {
         if (!FormatUtil.isMobile(mobile)) {
             throw new FormatException("手机号不正确");
         }

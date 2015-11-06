@@ -394,6 +394,9 @@ public class AppointmentRepository {
         if (!username.equals(teacherId) || !username.equals(app.getTeacherUsername())) {
             throw new ActionRejectException("预约不匹配");
         }
+        if (app.getTeacherFeedback().isEmpty() && app.getStudentFeedback().isEmpty()) {
+            SMS.sendFeedbackSMS(app);
+        }
         TeacherFeedback teacherFeedback = new TeacherFeedback(teacherName,
                 teacherId, studentName, problem, solution, adviceToCenter);
         app.setTeacherFeedback(teacherFeedback);
@@ -464,6 +467,9 @@ public class AppointmentRepository {
         }
         if (!teacherId.equals(app.getTeacherUsername())) {
             throw new ActionRejectException("预约不匹配");
+        }
+        if (app.getTeacherFeedback().isEmpty() && app.getStudentFeedback().isEmpty()) {
+            SMS.sendFeedbackSMS(app);
         }
         TeacherFeedback teacherFeedback = new TeacherFeedback(teacherName,
                 teacherId, studentName, problem, solution, adviceToCenter);
