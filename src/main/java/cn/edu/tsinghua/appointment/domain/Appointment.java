@@ -1,12 +1,17 @@
 package cn.edu.tsinghua.appointment.domain;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.CompoundIndex;
+import org.springframework.data.mongodb.core.index.CompoundIndexes;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
 
 @Document(collection = "appointment")
+@CompoundIndexes({
+        @CompoundIndex(name = "studentInfo_studentId", def = "{'studentInfo.studentId': 1}")
+})
 public class Appointment {
 
     @Id

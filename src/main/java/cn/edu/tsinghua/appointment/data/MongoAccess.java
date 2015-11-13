@@ -79,6 +79,11 @@ public class MongoAccess {
                 Appointment.class);
     }
 
+    public List<Appointment> getAppsByStudentId(String studentId) {
+        return MONGO.find(new Query(Criteria.where("studentInfo.studentId").is(studentId)),
+                Appointment.class);
+    }
+
     public List<Appointment> getAppsBetweenDateTimes(LocalDateTime from, LocalDateTime to) {
         Query query = new Query(Criteria.where("startTime").gte(from).lte(to));
         query.addCriteria(Criteria.where("status").ne(Status.DELETED));

@@ -100,6 +100,12 @@ public class AppointmentRepository {
         if (app.getStatus() != Status.AVAILABLE) {
             throw new ActionRejectException("该咨询已被预约");
         }
+        List<Appointment> studentApps = mongo.getAppsByStudentId(studentId);
+        for (Appointment a : studentApps) {
+            if (a.getStatus() == Status.APPOINTED && a.getStartTime().isAfter(DateUtil.getLocalNow())) {
+                throw new ActionRejectException("你已有未开始的预约，请先电话联系指导中心老师取消您的其他预约。");
+            }
+        }
         StudentInfo studentInfo = new StudentInfo(name, gender, studentId,
                 school, hometown, mobile, email, experience, problem);
         app.setStudentInfo(studentInfo);
