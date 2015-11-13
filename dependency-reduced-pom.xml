@@ -4,7 +4,7 @@
   <groupId>cn.edu.tsinghua</groupId>
   <artifactId>appointment</artifactId>
   <packaging>war</packaging>
-  <name>Appointment</name>
+  <name>appointment</name>
   <version>0.0.1-SNAPSHOT</version>
   <url>http://maven.apache.org</url>
   <build>
