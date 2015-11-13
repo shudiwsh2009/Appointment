@@ -103,7 +103,8 @@ public class AppointmentRepository {
         List<Appointment> studentApps = mongo.getAppsByStudentId(studentId);
         for (Appointment a : studentApps) {
             if (a.getStatus() == Status.APPOINTED && a.getStartTime().isAfter(DateUtil.getLocalNow())) {
-                throw new ActionRejectException("你已有未开始的预约，请先电话联系指导中心老师取消您的其他预约。");
+                throw new ActionRejectException("你好！你已有一个咨询预约，请完成这次咨询后再预约下一次，" +
+                        "或致电62792453取消已有预约。");
             }
         }
         StudentInfo studentInfo = new StudentInfo(name, gender, studentId,
